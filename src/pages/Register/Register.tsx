@@ -1,6 +1,7 @@
-import { RegisterOptions, useForm } from "react-hook-form";
+import {  useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { rules } from "../../utils/rules";
+import Input from "../../Components/Input";
 
 interface FormType {
   email: string
@@ -26,34 +27,32 @@ export default function Register() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="px-10 grid grid-cols-1 md:grid-cols-5 py-12 lg:py-28 md:pr-10">
             <div className="lg:col-span-2 lg:col-start-4 md:col-span-3 md:col-start-3">
-              <form onSubmit={onSubmit} action="" className="p-10 rounded bg-white shadow-sm">
-                <div className="text-2xl">Đăng nhập</div>
-                <div className="mt-6">
-                  <input 
-                    {...register("email", Rules.email as RegisterOptions<FormType, "email">)} 
-                    placeholder="Email"
-                    className="outline-none border-2 rounded-md focus:border-gray-500 border-gray-300 w-full p-3 focus:shadow-md"
-                  />
-                  <div className="text-red-500 text-sm ml-2 mt-1 min-h-[14px]">{errors.email?.message}</div>
-                </div>
-                <div className="mt-6">
-                  <input 
-                    {...register("password", Rules.password as RegisterOptions<FormType, "password">)} 
-                    type="password" 
-                    placeholder="Password"
-                    className="outline-none border-2 rounded-md focus:border-gray-500 border-gray-300 w-full p-3 focus:shadow-md"
-                  />
-                  <div className="text-red-500 text-sm ml-2 mt-1 min-h-[14px]">{errors.password?.message}</div>
-                </div>
-                <div className="mt-6">
-                  <input 
-                    {...register("confirm_password", Rules.confirm_password as RegisterOptions<FormType, "confirm_password">)} 
-                    type="confirm_password" 
-                    placeholder="Confirm Password"
-                    className="outline-none border-2 rounded-md focus:border-gray-500 border-gray-300 w-full p-3 focus:shadow-md"
-                  />
-                  <div className="text-red-500 text-sm ml-2 mt-1 min-h-[14px]">{errors.confirm_password?.message}</div>
-                </div>
+              <form noValidate onSubmit={onSubmit} action="" className="p-10 rounded bg-white shadow-sm">
+                <div className="text-2xl">Đăng ký</div>
+                <Input 
+                  name='email'
+                  register={register}
+                  type='email'
+                  errorMessage={errors.email?.message}
+                  placeholder="Email"
+                  Rules={Rules.email}
+                />  
+                <Input 
+                  name='password'
+                  register={register}
+                  type='password'
+                  errorMessage={errors.password?.message}
+                  placeholder="Password"
+                  Rules={Rules.password}
+                />  
+                <Input 
+                  name='confirm_password'
+                  register={register}
+                  type='confirm_password'
+                  errorMessage={errors.confirm_password?.message}
+                  placeholder="Confirm Password"
+                  Rules={Rules.confirm_password}
+                /> 
                 <div className="mt-8">
                   <button type="submit" className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover bg-orange-500">
                     Đăng ký

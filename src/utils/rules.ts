@@ -1,7 +1,7 @@
 import type { RegisterOptions } from "react-hook-form"
 
 type Rules = { [key in 'email' | 'password' | 'confirm_password']? : RegisterOptions }
-export const rules = (passwordValue?: string ): Rules =>  ({
+export const rules = (passwordValue: string = ""): Rules =>  ({
     email: {
         required: 'Email is compulsory',
         pattern: {
