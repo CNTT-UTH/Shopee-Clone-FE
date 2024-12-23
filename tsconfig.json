@@ -1,4 +1,44 @@
 {
+  "compilerOptions": {
+    // Output file type
+    "target": "ES6",                  
+    "module": "ESNext",              
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],  
+
+    // Process the file
+    "moduleResolution": "Node",      // Help to find the file that's same to NodeJS.
+    "allowJs": true,                 // Allow the use of .js files (if necessary).
+    "checkJs": false,                // Do not report errors in .js files.
+    "jsx": "react-jsx",             
+
+    // Improve security
+    "strict": true,                  //  (strict mode).
+    "strictNullChecks": true,        // Do not allow implicit null/undefined .
+    "strictBindCallApply": true,     // stricter check with bind, call, apply.
+    "noImplicitAny": true,           // Do not allow implicit 'any' type.
+    "alwaysStrict": true,            // add "use strict" 
+
+    // support 
+    "esModuleInterop": true,         // support to import/export with ES6.
+    "allowSyntheticDefaultImports": true, 
+    "resolveJsonModule": true,       // allowing import tệp .json.
+    "isolatedModules": true,         // support compiler module (e.g., Babel).
+
+    // optimizing
+    "skipLibCheck": true,            // skip checking .d.ts to boost speed
+    "forceConsistentCasingInFileNames": true, // distinguish uppercase and lowercase
+
+    "outDir": "./dist",              // The output folder for the compiled files.
+    "rootDir": "./src",              // The folder containing the TypeScript source code.
+    "baseUrl": "./",               //base url
+
+    // Alias 
+    "paths": {                       
+      "@uth/*": ["src/*"],
+      "@Components/*": ["src/Components/*"],
+      "@assets/*": ["src/assets/*"]
+    }
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
