@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { rules } from "../../utils/rules";
 import Input from "../../Components/Input";
+import { useTranslation } from 'react-i18next';
 
 interface IFormInput {
     email: string;
@@ -9,6 +10,8 @@ interface IFormInput {
 }
 
 export default function Login() {
+    const  { t } = useTranslation();
+
     const {
         register,
         handleSubmit,
@@ -29,7 +32,7 @@ export default function Login() {
                             noValidate
                             className="p-10 rounded bg-white shadow-sm"
                         >
-                            <div className="text-2xl">Đăng nhập</div>
+                            <div className="text-2xl">{t("Login")}</div>
                             <Input
                                 name="email"
                                 register={register}
@@ -51,19 +54,19 @@ export default function Login() {
                                     type="submit"
                                     className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover bg-orange-500"
                                 >
-                                    Đăng nhập
+                                    {t("Login")}
                                 </button>
                             </div>
                             <div className="mt-10 text-center">
                                 <div className="flex items-center justify-center">
                                     <span className="text-gray-400">
-                                        Bạn chưa có tài khoản?
+                                        {t("Don't have account")}
                                     </span>
                                     <Link
                                         to="/register"
                                         className="text-blue-400 ml-2"
                                     >
-                                        Đăng ký
+                                        {t("Register")}
                                     </Link>
                                 </div>
                             </div>
