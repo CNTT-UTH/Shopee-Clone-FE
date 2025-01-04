@@ -11,7 +11,7 @@ export type AuthResponse = ResponseApi<{
 
 //test typescript recommendation
 // const auth : AuthResponse = {
-//   message: 'Success',
+//   message: 'Success....',
 //   result: {
 //     access_token: 'test',
 //     ...

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 interface FormType {
   email: string
+  username: string
   password: string
   confirm_password: string
 }
@@ -39,6 +40,14 @@ export default function Register() {
                   errorMessage={errors.email?.message}
                   placeholder="Email"
                   Rules={Rules.email}
+                />  
+                <Input 
+                  name='username'
+                  register={register}
+                  type='text'
+                  errorMessage={errors.username?.message}
+                  placeholder="Username"
+                  Rules={Rules.username}
                 />  
                 <Input 
                   name='password'

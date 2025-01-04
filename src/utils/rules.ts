@@ -1,6 +1,6 @@
 import type { RegisterOptions } from "react-hook-form"
 
-type Rules = { [key in 'email' | 'password' | 'confirm_password']? : RegisterOptions }
+type Rules = { [key in 'email' | 'username' | 'password' | 'confirm_password']? : RegisterOptions }
 export const rules = (passwordValue: string = ""): Rules =>  ({
     email: {
         required: 'Email is compulsory',
@@ -8,6 +8,21 @@ export const rules = (passwordValue: string = ""): Rules =>  ({
             value: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/ ,
             message: 'The email format is invalid' // JS only: <p>error message</p> TS only support string
         }
+    },
+    username: {
+        required: 'Username is required',
+        minLength: {
+            value: 3,
+            message: 'Username must be at least 3 characters long',
+        },
+        maxLength: {
+            value: 20,
+            message: 'Username must not exceed 20 characters',
+        },
+        pattern: {
+            value: /^[a-zA-Z0-9]+$/,
+            message: 'Username must contain only letters and numbers',
+        },
     },
     password: {
         required: 'Password is required',
