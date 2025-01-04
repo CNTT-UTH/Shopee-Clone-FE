@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { rules } from "../../utils/rules";
 import Input from "../../Components/Input";
 import { useTranslation } from 'react-i18next';
+import { useMutation } from "@tanstack/react-query";
+import { registerAuth } from "../../apis/auth.api";
 
 interface FormType {
   email: string
@@ -14,6 +16,10 @@ interface FormType {
 export default function Register() {
   const { t } = useTranslation();
 
+  const registerMutation = useMutation({
+    mutationFn: (body: FormType) => registerAuth(body)
+  })
+
   const {
     register,
     handleSubmit,
@@ -24,8 +30,15 @@ export default function Register() {
   const passwordInput = watch("password")
   const Rules = rules(passwordInput);
 
-  const onSubmit = handleSubmit(data => console.log(data))
-  console.log("error", errors);
+  const onSubmit = handleSubmit(data => {
+    console.log("data>>>",data)
+    registerMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log("check onsuccess_", data)
+      }
+    })
+  })
+  
   return (
     <div className='bg-orange'> 
         <div className="mx-auto max-w-7xl px-4">

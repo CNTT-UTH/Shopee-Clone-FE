@@ -1,5 +1,5 @@
-import { AuthResponse } from "@uth/types/auth.type"
-import http from "@uth/utils/http"
+import { AuthResponse } from "../types/auth.type"
+import http from "../utils/http"
 
 interface RegisterBody {
   email: string
