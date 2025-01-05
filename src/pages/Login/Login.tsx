@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { rules } from "../../utils/rules";
 import Input from "../../Components/Input";
 import { useTranslation } from 'react-i18next';
+import { useMutation } from "@tanstack/react-query";
+import { loginAuth } from "../../apis/auth.api";
 
 interface IFormInput {
     email: string;
@@ -17,8 +19,17 @@ export default function Login() {
         handleSubmit,
         formState: { errors },
     } = useForm<IFormInput>();
+    
+    const loginMutation = useMutation({
+        mutationFn: (body: IFormInput) => loginAuth(body)
+    })
 
     const onSubmit = handleSubmit((data) => {
+      loginMutation.mutate(data, {
+        onSuccess: (data) => {
+          console.log("check onsuccess_", data)
+        }
+      })
         console.log(data);
     });
 

@@ -10,6 +10,17 @@ class Http {
         'Content-Type': 'application/json'
       }
     })
+
+    //config res interceptors
+    this.instance.interceptors.response.use(
+      function (response) { 
+          return response
+      }, 
+      function (error) { 
+        console.log(error)  
+        return Promise.reject(error)
+      }
+    )
   }
 }
 
