@@ -4,11 +4,16 @@ import Login from '../pages/Login'
 import Register from '../pages/Register'
 import ProductList from '../pages/ProductList'
 import AuthLayout from '../layouts/AuthLayout'
+import MainLayout from '../layouts/AuthLayout/MainLayout'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ProductList />
+    element: (
+      <MainLayout>
+        <ProductList />
+      </MainLayout>
+    )
   },
   {
     path: '/login',
