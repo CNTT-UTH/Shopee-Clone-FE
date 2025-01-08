@@ -5,11 +5,13 @@ import Register from '../pages/Register'
 import ProductList from '../pages/ProductList'
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/AuthLayout/MainLayout'
-import { PublicRoute } from '../Components/routes/ProtectedRoute'
+import { ProtectedRoute, PublicRoute } from '../Components/Routes/ProtectedRoute'
+import Profile from '../pages/Profie'
 
 const router = createBrowserRouter([
   {
     path: '',
+    index: true,
     element: (
       <MainLayout>
         <ProductList />
@@ -18,10 +20,24 @@ const router = createBrowserRouter([
   },
   {
     path: '',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: 'profile',
+        element: (
+          <MainLayout>
+            <Profile />
+          </MainLayout>
+        )
+      }
+    ]
+  },
+  {
+    path: '',
     element: <PublicRoute />,
     children: [
       {
-        path: '/login',
+        path: 'login',
         element: ( 
           <AuthLayout>
             <Login />
@@ -29,7 +45,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: '/register',
+        path: 'register',
         element: (
           <AuthLayout>
             <Register />
