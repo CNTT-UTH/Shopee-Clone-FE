@@ -5,10 +5,11 @@ import Register from '../pages/Register'
 import ProductList from '../pages/ProductList'
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/AuthLayout/MainLayout'
+import { PublicRoute } from '../Components/routes/ProtectedRoute'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '',
     element: (
       <MainLayout>
         <ProductList />
@@ -16,21 +17,28 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: '/login',
-    element: ( 
-      <AuthLayout>
-        <Login />
-      </AuthLayout>
-    )
+    path: '',
+    element: <PublicRoute />,
+    children: [
+      {
+        path: '/login',
+        element: ( 
+          <AuthLayout>
+            <Login />
+          </AuthLayout>
+        )
+      },
+      {
+        path: '/register',
+        element: (
+          <AuthLayout>
+            <Register />
+          </AuthLayout>
+        )
+      }
+    ]
   },
-  {
-    path: '/register',
-    element: (
-      <AuthLayout>
-        <Register />
-      </AuthLayout>
-    )
-  }
+  
 ])
 
 const App: React.FC = () => {
