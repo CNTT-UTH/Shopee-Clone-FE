@@ -5,7 +5,7 @@ import Register from '../pages/Register'
 import ProductList from '../pages/ProductList'
 import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/AuthLayout/MainLayout'
-import { ProtectedRoute, PublicRoute } from '../Components/Routes/ProtectedRoute'
+import { ProtectedRoute, PublicRoute } from '../components/Routes/ProtectedRoute'
 import Profile from '../pages/Profie'
 
 const router = createBrowserRouter([

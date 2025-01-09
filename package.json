@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.3",
     "@tanstack/react-query": "^4.36.1",
     "@tanstack/react-query-devtools": "^4.36.1",
     "@types/lodash": "^4.17.14",
     "axios": "^1.7.9",
+    "framer-motion": "^11.16.1",
     "i18next": "^24.2.0",
     "lodash": "^4.17.21",
     "react": "^18.3.1",

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { rules } from "../../utils/rules";
-import Input from "../../Components/Input";
+import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
 import { loginAuth } from "../../apis/auth.api";
