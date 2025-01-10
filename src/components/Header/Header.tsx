@@ -4,11 +4,13 @@ import reactImg from '../../assets/react.svg'
 import logo from '../../assets/images/logo.svg'
 import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react';
 import { useRef, useState } from 'react';
+import { AnimatePresence, motion } from "motion/react"
+
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const arrowElement = useRef<HTMLElement>(null)
 
-  const {refs, floatingStyles, middlewareData} = useFloating({
+  const {refs, x, y, strategy,middlewareData} = useFloating({
     middleware: [offset(5),shift(), arrow({element: arrowElement})],
   })
 
@@ -28,26 +30,42 @@ export default function Header() {
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
 
-          <FloatingPortal>
-            {isOpen && (
-              <div ref={refs.setFloating} style={floatingStyles} className='mt-2'>
-                <span   
-                  ref={arrowElement} 
+
+          <AnimatePresence>
+            <FloatingPortal>
+              {isOpen && (
+                <motion.div 
+                  initial = {{opacity: 0, scale: 0}} 
+                  animate={{opacity: 1, scale: 1}} 
+                  transition={{ type: "spring", stiffness: 100 }}
+
+                  ref={refs.setFloating} 
                   style={{
-                    left: middlewareData.arrow?.x,
-                    top: middlewareData.arrow?.y
-                  }}
-                  className='absolute border-b-white border-[11px] border-t-transparent border-x-transparent translate-y-[-94%] z-20'
-                ></span>
-                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                  <div className="flex flex-col py-2 px-3">
-                    <button className='hover:text-gray-500 py-2 mb-2 px-3'>English</button>
-                    <button className='hover:text-gray-500 py-2 px-3'>Tieng Viet</button>
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                    width: 'max-content'
+                  }} 
+                  className='mt-2'
+                >
+                  <span   
+                    ref={arrowElement} 
+                    style={{
+                      left: middlewareData.arrow?.x,
+                      top: middlewareData.arrow?.y
+                    }}
+                    className='absolute border-b-white border-[11px] border-t-transparent border-x-transparent translate-y-[-94%] z-20'
+                  ></span>
+                  <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                    <div className="flex flex-col py-2 px-3">
+                      <button className='hover:text-gray-500 py-2 mb-2 px-3'>English</button>
+                      <button className='hover:text-gray-500 py-2 px-3'>Tieng Viet</button>
+                    </div>
                   </div>
-                </div>
-              </div>
-            )}
-          </FloatingPortal>
+                </motion.div>
+              )}
+            </FloatingPortal>
+          </AnimatePresence>
         </div>
 
 
