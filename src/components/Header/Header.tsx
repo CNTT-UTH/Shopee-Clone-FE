@@ -2,12 +2,24 @@
 import { Link } from 'react-router-dom'
 import reactImg from '../../assets/react.svg'
 import logo from '../../assets/images/logo.svg'
+import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react';
+import { useRef, useState } from 'react';
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
+  const arrowElement = useRef<HTMLElement>(null)
+
+  const {refs, floatingStyles, middlewareData} = useFloating({
+    middleware: [offset(5),shift(), arrow({element: arrowElement})],
+  })
+
+  const onHover = () => setIsOpen(true)
+  const leaveHover = () => setIsOpen(false)
+
   return (
     <div className="pb-4 pt-2 bg-gradient-to-b from-[#d0011b] to-[#f53d2d]">
       <div className="container">
         <div className="flex justify-end text-white text-sm">
-          <div className="flex items-center py-1 hover:text-gray-300 hover:cursor-pointer">
+          <div className="flex items-center py-1 hover:text-gray-300 cursor-pointer" ref={refs.setReference} onMouseEnter={onHover} onMouseLeave={leaveHover}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
             </svg> 
@@ -15,7 +27,30 @@ export default function Header() {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
             </svg>
-          </div>
+
+          <FloatingPortal>
+            {isOpen && (
+              <div ref={refs.setFloating} style={floatingStyles} className='mt-2'>
+                <span   
+                  ref={arrowElement} 
+                  style={{
+                    left: middlewareData.arrow?.x,
+                    top: middlewareData.arrow?.y
+                  }}
+                  className='absolute border-b-white border-[11px] border-t-transparent border-x-transparent translate-y-[-94%] z-20'
+                ></span>
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                  <div className="flex flex-col py-2 px-3">
+                    <button className='hover:text-gray-500 py-2 mb-2 px-3'>English</button>
+                    <button className='hover:text-gray-500 py-2 px-3'>Tieng Viet</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </FloatingPortal>
+        </div>
+
+
           <div className="flex items-center py-1 hover:text-gray-300 hover:cursor-pointer ml-4">
             <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full">
               <img src={reactImg} alt="avatar" className='w-full h-full object-cover rounded-full' />
@@ -23,7 +58,7 @@ export default function Header() {
             <div>Đức Tài</div>
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-4 items-center py-2">
+        <div className="grid grid-cols-12 gap-4 items-center py-6">
           <Link to="/" className='flex gap-3 items-center col-span-2'>
               <img src={logo} alt="" className='h-8 lg:h-12' />
               <span className="text-xl lg:text-2xl text-white">Shopee</span>
@@ -32,8 +67,8 @@ export default function Header() {
             <div className="rounded-sm p-1 flex bg-white ">
               <input name='search' type="text" placeholder='Search something bro...' className='flex-grow px-3 py-2 text-black border-none outline-none bg-transparent'/>
               <button className='bg-[#f53d2d] py-2 px-6 hover:opacity-90 rounded-sm flex-shrink-0 text-white lg:px-10'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
               </button>
             </div>
