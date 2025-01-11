@@ -1,20 +1,22 @@
-import { arrow, FloatingPortal, offset, shift, useFloating } from "@floating-ui/react";
+import { arrow, FloatingPortal, offset, shift, useFloating, type Placement } from "@floating-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useId, useRef, useState } from "react";
 
 interface Props {
   children: React.ReactNode,
   infoPopover : React.ReactNode,
-  className?: string
+  className?: string,
+  placement?: Placement
 }
 
-export default function Popover({children, infoPopover, className}: Props) {
+export default function Popover({children, infoPopover, placement = 'bottom-end', className = "flex items-center hover:text-gray-300 cursor-pointer"}: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const arrowElement = useRef<HTMLElement>(null)
     const id = useId()
   
     const {refs, x, y, strategy,middlewareData} = useFloating({
-      middleware: [offset(5),shift(), arrow({element: arrowElement})],
+      middleware: [offset(6), shift(), arrow({element: arrowElement})],
+      placement: "bottom-end"
     })
   
     const onHover = () => setIsOpen(true)
@@ -22,7 +24,7 @@ export default function Popover({children, infoPopover, className}: Props) {
 
 
   return (
-    <div className="flex items-center py-1 hover:text-gray-300 cursor-pointer" ref={refs.setReference} onMouseEnter={onHover} onMouseLeave={leaveHover}>
+    <div className={className} ref={refs.setReference} onMouseEnter={onHover} onMouseLeave={leaveHover}>
       {children}
 
       <AnimatePresence>
@@ -40,7 +42,6 @@ export default function Popover({children, infoPopover, className}: Props) {
                 width: 'max-content',
                 transformOrigin: `${middlewareData.arrow?.x}px top`
               }} 
-              className='mt-2'
             >
               <span   
                 ref={arrowElement} 
@@ -50,7 +51,7 @@ export default function Popover({children, infoPopover, className}: Props) {
                 }}
                 className='absolute border-b-white border-[11px] border-t-transparent border-x-transparent translate-y-[-94%] z-20'
               ></span>
-              <div className='bg-white shadow-lg relative rounded-lg border border-gray-200 ring-2 ring-blue-200'>
+              <div className='bg-white shadow-lg relative rounded-md border border-gray-200 ring-2 ring-blue-200'>
                 {infoPopover}
               </div>
             </motion.div>
