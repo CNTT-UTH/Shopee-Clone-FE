@@ -1,5 +1,5 @@
 import { AuthResponse } from "../types/auth.type"
-import http from "../utils/http"
+import http from "../utils/axios.http"
 
 interface RegisterBody {
   email: string
