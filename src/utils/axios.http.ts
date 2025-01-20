@@ -4,7 +4,7 @@ class Http {
   instance : AxiosInstance
   constructor() {
     this.instance = axios.create({
-      baseURL: 'http://localhost:8080',
+      baseURL: import.meta.env.VITE_SERVER_URL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
@@ -14,10 +14,11 @@ class Http {
     //config res interceptors
     this.instance.interceptors.response.use(
       function (response) { 
+          console.log('success', response)
           return response
       }, 
       function (error) { 
-        console.log(error)  
+        console.log('error',error)  
         return Promise.reject(error)
       }
     )

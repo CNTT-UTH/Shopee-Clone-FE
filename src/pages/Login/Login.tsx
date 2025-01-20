@@ -7,8 +7,9 @@ import { useMutation } from "@tanstack/react-query";
 import { loginAuth } from "../../apis/auth.api";
 
 interface IFormInput {
-    email: string;
-    password: string;
+    username: string
+    email: string
+    password: string
 }
 
 export default function Login() {
@@ -29,8 +30,7 @@ export default function Login() {
         onSuccess: (data) => {
           console.log("check onsuccess_", data)
         }
-      })
-        console.log(data);
+      }) 
     });
 
     return (
@@ -44,6 +44,14 @@ export default function Login() {
                             className="p-10 rounded bg-white shadow-sm"
                         >
                             <div className="text-2xl">{t("Login")}</div>
+                            <Input
+                                name="username"
+                                register={register}
+                                type="username"
+                                errorMessage={errors.username?.message}
+                                placeholder="Username"
+                                Rules={rules().username}
+                            />
                             <Input
                                 name="email"
                                 register={register}
