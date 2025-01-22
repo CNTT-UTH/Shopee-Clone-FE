@@ -1,34 +1,29 @@
 import {  useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { rules } from "../../utils/rules";
+import { yupResolver } from '@hookform/resolvers/yup'
+import { schema, Schema } from "../../utils/rules"
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
 import { registerAuth } from "../../apis/auth.api";
 
-interface FormType {
-  email: string
-  username: string
-  password: string
-  confirm_password: string
-}
+
 
 export default function Register() {
-  const { t } = useTranslation();
+  const { t } = useTranslation() //muti languages
 
   const registerMutation = useMutation({
-    mutationFn: (body: FormType) => registerAuth(body)
+    mutationFn: (body: Schema) => registerAuth(body)
   })
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-} = useForm<FormType>();
+} = useForm<Schema>({
+  resolver: yupResolver(schema)
+});
 
-  const passwordInput = watch("password")
-  const Rules = rules(passwordInput);
 
   const onSubmit = handleSubmit(data => {
     console.log("data>>>",data)
@@ -52,7 +47,6 @@ export default function Register() {
                   type='email'
                   errorMessage={errors.email?.message}
                   placeholder="Email"
-                  Rules={Rules.email}
                 />  
                 <Input 
                   name='username'
@@ -60,7 +54,6 @@ export default function Register() {
                   type='text'
                   errorMessage={errors.username?.message}
                   placeholder="Username"
-                  Rules={Rules.username}
                 />  
                 <Input 
                   name='password'
@@ -68,7 +61,6 @@ export default function Register() {
                   type='password'
                   errorMessage={errors.password?.message}
                   placeholder="Password"
-                  Rules={Rules.password}
                 />  
                 <Input 
                   name='confirm_password'
@@ -76,7 +68,6 @@ export default function Register() {
                   type='confirm_password'
                   errorMessage={errors.confirm_password?.message}
                   placeholder="Confirm Password"
-                  Rules={Rules.confirm_password}
                 /> 
                 <div className="mt-8">
                   <button type="submit" className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover bg-orange-500">

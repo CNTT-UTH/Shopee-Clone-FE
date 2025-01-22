@@ -1,28 +1,30 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { rules } from "../../utils/rules";
+import { yupResolver } from '@hookform/resolvers/yup'
+import { schema, Schema } from "../../utils/rules";
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
 import { loginAuth } from "../../apis/auth.api";
 
-interface IFormInput {
-    username: string
-    email: string
-    password: string
-}
+type FormData = Pick<Schema, 'email' | 'username' | 'password'>
+const loginValidate = schema.pick(['email', 'username', 'password'])
+
 
 export default function Login() {
+    //muti language
     const  { t } = useTranslation();
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<IFormInput>();
+    } = useForm<FormData>({
+      resolver: yupResolver(loginValidate)
+    })
     
     const loginMutation = useMutation({
-        mutationFn: (body: IFormInput) => loginAuth(body)
+        mutationFn: (body: FormData) => loginAuth(body)
     })
 
     const onSubmit = handleSubmit((data) => {
@@ -50,7 +52,6 @@ export default function Login() {
                                 type="username"
                                 errorMessage={errors.username?.message}
                                 placeholder="Username"
-                                Rules={rules().username}
                             />
                             <Input
                                 name="email"
@@ -58,7 +59,6 @@ export default function Login() {
                                 type="email"
                                 errorMessage={errors.email?.message}
                                 placeholder="Email"
-                                Rules={rules().email}
                             />
                             <Input 
                                 name='password'
@@ -66,7 +66,6 @@ export default function Login() {
                                 type='password'
                                 errorMessage={errors.password?.message}
                                 placeholder="Password"
-                                Rules={rules().password}
                                 /> 
                             <div className="mt-6">
                                 <button
