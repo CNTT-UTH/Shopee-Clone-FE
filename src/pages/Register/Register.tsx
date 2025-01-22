@@ -1,7 +1,7 @@
 import {  useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
-import { schema, Schema } from "../../utils/rules"
+import { schema, Schema } from "../../utils/validate"
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
 } = useForm<Schema>({
   resolver: yupResolver(schema)
@@ -30,6 +31,9 @@ export default function Register() {
     registerMutation.mutate(data, {
       onSuccess: (data) => {
         console.log("check onsuccess_", data)
+      },
+      onError: (error) => {
+        console.log(error)
       }
     })
   })

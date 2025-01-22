@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
-import { schema, Schema } from "../../utils/rules";
+import { schema, Schema } from "../../utils/validate";
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
