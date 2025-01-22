@@ -6,6 +6,9 @@ import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
 import { registerAuth } from "../../apis/auth.api";
+import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
+import { ErrorResponse } from "../../types/utils.type";
+import { Omit } from "lodash";
 
 
 
@@ -27,13 +30,33 @@ export default function Register() {
 
 
   const onSubmit = handleSubmit(data => {
-    console.log("data>>>",data)
     registerMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log("check onsuccess_", data)
+        console.log("onsuccess_", data)
       },
+
       onError: (error) => {
-        console.log(error)
+          if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<Schema, 'confirm_password'>>>(error)) {
+             const authError = error.response?.data.errors
+             if(authError?.email) {
+              setError('email', {
+                message: authError.email.message,
+                type: 'Server'
+              })
+             }
+             if(authError?.username) {
+              setError('username', {
+                message: authError.username.message,
+                type: 'Server'
+              })
+             }
+             if(authError?.password) {
+              setError('password', {
+                message: authError.password.message,
+                type: 'Server'
+              })
+             }
+          }
       }
     })
   })
@@ -69,7 +92,7 @@ export default function Register() {
                 <Input 
                   name='confirm_password'
                   register={register}
-                  type='confirm_password'
+                  type='password'
                   errorMessage={errors.confirm_password?.message}
                   placeholder="Confirm Password"
                 /> 
