@@ -1,4 +1,5 @@
 import type { RegisterOptions } from "react-hook-form"
+import * as yup from "yup"
 
 type Rules = { [key in 'email' | 'username' | 'password' | 'confirm_password']? : RegisterOptions }
 export const rules = (passwordValue: string = ""): Rules =>  ({
@@ -53,3 +54,48 @@ export const rules = (passwordValue: string = ""): Rules =>  ({
     }
 }
 )
+
+// Function to validate confirm password
+const handleConfirmPasswordYup = (refString: string) => {
+  return yup
+    .string()
+    .required('Confirm password is required')
+    .min(8, 'Password must be between 8 and 128 characters long')
+    .max(128, 'Password must be between 8 and 128 characters long')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*(),.?":{}|<>]).{8,128}$/,
+      'Password must include at least one lowercase letter, one uppercase letter, one number, and one special character'
+    )
+    .oneOf([yup.ref(refString)], 'Passwords do not match');
+};
+
+// Schema
+export const schema = yup.object({
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Invalid email format')
+    .matches(
+      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+      'Invalid email format'
+    ),
+  username: yup
+    .string()
+    .required('Username is required')
+    .min(3, 'Username must be at least 3 characters long')
+    .max(20, 'Username must not exceed 20 characters')
+    .matches(
+      /^[a-zA-Z0-9]+$/,
+      'Username must only contain letters and numbers'
+    ),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Password must be between 8 and 128 characters long')
+    .max(128, 'Password must be between 8 and 128 characters long')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&*(),.?":{}|<>]).{8,128}$/,
+      'Password must include at least one lowercase letter, one uppercase letter, one number, and one special character'
+    ),
+  confirm_password: handleConfirmPasswordYup('password'),
+});
