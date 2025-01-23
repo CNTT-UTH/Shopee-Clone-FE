@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from "../../utils/validate";
 import Input from "../../components/Input";
@@ -9,14 +9,17 @@ import { loginAuth } from "../../apis/auth.api";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth.context";
 
 type FormData = Pick<Schema, 'email' | 'username' | 'password'>
 const loginValidate = schema.pick(['email', 'username', 'password'])
 
 
 export default function Login() {
-    //muti language
     const  { t } = useTranslation();
+    const { setIsAuthenticated } = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const {
         register,
@@ -36,6 +39,8 @@ export default function Login() {
           toast.success("You have logged in successfully!", {
             theme: 'colored'
           })
+          setIsAuthenticated(true)
+          navigate('/')
         },
 
         onError: (error) => {
