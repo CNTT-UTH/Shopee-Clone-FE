@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginAuth } from "../../apis/auth.api";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
+import { toast } from "react-toastify";
 
 type FormData = Pick<Schema, 'email' | 'username' | 'password'>
 const loginValidate = schema.pick(['email', 'username', 'password'])
@@ -20,7 +21,6 @@ export default function Login() {
     const {
         register,
         handleSubmit,
-        setError,
         formState: { errors },
     } = useForm<FormData>({
       resolver: yupResolver(loginValidate)
@@ -40,11 +40,9 @@ export default function Login() {
           if (isAxiosUnprocessableEntityError<ErrorResponse<AuthError>>(error)) {
              const authError = error.response?.data.errors
              if (authError) {
-              Object.keys(authError).forEach((key) => {
-                setError(key as keyof FormData, {
-                  message: authError[key as keyof Omit<Schema, 'confirm_password'>].message,
-                  type: 'Server'
-                })
+              toast.error(authError.email.message, {
+                theme: 'dark',
+                pauseOnHover: true
               })
             } 
           }
@@ -110,5 +108,6 @@ export default function Login() {
                 </div>
             </div>
         </div>
+        
     );
 }

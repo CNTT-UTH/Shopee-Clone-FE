@@ -1,4 +1,5 @@
-import axios, {type AxiosInstance} from 'axios'
+import axios, {AxiosError, HttpStatusCode, type AxiosInstance} from 'axios'
+import { toast } from 'react-toastify'
 
 class Http {
   instance : AxiosInstance
@@ -17,8 +18,13 @@ class Http {
           console.log('success', response)
           return response
       }, 
-      function (error) { 
-        console.log('error',error)  
+      function (error: AxiosError) { 
+        if(error.response?.status !== HttpStatusCode.UnprocessableEntity)  {
+          const message = (error.response?.data as { message: string }).message || error.message
+          toast.error(message, {
+            theme: 'colored'
+          })
+        }
         return Promise.reject(error)
       }
     )

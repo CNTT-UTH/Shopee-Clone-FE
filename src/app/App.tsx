@@ -7,6 +7,7 @@ import AuthLayout from '../layouts/AuthLayout'
 import MainLayout from '../layouts/MainLayout'
 import { ProtectedRoute, PublicRoute } from '../components/Routes/ProtectedRoute'
 import Profile from '../pages/Profie'
+import { ToastContainer } from 'react-toastify'
 
 const router = createBrowserRouter([
   {
@@ -58,7 +59,13 @@ const router = createBrowserRouter([
 ])
 
 const App: React.FC = () => {
-  return <RouterProvider router={router} />
+  return (
+    <React.Fragment>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </React.Fragment>
+  )
+
 }
 
 export default App
