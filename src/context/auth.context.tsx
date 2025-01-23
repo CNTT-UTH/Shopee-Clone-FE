@@ -1,5 +1,5 @@
 import { getAccessTokenFromLS } from "../utils/auth.http"
-import React, { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react"
+import React, { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react"
 
 interface AuthContextInterface {
   isAuthenticated: boolean,
@@ -22,3 +22,5 @@ export const AuthProvider = ({ children }: {children: ReactNode}) => {
     </AuthContext.Provider>
   )
 }
+
+export const useAuth = () => useContext(AuthContext);

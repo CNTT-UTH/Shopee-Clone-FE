@@ -1,5 +1,5 @@
 import {  useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from "../../utils/validate"
 import Input from "../../components/Input";
@@ -8,9 +8,13 @@ import { useMutation } from "@tanstack/react-query";
 import { registerAuth } from "../../apis/auth.api";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
+import { toast } from "react-toastify"
+import {  useAuth } from "../../context/auth.context";
  
 export default function Register() {
   const { t } = useTranslation() //muti languages
+  const { setIsAuthenticated } = useAuth()
+  const navigate = useNavigate()
 
   const registerMutation = useMutation({
     mutationFn: (body: Schema) => registerAuth(body)
@@ -28,9 +32,13 @@ export default function Register() {
 
   const onSubmit = handleSubmit(data => {
     registerMutation.mutate(data, {
-      onSuccess: (data) => {
-        console.log("onsuccess_", data)
-      },
+      onSuccess: () => {
+          toast.success("You have registered successfully!", {
+            theme: 'colored'
+          })
+          setIsAuthenticated(true)
+          navigate('/')      
+        },
 
       onError: (error) => {
           if (isAxiosUnprocessableEntityError<ErrorResponse<AuthError>>(error)) {
