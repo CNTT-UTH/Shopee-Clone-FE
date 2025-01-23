@@ -1,5 +1,5 @@
 import {  useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from "../../utils/validate"
 import Input from "../../components/Input";
@@ -9,7 +9,6 @@ import { registerAuth } from "../../apis/auth.api";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { toast } from "react-toastify"
-import {  useAuth } from "../../context/auth.context";
 import { useState } from "react";
 import VerifyEmailModal from "../../components/Modal/Modal";
  
@@ -37,7 +36,7 @@ export default function Register() {
     registerMutation.mutate(data, {
       onSuccess: (data) => {
           toast.success("You have registered successfully!", {
-            theme: 'colored'
+            theme: 'light'
           })
           setVerifyToken(data.result?.verify_mail_token);
           setIsModalOpen(true);

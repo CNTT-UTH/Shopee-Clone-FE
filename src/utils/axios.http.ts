@@ -48,8 +48,9 @@ class Http {
 
   private handleAuthResponses(response: AxiosResponse<AuthResponse>) {
     const { url } = response.config;
-    if (url === '/auth/login' || url === '/auth/register') {
-      this.accessToken = (response.data as AuthResponse).result?.accessToken || '';
+    if (url === '/auth/login' || url === '/auth/verify-email') {
+      console.log(response)
+      this.accessToken = (response.data as AuthResponse).result?.accessToken || (response.data as AuthResponse).result?.access_token
       saveAccessTokenToLS(this.accessToken);
     } else if (url === '/auth/logout') {
       this.accessToken = '';

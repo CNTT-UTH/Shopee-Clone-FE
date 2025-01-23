@@ -1,11 +1,13 @@
 import { useForm } from 'react-hook-form';
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { OtpSchema } from '../../utils/validate';
 import { verifyEmail } from '../../apis/auth.api';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@uth/context/auth.context';
+import { useAuth } from '../../context/auth.context';
+import { Fragment } from 'react';
+import { motion } from "framer-motion";
 
 interface VerifyEmailModalProps {
   isOpen: boolean;
@@ -49,50 +51,69 @@ export default function VerifyEmailModal({
   })
 
   return (
-    <Dialog open={isOpen} onClose={onClose} className="relative z-50">
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black bg-opacity-30" />
-      {/* Modal Container */}
-      <div className="fixed inset-0 flex items-center justify-center p-4">
-        <Dialog.Panel className="w-full max-w-md bg-white rounded shadow-md p-6">
-          <Dialog.Title className="text-xl font-bold mb-4">Verify Email</Dialog.Title>
-          <form onSubmit={onSubmit} className="space-y-4">
-            {/* OTP Input */}
-            <div>
-              <label htmlFor="otp" className="block text-sm font-medium text-gray-700">
-                OTP
-              </label>
-              <input
-                id="otp"
-                type="text"
-                {...register('otp', { required: 'OTP is required' })}
-                className={`w-full px-3 py-2 border rounded ${
-                  errors.otp ? 'border-red-500' : 'border-gray-300'
-                } focus:outline-none focus:ring focus:ring-blue-500`}
-                placeholder="Enter OTP"
-              />
-              {errors.otp && <p className="text-red-500 text-sm">{errors.otp.message}</p>}
-            </div>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <TransitionChild
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-30" />
+        </TransitionChild>
 
-            {/* Buttons */}
-            <div className="flex justify-end space-x-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Verify
-              </button>
-            </div>
-          </form>
-        </Dialog.Panel>
-      </div>
-    </Dialog>
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <TransitionChild
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <DialogPanel className="w-full max-w-md transform bg-white rounded-lg shadow-lg p-6 transition-all">
+              <DialogTitle className="text-xl font-bold mb-4">Verify Email</DialogTitle>
+              <form onSubmit={onSubmit} className="space-y-4">
+                {/* OTP Input */}
+                <div className="mb-12">
+                  <input
+                    type="text"
+                    {...register("otp")}
+                    className="w-full px-4 py-3 border-2 rounded-lg focus:ring focus:ring-orange-500 focus:ring-opacity-50 transition-shadow"
+                    placeholder="Enter OTP"
+                  />
+                  {errors.otp && (
+                    <p className="text-red-500 mt-1 text-sm">{errors.otp.message}</p>
+                  )}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end space-x-2">
+                  <motion.button
+                    type="button"
+                    onClick={onClose}
+                    className="text-white px-4 text-center py-4 uppercase bg-gray-300 hover:bg-gray-500 rounded-md text-sm hover bg-orange-500"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    Cancel
+                  </motion.button>
+                  <motion.button
+                    type="submit"
+                    className="text-white px-4 text-center py-4 uppercase bg-orange rounded-md text-sm hover hover:bg-opacity-80"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    Verify
+                  </motion.button>
+                </div>
+              </form>
+            </DialogPanel>
+          </TransitionChild>
+        </div>
+      </Dialog>
+    </Transition>
   );
 }
