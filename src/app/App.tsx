@@ -8,6 +8,7 @@ import MainLayout from '../layouts/MainLayout'
 import { ProtectedRoute, PublicRoute } from '../components/Routes/ProtectedRoute'
 import Profile from '../pages/Profie'
 import { ToastContainer } from 'react-toastify'
+import VerifyEmail from '../pages/Register/VerifyEmail'
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,14 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout>
             <Register />
+          </AuthLayout>
+        )
+      },
+      {
+        path: 'verify-email',
+        element: (
+          <AuthLayout>
+            <VerifyEmail />
           </AuthLayout>
         )
       }

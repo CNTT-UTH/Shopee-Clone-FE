@@ -1,4 +1,5 @@
-import { AuthResponse } from "../types/auth.type";
+import { OtpSchema } from "@uth/utils/validate";
+import { AuthResponse, RegisterResponse } from "../types/auth.type";
 import http from "../utils/axios.http";
 
 interface RegisterBody {
@@ -22,8 +23,8 @@ const AUTH_ENDPOINT = '/auth';
  * @returns A promise resolving to the authentication response data.
  */
 
-export const registerAuth = (body: RegisterBody): Promise<AuthResponse> => {
-  return http.post<AuthResponse>(`${AUTH_ENDPOINT}/register`, body)
+export const registerAuth = (body: RegisterBody): Promise<RegisterResponse> => {
+  return http.post<RegisterResponse>(`${AUTH_ENDPOINT}/register`, body)
     .then(response => response.data)
     .catch(error => {
       console.error("Registration failed", error);
@@ -43,5 +44,16 @@ export const loginAuth = (body: LoginBody): Promise<AuthResponse> => {
     .catch(error => {
       console.error("Login failed", error);
       throw error;
-    });
+    })
 };
+
+export const verifyEmail = (body : { verify_email_token: string, code: string }) => {
+  console.log('check',body)
+  return http.post<AuthResponse>(`${AUTH_ENDPOINT}/verify-email`, body)
+    .then(response => response.data)
+    .catch(error => {
+      console.error("Verify email failed", error);
+      throw error;
+    })
+}
+

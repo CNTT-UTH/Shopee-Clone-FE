@@ -46,4 +46,9 @@ export const schema = yup.object({
   confirm_password: handleConfirmPasswordYup('password'),
 });
 
+export const otpValidate = yup.object().shape({
+  otp: yup.string().required('OTP is required').length(6, 'OTP must be 6 digits')
+})
+
 export type Schema = yup.InferType<typeof schema>
+export type OtpSchema = yup.InferType<typeof otpValidate>;

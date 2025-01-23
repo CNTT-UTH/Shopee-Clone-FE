@@ -10,11 +10,14 @@ import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { toast } from "react-toastify"
 import {  useAuth } from "../../context/auth.context";
+import { useState } from "react";
+import VerifyEmailModal from "../../components/Modal/Modal";
  
 export default function Register() {
+  const [verifyToken, setVerifyToken] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { t } = useTranslation() //muti languages
-  const { setIsAuthenticated } = useAuth()
-  const navigate = useNavigate()
 
   const registerMutation = useMutation({
     mutationFn: (body: Schema) => registerAuth(body)
@@ -32,12 +35,12 @@ export default function Register() {
 
   const onSubmit = handleSubmit(data => {
     registerMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
           toast.success("You have registered successfully!", {
             theme: 'colored'
           })
-          setIsAuthenticated(true)
-          navigate('/')      
+          setVerifyToken(data.result?.verify_mail_token);
+          setIsModalOpen(true);
         },
 
       onError: (error) => {
@@ -124,6 +127,8 @@ export default function Register() {
             </div>
           </div>
         </div>
+        {verifyToken && <VerifyEmailModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} token={verifyToken} />}
+
     </div>
   )
 }

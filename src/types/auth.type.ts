@@ -17,3 +17,7 @@ export type AuthResponse = ResponseApi<{
 //     ...
 //   }
 // }
+
+export type RegisterResponse = ResponseApi<{
+  verify_mail_token: string
+}>
