@@ -33,7 +33,9 @@ export default function Login() {
     const onSubmit = handleSubmit((data) => {
       loginMutation.mutate(data, {
         onSuccess: (data) => {
-          console.log("check onsuccess_", data)
+          toast.success("You have logged in successfully!", {
+            theme: 'colored'
+          })
         },
 
         onError: (error) => {

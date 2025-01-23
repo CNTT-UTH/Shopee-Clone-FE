@@ -1,7 +1,7 @@
 import { Schema } from "../utils/validate"
 
 export interface ResponseApi<Data> {
-  result?: Data
+  result: Data
   message: string
 }
 
