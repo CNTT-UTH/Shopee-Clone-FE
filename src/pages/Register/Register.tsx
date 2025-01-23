@@ -7,11 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
 import { registerAuth } from "../../apis/auth.api";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
-import { ErrorResponse } from "../../types/utils.type";
-import { Omit } from "lodash";
-
-
-
+import { AuthError, ErrorResponse } from "../../types/utils.type";
+ 
 export default function Register() {
   const { t } = useTranslation() //muti languages
 
@@ -36,26 +33,34 @@ export default function Register() {
       },
 
       onError: (error) => {
-          if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<Schema, 'confirm_password'>>>(error)) {
+          if (isAxiosUnprocessableEntityError<ErrorResponse<AuthError>>(error)) {
              const authError = error.response?.data.errors
-             if(authError?.email) {
-              setError('email', {
-                message: authError.email.message,
-                type: 'Server'
+             if (authError) {
+              Object.keys(authError).forEach((key) => {
+                setError(key as keyof Schema, {
+                  message: authError[key as keyof Omit<Schema, 'confirm_password'>].message,
+                  type: 'Server'
+                })
               })
-             }
-             if(authError?.username) {
-              setError('username', {
-                message: authError.username.message,
-                type: 'Server'
-              })
-             }
-             if(authError?.password) {
-              setError('password', {
-                message: authError.password.message,
-                type: 'Server'
-              })
-             }
+            }
+            //  if(authError?.email) {
+            //   setError('email', {
+            //     message: authError.email.message,
+            //     type: 'Server'
+            //   })
+            //  }
+            //  if(authError?.username) {
+            //   setError('username', {
+            //     message: authError.username.message,
+            //     type: 'Server'
+            //   })
+            //  }
+            //  if(authError?.password) {
+            //   setError('password', {
+            //     message: authError.password.message,
+            //     type: 'Server'
+            //   })
+            //  }
           }
       }
     })
