@@ -10,6 +10,8 @@ import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { toast } from "react-toastify";
 import { useAuth } from "../../context/auth.context";
+import { motion } from 'framer-motion';
+import { containerVariants, inputVariants } from "../../constants/animation.motion";
 
 type FormData = Pick<Schema, 'email' | 'username' | 'password'>
 const loginValidate = schema.pick(['email', 'username', 'password'])
@@ -59,61 +61,74 @@ export default function Login() {
     return (
         <div className="bg-orange">
             <div className="mx-auto max-w-7xl px-4">
-                <div className="px-10 grid grid-cols-1 md:grid-cols-5 py-12 lg:py-28 md:pr-10">
-                    <div className="lg:col-span-2 lg:col-start-4 md:col-span-3 md:col-start-3">
-                        <form
-                            onSubmit={onSubmit}
-                            noValidate
-                            className="p-10 rounded bg-white shadow-sm"
-                        >
-                            <div className="text-2xl">{t("Login")}</div>
-                            <Input
-                                name="username"
-                                register={register}
-                                type="username"
-                                errorMessage={errors.username?.message}
-                                placeholder="Username"
-                            />
-                            <Input
-                                name="email"
-                                register={register}
-                                type="email"
-                                errorMessage={errors.email?.message}
-                                placeholder="Email"
-                            />
-                            <Input 
-                                name='password'
-                                register={register}
-                                type='password'
-                                errorMessage={errors.password?.message}
-                                placeholder="Password"
-                                /> 
-                            <div className="mt-6">
-                                <button
-                                    type="submit"
-                                    className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover bg-orange-500"
-                                >
-                                    {t("Login")}
-                                </button>
-                            </div>
-                            <div className="mt-10 text-center">
-                                <div className="flex items-center justify-center">
-                                    <span className="text-gray-400">
-                                        {t("Don't have account")}
-                                    </span>
-                                    <Link
-                                        to="/register"
-                                        className="text-blue-400 ml-2"
-                                    >
-                                        {t("Register")}
-                                    </Link>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <motion.div
+              className="px-10 grid grid-cols-1 md:grid-cols-5 py-12 lg:py-28 md:pr-10"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={containerVariants}
+            >
+            <motion.div
+              className="lg:col-span-2 lg:col-start-4 md:col-span-3 md:col-start-3"
+              variants={containerVariants}
+            >
+            <form
+              noValidate
+              onSubmit={onSubmit}
+              action=""
+              className="p-10 rounded bg-white shadow-sm"
+            >
+              <motion.div
+                className="text-2xl mb-6"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {t('Login')}
+              </motion.div>
+              {(['email', 'username', 'password'] as Array<keyof FormData>).map(
+                (field, index) => (
+                  <motion.div key={field} custom={index} variants={inputVariants}>
+                    <Input
+                      name={field}
+                      register={register}
+                      type={field}
+                      errorMessage={errors[field]?.message}
+                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
+                    />
+                  </motion.div>
+                )
+              )}
+              <motion.div
+                className="mt-8"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+              >
+                <button
+                  type="submit"
+                  className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
+                >
+                  {t('Login')}
+                </button>
+              </motion.div>
+              <motion.div
+                className="mt-10 text-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 1 }}
+              >
+                <div className="flex items-center justify-center">
+                  <span className="text-gray-400">{t("Don't have account")}</span>
+                  <Link to="/register" className="text-blue-400 ml-2">
+                    {t('Register')}
+                  </Link>
                 </div>
-            </div>
-        </div>
-        
-    );
+              </motion.div>
+            </form>
+          </motion.div>
+        </motion.div>
+      </div>
+  </div>
+  );
 }
