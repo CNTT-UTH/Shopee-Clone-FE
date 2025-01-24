@@ -62,7 +62,7 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <RouterProvider router={router} />
-      <ToastContainer />
+      <ToastContainer autoClose={2000}/>
     </React.Fragment>
   )
 

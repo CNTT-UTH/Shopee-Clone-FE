@@ -13,6 +13,7 @@ import { useState } from "react";
 import VerifyEmailModal from "../../components/Modal/Modal";
 import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
+import Button from "../../components/Button";
 
 export default function Register() {
   const [verifyToken, setVerifyToken] = useState<string | null>(null);
@@ -112,7 +113,7 @@ export default function Register() {
                     <Input
                       name={field}
                       register={register}
-                      type={field === 'email' ? 'email' : 'text'}
+                      type={field === 'confirm_password' ? 'password' : field}
                       errorMessage={errors[field]?.message}
                       placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
                     />
@@ -125,12 +126,14 @@ export default function Register() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.8 }}
               >
-                <button
+                <Button
+                  isLoading={registerMutation.isLoading}
+                  disabled={registerMutation.isLoading}
                   type="submit"
                   className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
                 >
                   {t('Register')}
-                </button>
+                </Button>
               </motion.div>
               <motion.div
                 className="mt-10 text-center"

@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../../context/auth.context";
 import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
+import Button from "../../components/Button";
 
 type FormData = Pick<Schema, 'email' | 'username' | 'password'>
 const loginValidate = schema.pick(['email', 'username', 'password'])
@@ -38,7 +39,7 @@ export default function Login() {
       loginMutation.mutate(data, {
         onSuccess: () => {
           toast.success("You have logged in successfully!", {
-            theme: 'colored'
+            theme: 'colored',
           })
           setIsAuthenticated(true)
           navigate('/')
@@ -105,12 +106,14 @@ export default function Login() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.8 }}
               >
-                <button
+                <Button
                   type="submit"
                   className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
+                  isLoading={loginMutation.isLoading}
+                  disabled={loginMutation.isLoading}
                 >
                   {t('Login')}
-                </button>
+                </Button>
               </motion.div>
               <motion.div
                 className="mt-10 text-center"

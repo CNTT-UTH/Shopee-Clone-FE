@@ -6,8 +6,10 @@ import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from "motion/react"
 import Popover from '../Popover';
+import { useAuth } from '../../context/auth.context';
 
 export default function Header() {
+  const { setIsAuthenticated, isAuthenticated } = useAuth()
 
   const infoPopover = (
       <div className="flex flex-col py-1 px-1">
@@ -99,15 +101,24 @@ export default function Header() {
             </svg>
           </Popover>  
 
-          <Popover 
+          {isAuthenticated ? <Popover 
             infoPopover={avatarPopover}
-            className={"flex items-center h-16 hover:text-gray-300 hover:cursor-pointer ml-4"}
+            className={"flex items-center h-16 hover:text-gray-300 cursor-pointer ml-4"}
           >
             <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full">
                 <img src={reactImg} alt="avatar" className='w-full h-full object-cover rounded-full' />
               </div>
             <div>Đức Tài</div>
-          </Popover>
+          </Popover> : 
+            (<div className='flex items-center'>
+              <Link to='/register' className='mx-3 capitalize hover:text-white/70 cursor-pointer'>
+                Register
+              </Link>
+              <div> | </div>
+              <Link to='/login' className='mx-3 capitalize hover:text-white/70 cursor-pointer'>
+                Login
+              </Link>
+            </div>)}
 
           <div >
 
