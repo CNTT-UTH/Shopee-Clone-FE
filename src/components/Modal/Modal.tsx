@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { OtpSchema } from '../../utils/validate';
 import { verifyEmail } from '../../apis/auth.api';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/auth.context';
+import { useAuth } from '../../contexts/auth.context';
 import { Fragment } from 'react';
 import { motion } from "framer-motion";
 
@@ -25,7 +25,7 @@ export default function VerifyEmailModal({
   token,
 }: VerifyEmailModalProps) {
 
-  const { setIsAuthenticated } = useAuth()
+  const { setIsAuthenticated, setUser } = useAuth()
   const navigate = useNavigate()
   const {
     register,
@@ -39,9 +39,10 @@ export default function VerifyEmailModal({
 
   const onSubmit = handleSubmit(data => {
     verifyMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Email verified successfully!", { theme: 'colored' })
         setIsAuthenticated(true)
+        setUser(data.result.user_profile)
         navigate('/')
       },
       onError: () => {

@@ -1,14 +1,15 @@
 import { AuthResponse } from '../types/auth.type'
 import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} from 'axios'
 import { toast } from 'react-toastify'
-import { clearAccessTokenFromLS, getAccessTokenFromLS, saveAccessTokenToLS } from './auth.http'
+import { clearLS, getAccessTokenFromLS, getUserProfileFromLS, setAccessTokenToLS, setUserProfileFromLS } from './auth.http'
 import { useNavigate } from 'react-router-dom'
+import { User } from '../types/user.type'
 
 class Http {
   instance : AxiosInstance
-  private accessToken: string
+  private access_token: string
   constructor() {
-    this.accessToken = getAccessTokenFromLS()
+    this.access_token = getAccessTokenFromLS()
     this.instance = axios.create({
       baseURL: import.meta.env.VITE_SERVER_URL,
       timeout: 10000,
@@ -24,8 +25,8 @@ class Http {
   private initializeRequestInterceptor() {
     this.instance.interceptors.request.use(
       (config) => {
-        if (this.accessToken && config.headers) {
-          config.headers.Authorization = `Bearer ${this.accessToken}`;
+        if (this.access_token && config.headers) {
+          config.headers.Authorization = `Bearer ${this.access_token}`;
         }
         return config;
       },
@@ -47,14 +48,16 @@ class Http {
   }
 
   private handleAuthResponses(response: AxiosResponse<AuthResponse>) {
-    const { url } = response.config;
+    const { url } = response.config
+    const result = (response.data as AuthResponse).result
     if (url === '/auth/login' || url === '/auth/verify-email') {
       console.log(response)
-      this.accessToken = (response.data as AuthResponse).result?.accessToken || (response.data as AuthResponse).result?.access_token //fix sau
-      saveAccessTokenToLS(this.accessToken);
+      this.access_token = result.access_token 
+      setAccessTokenToLS(this.access_token)
+      setUserProfileFromLS(result.user_profile)
     } else if (url === '/auth/logout') {
-      this.accessToken = '';
-      clearAccessTokenFromLS();
+      this.access_token = ''
+      clearLS();
     }
   }
 
@@ -72,8 +75,8 @@ class Http {
 
   private handleUnauthorizedError() {
     // Logic to redirect to login page or refresh token
-    clearAccessTokenFromLS();
-    this.accessToken = '';
+    clearLS();
+    this.access_token = '';
     toast.error('Your session has expired. Please log in again.', { theme: 'colored' });
     const navigate = useNavigate()
     navigate('/login')

@@ -6,7 +6,7 @@ import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from "motion/react"
 import Popover from '../Popover';
-import { useAuth } from '../../context/auth.context';
+import { useAuth } from '../../contexts/auth.context';
 import path from '../../constants/path';
 
 export default function Header() {

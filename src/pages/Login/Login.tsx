@@ -9,7 +9,7 @@ import { loginAuth } from "../../apis/auth.api";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { toast } from "react-toastify";
-import { useAuth } from "../../context/auth.context";
+import { useAuth } from "../../contexts/auth.context";
 import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
 import Button from "../../components/Button";
@@ -21,7 +21,7 @@ const loginValidate = schema.pick(['email', 'username', 'password'])
 
 export default function Login() {
     const  { t } = useTranslation();
-    const { setIsAuthenticated } = useAuth()
+    const { setIsAuthenticated, setUser } = useAuth()
     const navigate = useNavigate()
 
     const {
@@ -38,11 +38,12 @@ export default function Login() {
 
     const onSubmit = handleSubmit((data) => {
       loginMutation.mutate(data, {
-        onSuccess: () => {
+        onSuccess: (data) => {
           toast.success("You have logged in successfully!", {
             theme: 'colored',
           })
           setIsAuthenticated(true)
+          setUser(data.result.user_profile)
           navigate('/')
         },
 

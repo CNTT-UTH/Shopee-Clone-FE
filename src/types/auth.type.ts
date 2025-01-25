@@ -2,12 +2,11 @@ import { User } from "./user.type";
 import { ResponseApi } from "./utils.type";
 
 export type AuthResponse = ResponseApi<{
-  accessToken: string
-  access_token?: string
+  access_token: string
   refreshToken: string
   expires_access_token : string
   expires_refresh_token : string
-  user : User
+  user_profile : User
 }> // => { result: { access_token, refresh_token, ,expires , user}, message: string }  
 
 //test typescript recommendation
