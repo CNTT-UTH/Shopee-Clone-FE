@@ -13,6 +13,7 @@ import { useAuth } from "../../context/auth.context";
 import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
 import Button from "../../components/Button";
+import path from "../../constants/path"
 
 type FormData = Pick<Schema, 'email' | 'username' | 'password'>
 const loginValidate = schema.pick(['email', 'username', 'password'])
@@ -123,7 +124,7 @@ export default function Login() {
               >
                 <div className="flex items-center justify-center">
                   <span className="text-gray-400">{t("Don't have account")}</span>
-                  <Link to="/register" className="text-blue-400 ml-2">
+                  <Link to={path.register} className="text-blue-400 ml-2">
                     {t('Register')}
                   </Link>
                 </div>

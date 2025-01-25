@@ -14,6 +14,7 @@ import VerifyEmailModal from "../../components/Modal/Modal";
 import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
 import Button from "../../components/Button";
+import path from "../../constants/path";
 
 export default function Register() {
   const [verifyToken, setVerifyToken] = useState<string | null>(null);
@@ -143,7 +144,7 @@ export default function Register() {
               >
                 <div className="flex items-center justify-center">
                   <span className="text-gray-400">{t('Have account')}</span>
-                  <Link to="/login" className="text-blue-400 ml-2">
+                  <Link to={path.login} className="text-blue-400 ml-2">
                     {t('Login')}
                   </Link>
                 </div>
@@ -160,5 +161,5 @@ export default function Register() {
         />
       )}
     </div>
-  );
+  )
 }

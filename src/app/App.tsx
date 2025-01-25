@@ -8,6 +8,7 @@ import MainLayout from '../layouts/MainLayout'
 import { ProtectedRoute, PublicRoute } from '../components/Routes/ProtectedRoute'
 import Profile from '../pages/Profie'
 import { ToastContainer } from 'react-toastify'
+import path from '../constants/path'
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: 'profile',
+        path: path.profile,
         element: (
           <MainLayout>
             <Profile />
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
     element: <PublicRoute />,
     children: [
       {
-        path: 'login',
+        path: path.login,
         element: ( 
           <AuthLayout>
             <Login />
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: 'register',
+        path: path.register,
         element: (
           <AuthLayout>
             <Register />

@@ -5,10 +5,9 @@ export interface User {
   username: string
   email: string
   name?: string
-  dob?: string
-  gender?: string
+  gender?: number  //0: nam, 1: nu, 2: other
   phone?: string
-  is_shop?: string
-  status?: number; // 0: Chưa xác nhận mail, 1: Đã xác thực, 2: Banned
-  default_address?: Address
-}
+  is_shop: boolean
+  status: number; // 0: Chưa xác nhận mail, 1: Đã xác thực, 2: Banned
+  avatar?: string
+} 
