@@ -4,6 +4,8 @@ const ACCESS_TOKEN_KEY = 'access_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
 const USER_KEY = 'user_profile'
 
+export const EventTargetLS = new EventTarget()
+
 /**
  * Saves the access token to local storage.
  * @param access_token - The access token to save.
@@ -34,7 +36,11 @@ export const setRefreshTokenToLS = (refresh_token: string): void => {
 export const clearLS = (): void => {
   try {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
+    localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(USER_KEY)
+    const clearEvent = new Event('clear')
+    EventTargetLS.dispatchEvent(clearEvent)
+
   } catch (error) {
     console.error("Failed to remove these properties from localStorage", error)
   }

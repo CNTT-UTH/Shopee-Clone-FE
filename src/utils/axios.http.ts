@@ -77,19 +77,11 @@ class Http {
     }
 
     //Handle specific status codes like 401 or 403.
-    if (error.response?.status === HttpStatusCode.Unauthorized || error.response?.status === HttpStatusCode.Forbidden) {
-      this.handleUnauthorizedError();
+    if (error.response?.status === HttpStatusCode.Unauthorized) {
+      clearLS()
     }
   }
-
-  private handleUnauthorizedError() {
-    // Logic to redirect to login page or refresh token
-    clearLS();
-    this.access_token = '';
-    toast.error('Your token has expired. Please log in again.', { theme: 'colored' });
-    const navigate = useNavigate()
-    navigate('/login')
-  }
+ 
 
 }
 

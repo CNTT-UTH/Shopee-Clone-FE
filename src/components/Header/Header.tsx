@@ -25,7 +25,7 @@ export default function Header() {
   </div>)
 
   const avatarPopover = (<div className='px-1 py-1'>
-    <Link to='/' className='block py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>My Account</Link>
+    <Link to='/profile' className='block py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>My Account</Link>
     <Link to='/' className='block py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>Order</Link>
     <button  className='block w-full text-left py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>Log Out</button>
   </div>)
