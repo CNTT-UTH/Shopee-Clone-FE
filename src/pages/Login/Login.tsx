@@ -5,7 +5,7 @@ import { schema, Schema } from "../../utils/validate";
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
-import { loginAuth } from "../../apis/auth.api";
+import authApi from "../../apis/auth.api";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { toast } from "react-toastify";
@@ -33,7 +33,7 @@ export default function Login() {
     })
     
     const loginMutation = useMutation({
-        mutationFn: (body: FormData) => loginAuth(body)
+        mutationFn: (body: FormData) => authApi.loginAuth(body)
     })
 
     const onSubmit = handleSubmit((data) => {

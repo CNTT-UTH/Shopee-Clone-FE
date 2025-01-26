@@ -9,6 +9,10 @@ import Popover from '../Popover';
 import { useAuth } from '../../contexts/auth.context';
 import path from '../../constants/path';
 import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import authApi from '../../apis/auth.api';
+import { toast } from 'react-toastify';
+import { clearLS } from '../../utils/auth.http';
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
@@ -16,7 +20,20 @@ export default function Header() {
 
   const changeLanguage = (lng: 'vi' | 'en') => {
     i18n.changeLanguage(lng) 
-  };
+  }
+
+  const logoutMutation = useMutation({
+    mutationFn: authApi.logoutAuth
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        toast.success('Logout success')
+      },
+      onError: () => console.log('Error logout')
+    })
+  }
 
   const infoPopover = (
       <div className="flex flex-col py-1 px-1">
@@ -27,7 +44,7 @@ export default function Header() {
   const avatarPopover = (<div className='px-1 py-1'>
     <Link to='/profile' className='block py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>My Account</Link>
     <Link to='/' className='block py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>Order</Link>
-    <button  className='block w-full text-left py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>Log Out</button>
+    <button onClick={handleLogout} className='block w-full text-left py-2 px-3 hover:bg-gray-50 hover:text-cyan-500 rounded-md'>Log Out</button>
   </div>)
 
   const cartPopover = (

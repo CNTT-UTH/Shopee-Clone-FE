@@ -3,7 +3,7 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 import { toast } from 'react-toastify';
 import { useMutation } from '@tanstack/react-query';
 import { OtpSchema } from '../../utils/validate';
-import { verifyEmail } from '../../apis/auth.api';
+import authApi from '../../apis/auth.api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/auth.context';
 import { Fragment } from 'react';
@@ -34,7 +34,7 @@ export default function VerifyEmailModal({
   } = useForm<VerifyForm>();
 
     const verifyMutation = useMutation({
-      mutationFn: (body: OtpSchema) => verifyEmail({ verify_email_token: token, code: body.otp })
+      mutationFn: (body: OtpSchema) => authApi.verifyEmail({ verify_email_token: token, code: body.otp })
     }) 
 
   const onSubmit = handleSubmit(data => {

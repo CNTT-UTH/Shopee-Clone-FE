@@ -5,7 +5,7 @@ import { schema, Schema } from "../../utils/validate"
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
-import { registerAuth } from "../../apis/auth.api";
+import authApi from "../../apis/auth.api";
 import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
 import { AuthError, ErrorResponse } from "../../types/utils.type";
 import { toast } from "react-toastify"
@@ -23,7 +23,7 @@ export default function Register() {
   const { t } = useTranslation() //muti languages
 
   const registerMutation = useMutation({
-    mutationFn: (body: Schema) => registerAuth(body)
+    mutationFn: (body: Schema) => authApi.registerAuth(body)
   }) 
 
   const {

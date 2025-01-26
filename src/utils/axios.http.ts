@@ -62,6 +62,7 @@ class Http {
       console.log(response)
       this.access_token = result.access_token 
       this.refresh_token = result.refresh_token
+      
       setAccessTokenToLS(this.access_token)
       setRefreshTokenToLS(this.refresh_token)
       setUserProfileFromLS(result.user_profile)
@@ -73,7 +74,7 @@ class Http {
   }
 
   private handleErrorResponse(error: AxiosError) {
-    if (error.response?.status !== HttpStatusCode.UnprocessableEntity) {
+    if (error.response?.status !== HttpStatusCode.UnprocessableEntity && error.response?.status !== HttpStatusCode.Unauthorized) {
       const message = (error.response?.data as { message: string })?.message || error.message;
       toast.error(message, { theme: 'colored' });
     }

@@ -38,6 +38,7 @@ export const clearLS = (): void => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(USER_KEY)
+    
     const clearEvent = new Event('clear')
     EventTargetLS.dispatchEvent(clearEvent)
 
