@@ -1,14 +1,21 @@
 import { AuthResponse } from '../types/auth.type'
 import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} from 'axios'
 import { toast } from 'react-toastify'
-import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setUserProfileFromLS } from './auth.http'
+import { clearLS, getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserProfileFromLS } from './auth.http'
 import { useNavigate } from 'react-router-dom' 
 
 class Http {
   instance : AxiosInstance
   private access_token: string
+  private refresh_token: string
+  private callRefreshToken: Promise<string> | null
+
   constructor() {
+    //init for properties
     this.access_token = getAccessTokenFromLS()
+    this.refresh_token = getRefreshTokenFromLS()
+    this.callRefreshToken = null
+
     this.instance = axios.create({
       baseURL: import.meta.env.VITE_SERVER_URL,
       timeout: 10000,
@@ -52,10 +59,13 @@ class Http {
     if (url === '/auth/login' || url === '/auth/verify-email') {
       console.log(response)
       this.access_token = result.access_token 
+      this.refresh_token = result.refresh_token
       setAccessTokenToLS(this.access_token)
+      setRefreshTokenToLS(this.refresh_token)
       setUserProfileFromLS(result.user_profile)
     } else if (url === '/auth/logout') {
       this.access_token = ''
+      this.refresh_token = ''
       clearLS();
     }
   }

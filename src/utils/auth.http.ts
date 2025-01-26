@@ -1,17 +1,30 @@
 import { User } from "../types/user.type"
 
 const ACCESS_TOKEN_KEY = 'access_token'
+const REFRESH_TOKEN_KEY = 'refresh_token'
 const USER_KEY = 'user_profile'
 
 /**
  * Saves the access token to local storage.
- * @param accessToken - The access token to save.
+ * @param access_token - The access token to save.
  */
-export const setAccessTokenToLS = (accessToken: string): void => {
+export const setAccessTokenToLS = (access_token: string): void => {
   try {
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+    localStorage.setItem(ACCESS_TOKEN_KEY, access_token)
   } catch (error) {
     console.error("Failed to save access token to localStorage", error)
+  }
+}
+
+/**
+ * Saves the access token to local storage.
+ * @param refresh_token - The refresh token to save.
+ */
+export const setRefreshTokenToLS = (refresh_token: string): void => {
+  try {
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh_token)
+  } catch (error) {
+    console.error("Failed to save refresh token to localStorage", error)
   }
 }
 
@@ -36,6 +49,15 @@ export const getAccessTokenFromLS = (): string => {
     return localStorage.getItem(ACCESS_TOKEN_KEY) || ''
   } catch (error) {
     console.error("Failed to retrieve access token from localStorage", error)
+    return ''
+  }
+}
+
+export const getRefreshTokenFromLS = (): string => {
+  try {
+    return localStorage.getItem(REFRESH_TOKEN_KEY) || ''
+  } catch (error) {
+    console.error("Failed to retrieve refresh token from localStorage", error)
     return ''
   }
 }
