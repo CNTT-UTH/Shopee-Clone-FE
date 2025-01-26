@@ -8,7 +8,7 @@ export interface ResponseApi<Data> {
 
 export interface ErrorResponse<Errors> {
   message: string
-  errors: Errors
+  errors?: Errors
   success: boolean
 }
 

@@ -3,6 +3,8 @@ import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} fr
 import { toast } from 'react-toastify'
 import { clearLS, getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserProfileFromLS } from './auth.http'
 import { useNavigate } from 'react-router-dom' 
+import { isAxiosExpiredError, isAxiosUnauthorizedError } from './axios.error'
+import { ErrorResponse } from '../types/utils.type'
 
 class Http {
   instance : AxiosInstance
@@ -77,9 +79,37 @@ class Http {
     }
 
     //Handle specific status codes like 401 
-    if (error.response?.status === HttpStatusCode.Unauthorized) {
+    // - token is wrong
+    // - don't pass token
+    // - token is expired
+    if (isAxiosUnauthorizedError<ErrorResponse<null>>(error)) {
+      const config = error.response?.config || {headers: {}, url: ''}
+      console.log('config', config)
+
+      if (isAxiosExpiredError(error) && config.url !== '/auth/refresh-token') {
+
+        // limit more calls to handleRefreshToken
+        this.callRefreshToken = this.callRefreshToken
+          ? this.callRefreshToken
+          : this.handleRefreshToken().finally(() => {
+              // Keep callRefreshToken for 10 seconds for subsequent requests, if there is a 401 then use it
+              setTimeout(() => {
+                this.callRefreshToken = null
+              }, 10000)
+            })
+        return this.callRefreshToken.then((access_token) => {
+          // This means we continue to call back the old request that just failed
+          return this.instance({ ...config, headers: { ...config.headers, Authorization: `Bearer ${access_token}` } })
+        })
+      }
+
+
+      //remaining cases
       clearLS()
-    }
+      this.access_token = ''
+      this.refresh_token = ''
+      toast.error((error.response?.data.errors && (error.response.data.errors as ErrorResponse<{message: string}>).message) 
+      || error.response?.data.message)}
   }
 
   private handleRefreshToken() {
@@ -97,8 +127,6 @@ class Http {
         throw error
       })
   }
- 
-
 }
 
 const http = new Http().instance
