@@ -1,9 +1,8 @@
 import { AuthResponse } from '../types/auth.type'
 import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} from 'axios'
 import { toast } from 'react-toastify'
-import { clearLS, getAccessTokenFromLS, getUserProfileFromLS, setAccessTokenToLS, setUserProfileFromLS } from './auth.http'
-import { useNavigate } from 'react-router-dom'
-import { User } from '../types/user.type'
+import { clearLS, getAccessTokenFromLS, setAccessTokenToLS, setUserProfileFromLS } from './auth.http'
+import { useNavigate } from 'react-router-dom' 
 
 class Http {
   instance : AxiosInstance
@@ -77,7 +76,7 @@ class Http {
     // Logic to redirect to login page or refresh token
     clearLS();
     this.access_token = '';
-    toast.error('Your session has expired. Please log in again.', { theme: 'colored' });
+    toast.error('Your token has expired. Please log in again.', { theme: 'colored' });
     const navigate = useNavigate()
     navigate('/login')
   }

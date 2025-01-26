@@ -48,12 +48,18 @@ export const loginAuth = (body: LoginBody): Promise<AuthResponse> => {
 };
 
 export const verifyEmail = (body : { verify_email_token: string, code: string }) => {
-  console.log('check',body)
+  // console.log('check',body)
   return http.post<AuthResponse>(`${AUTH_ENDPOINT}/verify-email`, body)
     .then(response => response.data)
     .catch(error => {
       console.error("Verify email failed", error);
       throw error;
     })
+}
+
+export const logoutAuth = (body: any) => {
+  return http.post(`${AUTH_ENDPOINT}/logout`, body)
+    .then(res => res.data)
+    .catch(error => {throw new Error("Maybe it has an error that is ", error)})
 }
 
