@@ -21,3 +21,8 @@ export type AuthResponse = ResponseApi<{
 export type RegisterResponse = ResponseApi<{
   verify_mail_token: string
 }>
+
+export type RefreshTokenResponse = ResponseApi<{
+  accessToken: string
+  refreshToken: string
+}>

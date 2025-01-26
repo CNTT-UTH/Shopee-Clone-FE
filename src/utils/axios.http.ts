@@ -1,4 +1,4 @@
-import { AuthResponse } from '../types/auth.type'
+import { AuthResponse, RefreshTokenResponse } from '../types/auth.type'
 import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} from 'axios'
 import { toast } from 'react-toastify'
 import { clearLS, getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserProfileFromLS } from './auth.http'
@@ -76,10 +76,26 @@ class Http {
       toast.error(message, { theme: 'colored' });
     }
 
-    //Handle specific status codes like 401 or 403.
+    //Handle specific status codes like 401 
     if (error.response?.status === HttpStatusCode.Unauthorized) {
       clearLS()
     }
+  }
+
+  private handleRefreshToken() {
+    return this.instance.post<RefreshTokenResponse>('/auth/refresh-token', {refresh_token: this.refresh_token})
+      .then(res => {
+        const access_token = res.data.result.accessToken
+        setAccessTokenToLS(access_token)
+        this.access_token = access_token
+        return access_token
+      })
+      .catch(error => {
+        clearLS()
+        this.access_token = ''
+        this.refresh_token = ''
+        throw error
+      })
   }
  
 

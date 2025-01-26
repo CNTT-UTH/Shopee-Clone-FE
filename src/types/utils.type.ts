@@ -3,6 +3,7 @@ import { Schema } from "../utils/validate"
 export interface ResponseApi<Data> {
   result: Data
   message: string
+  success: boolean
 }
 
 export interface ErrorResponse<Errors> {

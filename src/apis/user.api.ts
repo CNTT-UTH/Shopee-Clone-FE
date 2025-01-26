@@ -1,6 +1,6 @@
-import { User } from 'src/types/user.type'
-import { ResponseApi } from 'src/types/utils.type'
-import http from 'src/utils/axios.http'
+import { User } from '../types/user.type'
+import { ResponseApi } from '../types/utils.type'
+import http from '../utils/axios.http'
 
 const USER_ENDPOINT = '/users';
 
