@@ -1,11 +1,12 @@
-interface Props {
-  children?: React.ReactNode
-}
+import { Outlet } from "react-router-dom"
+import SideBarUser from "../../components/SideBarUser"
 
-export default function UserLayout({ children }: Props) {
+
+export default function UserLayout() {
   return (
     <div>
-      {children}
+      <SideBarUser />
+      <Outlet />
     </div>
   )
 }

@@ -56,25 +56,7 @@ export default function Register() {
                   type: 'Server'
                 })
               })
-            }
-            //  if(authError?.email) {
-            //   setError('email', {
-            //     message: authError.email.message,
-            //     type: 'Server'
-            //   })
-            //  }
-            //  if(authError?.username) {
-            //   setError('username', {
-            //     message: authError.username.message,
-            //     type: 'Server'
-            //   })
-            //  }
-            //  if(authError?.password) {
-            //   setError('password', {
-            //     message: authError.password.message,
-            //     type: 'Server'
-            //   })
-            //  }
+            } 
           }
       }
     })

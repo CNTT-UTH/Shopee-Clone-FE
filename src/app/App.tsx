@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify'
 import path from '../constants/path'
 import { EventTargetLS } from '../utils/auth.http'
 import { useAuth } from '../contexts/auth.context'
+import UserLayout from '../layouts/UserLayout'
 
 const router = createBrowserRouter([
   {
@@ -27,13 +28,19 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: path.profile,
+        path: path.user,
         element: (
           <MainLayout>
-            <Profile />
+            <UserLayout />
           </MainLayout>
-        )
-      }
+        ),
+        children: [
+          {
+            path: path.profile,
+            element: <Profile />
+          }
+        ]
+      },
     ]
   },
   {

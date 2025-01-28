@@ -1,9 +1,11 @@
 const path = {
   home: '/',
-  profile: '/profile',
+  user: 'user',
+  profile: '/user/profile',
   login: '/login',
   register: '/register',
-  logout: '/logout'
+  logout: '/logout',
+  cart: 'cart'
 }
 
 export default path
