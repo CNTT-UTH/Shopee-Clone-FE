@@ -1,18 +1,14 @@
 
 import { Link } from 'react-router-dom'
 import reactImg from '../../assets/react.svg'
-import logo from '../../assets/images/logo.svg'
-import { arrow, FloatingPortal, offset, shift, useFloating } from '@floating-ui/react';
-import { useRef, useState } from 'react';
-import { AnimatePresence, motion } from "motion/react"
-import Popover from '../Popover';
-import { useAuth } from '../../contexts/auth.context';
-import path from '../../constants/path';
-import { useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
-import authApi from '../../apis/auth.api';
-import { toast } from 'react-toastify';
-import { clearLS } from '../../utils/auth.http';
+import logo from '../../assets/images/logo.svg' 
+import Popover from '../Popover'
+import { useAuth } from '../../contexts/auth.context'
+import path from '../../constants/path'
+import { useTranslation } from 'react-i18next'
+import { useMutation } from '@tanstack/react-query'
+import authApi from '../../apis/auth.api'
+import { toast } from 'react-toastify' 
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()

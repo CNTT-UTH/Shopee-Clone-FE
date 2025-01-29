@@ -12,6 +12,8 @@ import path from '../constants/path'
 import { EventTargetLS } from '../utils/auth.http'
 import { useAuth } from '../contexts/auth.context'
 import UserLayout from '../layouts/UserLayout'
+import ChangePassword from '../pages/ChangePassword'
+import InfoPurchase from '../pages/InfoPurchase'
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
           {
             path: path.profile,
             element: <Profile />
+          },
+          {
+            path: path.changePassword,
+            element: <ChangePassword />
+          },
+          {
+            path: path.infoPurchase,
+            element: <InfoPurchase />
           }
         ]
       },
