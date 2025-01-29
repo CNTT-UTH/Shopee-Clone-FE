@@ -9,7 +9,7 @@ export default function SideBarUser() {
     <Fragment>
       <div className="flex items-center border-b border-b-gray-200 py-4">
         <Link to={path.profile} className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10">
-          <img src="https://i.pinimg.com/736x/73/ae/14/73ae1424196238ffdeaf9dfc099fa88f.jpg" alt=""
+          <img src="https://i.pinimg.com/736x/cf/d4/de/cfd4deea360693aea33bcc2afc7655b4.jpg" alt=""
             className="h-full w-full object-cover" 
           />
         </Link>
