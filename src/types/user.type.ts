@@ -1,4 +1,8 @@
-import { Address } from "./address.type"
+// import { Address } from "./address.type"
+
+export interface UserProfileResponse {
+  user_profile: User
+}
 
 export interface User {
   user_id: string
