@@ -23,9 +23,13 @@ const userApi = {
       })
   },
 
-  // uploadAvatar(body: FormData) {
-  //   return http.post<ResponseApi>
-  // }
+  uploadAvatar(body: FormData) {
+    return http.post<ResponseApi<string>>(`${USER_ENDPOINT}/upload_avatar`, body, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  }
 }
 
 export default userApi

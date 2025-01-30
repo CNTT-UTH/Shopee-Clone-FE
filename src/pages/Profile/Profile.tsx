@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import userApi from "../../apis/user.api"
 import Input from "../../components/Input"
+import Button from "../../components/Button"
 
 export default function Profile() {
 
@@ -28,8 +29,8 @@ export default function Profile() {
           Manage and protect your account
         </div>
       </div>
-      <div className="mt-8 flex flex-col-reverse md:flex-row md:items-start">
-        <form className="mt-6 flex-grow pr-12 md:mt-0">
+      <form className="mt-8 flex flex-col-reverse md:flex-row md:items-start">
+        <div className="mt-6 flex-grow pr-12 md:mt-0">
           <div className="flex flex-wrap flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Username</div>
             <div className="sm:w-[80%] sm:pl-5">
@@ -70,7 +71,11 @@ export default function Profile() {
               </div>
             </div>
           </div>
-        </form>
+          <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
+            <div className="sm:w-[20%] sm:mr-5 pt-3"></div>
+            <Button type="button" className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-8 py-2.5 text-center mt-4">Save</Button>
+          </div>
+        </div>
         <div className="flex justify-center md:w-72 md:border-l md:border-l-gray-200">
           <div className="flex flex-col items-center">
             <div className="my-5 h-24 w-24">
@@ -89,7 +94,7 @@ export default function Profile() {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   )
 }
