@@ -3,14 +3,25 @@ import userApi from "@uth/apis/user.api"
 import Input from "@uth/components/Input"
 import Button from "@uth/components/Button"
 import formatEmail from "@uth/utils/formatEmail"
+import { UserSchemaType } from "@uth/schemas/user.schema"
+import { useForm } from "react-hook-form"
+
 
 export default function ProfileComponent() {
+  const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
+    defaultValues: {
+      address: '',
+      name: '',
+      phone: '',
+      avatar: ''
+    }
+  })
 
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
-  const profile = profileData?.result
+  const profile = profileData?.result.user_profile
 
   console.log(profile)
 
