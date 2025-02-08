@@ -4,7 +4,8 @@ import Input from "@uth/components/Input"
 import Button from "@uth/components/Button"
 import formatEmail from "@uth/utils/formatEmail"
 import { UserSchemaType } from "@uth/schemas/user.schema"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
+import InputNumber from "../InputNumber"
 
 
 export default function ProfileComponent() {
@@ -23,7 +24,7 @@ export default function ProfileComponent() {
   })
   const profile = profileData?.result.user_profile
 
-  console.log(profile)
+  console.log(profile?.email)
 
   return (
     <div className="bg-white rounded-md px-2 md:px-7 pb-10 md:pb-20 shadow">
@@ -38,25 +39,34 @@ export default function ProfileComponent() {
           <div className="flex flex-wrap flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Username</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <div className="pt-3 text-gray-700">DucTaiPhan</div>
+              <div className="pt-3 text-gray-700">{profile?.username}</div>
             </div>
           </div>
           <div className="flex flex-wrap mt-4 flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Email</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <div className="pt-3 text-gray-700">{formatEmail('ductai@gmail.com')}</div>
+              <div className="pt-3 text-gray-700">{formatEmail(profile?.email as string)}</div>
             </div>
           </div>
           <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Name</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <input className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm"/>
+              <Input className="mt-0" type='text' errorMessage={errors.name?.message} name='name' register={register} classNameInput="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm" />
             </div>
           </div>
           <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Phone number</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <input className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm"/>
+              <Controller
+                control={control}
+                name='phone'
+                render={({field}) => (
+                  <InputNumber className="mt-0" type="number" errorMessage={errors.phone?.message}  classNameInput="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm"
+                    {...field}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
             </div>
           </div>
           <div className="mt-6 flex flex-wrap flex-col sm:flex-row">
@@ -88,8 +98,8 @@ export default function ProfileComponent() {
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
-            <input className="hidden" type="file" accept=".jpg, .jpeg, .png" id="" />
-            <button className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">
+            <Input className="mt-0" name='avatar' errorMessage={errors.avatar?.message} register={register} classNameInput="hidden" type="file"  />
+            <button type="button" className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">
               Select Image
             </button>
             <div className="text-gray-400 mt-3">
