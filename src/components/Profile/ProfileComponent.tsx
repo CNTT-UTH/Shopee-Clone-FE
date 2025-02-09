@@ -3,52 +3,54 @@ import userApi from "@uth/apis/user.api"
 import Input from "@uth/components/Input"
 import Button from "@uth/components/Button"
 import formatEmail from "@uth/utils/formatEmail"
-import { UserSchemaType } from "@uth/schemas/user.schema"
+import { userSchema, UserSchemaType } from "@uth/schemas/user.schema"
 import { Controller, useForm } from "react-hook-form"
 import InputNumber from "../InputNumber"
 import { useEffect } from "react"
 import defaultValue from "@uth/constants/defaultValue"
 import DateForm from "../DateForm"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { toast } from "react-toastify"
 
 
 export default function ProfileComponent() {
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
     defaultValues: {
-      address: '',
       name: '',
       phone: '',
       avatar: '',
       dob: defaultValue.date_of_birth
-    }
+    },
+    resolver: yupResolver(userSchema)
   })
 
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
+  const profile = profileData?.result.user_profile
 
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
   })
-  const profile = profileData?.result.user_profile
-
+  
   useEffect(() => {
     if(profile) {
-      console.log('run', profile.dob)
-      setValue('name', profile.name)
-      setValue('avatar', profile.avatar)
-      setValue('phone', profile.phone)
+      setValue('name', profile.name || '')
+      setValue('avatar', profile.avatar || '')
+      setValue('phone', profile.phone || '')
       setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
+      console.log('run', new Date(profile.dob || defaultValue.date_of_birth.getTime()))
     }
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    // await updateProfileMutation.mutateAsync({
-    // })
+    console.log(data)
+    const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
+    console.log(data)
+    toast.success(result.message)
   })
 
-  const value = watch()
-  console.log(value)
 
   return (
     <div className="bg-white rounded-md px-2 md:px-7 pb-10 md:pb-20 shadow">

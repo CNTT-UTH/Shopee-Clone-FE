@@ -1,6 +1,6 @@
 import defaultValue from '@uth/constants/defaultValue'
 import { range } from 'lodash'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface Props {
   onChange?: (value: Date) => void
@@ -8,19 +8,32 @@ interface Props {
   errorMessage?: string
 }
 
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 export default function DateForm({value, onChange, errorMessage}: Props) {
   const [date, setDate] = useState({
     date: value?.getDate() || 1,
     month: value?.getMonth() || 0,
-    year: value?.getFullYear() || 1980
+    year: value?.getFullYear() || 2000
   })
+ 
+  useEffect(() => {
+     if (value) {
+      setDate({
+        date: value?.getDate(),
+        month: value?.getMonth(),
+        year: value?.getFullYear(),
+      })
+    }
+  }, [value])
 
-  console.log('check date',value?.getFullYear(), ' ',  )
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const {value, name} = event.target
+    const {value: valueForm, name} = event.target
     const newDate = {
-      ...date,
-      [name]: value
+      date: value?.getDate() || date.date,
+      month: value?.getMonth() || date.month,
+      year: value?.getFullYear() || date.year,
+      [name]: Number(valueForm)
     }
     setDate(newDate)
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -42,23 +55,23 @@ export default function DateForm({value, onChange, errorMessage}: Props) {
           </select>
           <select value={value?.getMonth() || date.month} onChange={handleChange} name='month' className="h-10 w-[32%] bg-white hover:border-orange cursor-pointer rounded-sm border border-black/10 px-3">
             <option disabled>Month</option>
-            {range(0, 12).map((item) => (
-              <option value={item} key={item}>
-                {item + 1}
+            {months.map((item, index) => (
+              <option value={index} key={index}>
+                {item}
               </option>
             ))}
-          </select>
-          <select defaultValue={value?.getFullYear() || date.year} onChange={handleChange} name='year' className="h-10 w-[32%] bg-white hover:border-orange cursor-pointer rounded-sm border border-black/10 px-3">
+          </select> 
+          <select value={value?.getFullYear() || date.year} onChange={handleChange} name='year' className="h-10 bg-white hover:border-orange cursor-pointer w-[32%] rounded-sm border border-black/10 px-3">
             <option disabled>Year</option>
-            {range(1980, (new Date()).getFullYear()).map((item) => (
+            {range(1990, (new Date()).getFullYear() + 1).map((item) => (
               <option value={item} key={item}>
                 {item}
               </option>
             ))}
           </select>
         </div>
+        <div className="mt-1 text-red-600 min-h-[1.25rem] text-sm">{errorMessage}</div>
       </div>
-      <div className="mt-1 text-red-600 min-h-[1.25rem] text-sm">{errorMessage}</div>
     </div>
 
   )

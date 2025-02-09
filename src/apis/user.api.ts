@@ -1,4 +1,4 @@
-import { User, UserProfileResponse } from '../types/user.type'
+import { User, UserBodyRequest, UserProfileResponse } from '../types/user.type'
 import { ResponseApi } from '../types/utils.type'
 import http from '../utils/axios.http'
 
@@ -14,8 +14,8 @@ const userApi = {
     })
   },
 
-  updateProfile(body: Omit<User, 'user_id' | 'email'>) {
-    return http.patch<ResponseApi<UserProfileResponse>>(`${USER_ENDPOINT}/update_profile`, body)
+  updateProfile(body: Omit<UserBodyRequest, 'user_id' | 'email' | 'username'>) {
+    return http.patch<ResponseApi<UserProfileResponse>>(`${USER_ENDPOINT}/update-profile`, body)
       .then(response => response.data)
       .catch(error => {
         console.error('Update profile fail ', error)
