@@ -69,7 +69,7 @@ export const getRefreshTokenFromLS = (): string => {
   }
 }
 
-export const setUserProfileFromLS = (user: User): void => {
+export const setUserProfileToLS = (user: User): void => {
   try {
     localStorage.setItem(USER_KEY, JSON.stringify(user))
   } catch (error) {

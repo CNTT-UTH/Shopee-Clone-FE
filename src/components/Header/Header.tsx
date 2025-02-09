@@ -26,6 +26,8 @@ export default function Header() {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('Logout success')
+        setIsAuthenticated(false)
+        setUser(null)
       },
       onError: () => console.log('Error logout')
     })
@@ -126,7 +128,7 @@ export default function Header() {
             className={"flex items-center h-16 hover:text-gray-300 cursor-pointer ml-4"}
           >
             <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full cursor-pointer">
-                <img src={reactImg} alt="avatar" className='w-full h-full object-cover rounded-full' />
+                <img src={user?.avatar || reactImg} alt="avatar" className='w-full h-full object-cover rounded-full' />
               </div>
             <div>{user?.username}</div>
           </Popover> : 

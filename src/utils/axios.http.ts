@@ -1,7 +1,7 @@
 import { AuthResponse, RefreshTokenResponse } from '../types/auth.type'
 import axios, {AxiosError, AxiosResponse, HttpStatusCode, type AxiosInstance} from 'axios'
 import { toast } from 'react-toastify'
-import { clearLS, getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserProfileFromLS } from './auth.http'
+import { clearLS, getAccessTokenFromLS, getRefreshTokenFromLS, setAccessTokenToLS, setRefreshTokenToLS, setUserProfileToLS } from './auth.http'
 import { useNavigate } from 'react-router-dom' 
 import { isAxiosExpiredError, isAxiosUnauthorizedError } from './axios.error'
 import { ErrorResponse } from '../types/utils.type'
@@ -65,7 +65,7 @@ class Http {
       
       setAccessTokenToLS(this.access_token)
       setRefreshTokenToLS(this.refresh_token)
-      setUserProfileFromLS(result.user_profile)
+      setUserProfileToLS(result.user_profile)
     } else if (url === '/auth/logout') {
       this.access_token = ''
       this.refresh_token = ''

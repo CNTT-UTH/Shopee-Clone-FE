@@ -11,11 +11,15 @@ import defaultValue from "@uth/constants/defaultValue"
 import DateForm from "../DateForm"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { toast } from "react-toastify"
+import { useAuth } from "@uth/contexts/auth.context"
+import { setUserProfileToLS } from "@uth/utils/auth.http"
 
 
 export default function ProfileComponent() {
+  const { setUser } = useAuth()
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
     defaultValues: {
+      gender: 2,
       name: '',
       phone: '',
       avatar: '',
@@ -24,7 +28,7 @@ export default function ProfileComponent() {
     resolver: yupResolver(userSchema)
   })
 
-  const { data: profileData } = useQuery({
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
@@ -40,15 +44,19 @@ export default function ProfileComponent() {
       setValue('avatar', profile.avatar || '')
       setValue('phone', profile.phone || '')
       setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
-      console.log('run', new Date(profile.dob || defaultValue.date_of_birth.getTime()))
+      setValue('gender', profile.gender)
+      console.log('run', profile)
     }
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
     const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
     console.log(data)
+    setUser(result.result.user_profile)
+    setUserProfileToLS(result.result.user_profile)
+
     toast.success(result.message)
+    refetch()
   })
 
 
@@ -74,7 +82,7 @@ export default function ProfileComponent() {
               <div className="pt-3 text-gray-700">{formatEmail(profile?.email as string)}</div>
             </div>
           </div>
-          <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
+          <div className="flex flex-wrap mt-8 flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Name</div>
             <div className="sm:w-[80%] sm:pl-5">
               <Input placeholder="Name" className="mt-0" type='text' errorMessage={errors.name?.message} name='name' register={register} classNameInput="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm" />
@@ -88,10 +96,52 @@ export default function ProfileComponent() {
                 name='phone'
                 render={({field}) => (
                   <InputNumber className="mt-0" placeholder="Number phone" errorMessage={errors.phone?.message}  classNameInput="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-gray-500 focus:shadow-sm"
-                    {...field}
                     value={field.value || ''}
                     onChange={field.onChange}
                   />
+                )}
+              />
+            </div>
+          </div>
+          <div className="flex flex-wrap flex-col sm:flex-row">
+            <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Gender</div>
+            <div className="sm:w-[80%] sm:pl-5 flex items-end">
+              <Controller
+                control={control}
+                name="gender"
+                render={({ field }) => (
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value={0}
+                        checked={field.value === 0}
+                        onChange={() => field.onChange(0)}
+                        className="mr-2"
+                      />
+                      Male
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value={1}
+                        checked={field.value === 1}
+                        onChange={() => field.onChange(1)}
+                        className="mr-2"
+                      />
+                      Female
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        value={2}
+                        checked={field.value === 2}
+                        onChange={() => field.onChange(2)}
+                        className="mr-2"
+                      />
+                      Other
+                    </label>
+                  </div>
                 )}
               />
             </div>
