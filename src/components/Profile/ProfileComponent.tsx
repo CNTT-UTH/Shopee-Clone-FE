@@ -7,6 +7,7 @@ import { UserSchemaType } from "@uth/schemas/user.schema"
 import { Controller, useForm } from "react-hook-form"
 import InputNumber from "../InputNumber"
 import { useEffect } from "react"
+import defaultValue from "@uth/constants/defaultValue"
 
 
 export default function ProfileComponent() {
@@ -15,7 +16,8 @@ export default function ProfileComponent() {
       address: '',
       name: '',
       phone: '',
-      avatar: ''
+      avatar: '',
+      dob: defaultValue.date_of_birth
     }
   })
 
@@ -35,12 +37,15 @@ export default function ProfileComponent() {
       setValue('name', profile.name)
       setValue('avatar', profile.avatar)
       setValue('phone', profile.phone)
+      setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
     }
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
     // await updateProfileMutation.mutateAsync({})
   })
+  const value = watch()
+  console.log(value)
 
   return (
     <div className="bg-white rounded-md px-2 md:px-7 pb-10 md:pb-20 shadow">

@@ -14,4 +14,5 @@ export interface User {
   is_shop: boolean
   status: number; // 0: Chưa xác nhận mail, 1: Đã xác thực, 2: Banned
   avatar?: string
+  dob?: string
 } 
