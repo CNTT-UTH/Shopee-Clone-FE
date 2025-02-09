@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form"
 import InputNumber from "../InputNumber"
 import { useEffect } from "react"
 import defaultValue from "@uth/constants/defaultValue"
+import DateForm from "../DateForm"
 
 
 export default function ProfileComponent() {
@@ -33,7 +34,7 @@ export default function ProfileComponent() {
 
   useEffect(() => {
     if(profile) {
-      console.log('run', profile.name)
+      console.log('run', profile.dob)
       setValue('name', profile.name)
       setValue('avatar', profile.avatar)
       setValue('phone', profile.phone)
@@ -42,8 +43,10 @@ export default function ProfileComponent() {
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    // await updateProfileMutation.mutateAsync({})
+    // await updateProfileMutation.mutateAsync({
+    // })
   })
+
   const value = watch()
   console.log(value)
 
@@ -91,22 +94,13 @@ export default function ProfileComponent() {
               />
             </div>
           </div>
-          {/* <div className="mt-6 flex flex-wrap flex-col sm:flex-row">
-            <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">BirthDay</div>
-            <div className="sm:w-[80%] sm:pl-5">
-              <div className="flex justify-between">
-                <select className="h-10 w-[32%] rounded-sm border border-black/10 px-3">
-                  <option disabled>Day</option>
-                </select>
-                <select className="h-10 w-[32%] rounded-sm border border-black/10 px-3">
-                  <option disabled>Month</option>
-                </select>
-                <select className="h-10 w-[32%] rounded-sm border border-black/10 px-3">
-                  <option disabled>Year</option>
-                </select>
-              </div>
-            </div>
-          </div> */}
+          <Controller 
+            control={control}
+            name='dob'
+            render={({field}) => (
+              <DateForm errorMessage={errors.dob?.message} value={field.value} onChange={field.onChange} />
+            )}
+          />
           <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
             <div className="sm:w-[20%] sm:mr-5 pt-3"></div>
             <Button type="submit" className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-8 py-2.5 text-center mt-4">Save</Button>
