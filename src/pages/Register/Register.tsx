@@ -1,24 +1,26 @@
-import {  useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import {  useForm } from "react-hook-form"
+import { Link } from "react-router-dom"
 import { yupResolver } from '@hookform/resolvers/yup'
 import { schema, Schema } from "../../utils/validate"
-import Input from "../../components/Input";
-import { useTranslation } from 'react-i18next';
-import { useMutation } from "@tanstack/react-query";
-import authApi from "../../apis/auth.api";
-import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
-import { AuthError, ErrorResponse } from "../../types/utils.type";
+import Input from "../../components/Input"
+import { useTranslation } from 'react-i18next'
+import { useMutation } from "@tanstack/react-query"
+import authApi from "../../apis/auth.api"
+import { isAxiosUnprocessableEntityError } from "../../utils/axios.error"
+import { AuthError, ErrorResponse } from "../../types/utils.type"
 import { toast } from "react-toastify"
-import { useState } from "react";
-import VerifyEmailModal from "../../components/Modal/Modal";
-import { motion } from 'framer-motion';
-import { containerVariants, inputVariants } from "../../constants/animation.motion";
-import Button from "../../components/Button";
-import path from "../../constants/path";
+import { useState } from "react"
+import VerifyEmailModal from "../../components/Modal/Modal"
+import { motion } from 'framer-motion'
+import { containerVariants, inputVariants } from "../../constants/animation.motion"
+import Button from "../../components/Button"
+import path from "../../constants/path"
+import RobotCaptcha from "@uth/components/CaptchaRobot"
 
 export default function Register() {
-  const [verifyToken, setVerifyToken] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [verifyToken, setVerifyToken] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isNotRobot, setIsNotRobot] = useState(false)
 
   const { t } = useTranslation() //muti languages
 
@@ -103,6 +105,10 @@ export default function Register() {
                   </motion.div>
                 )
               )}
+
+              <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>
+
+
               <motion.div
                 className="mt-8"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -111,9 +117,9 @@ export default function Register() {
               >
                 <Button
                   isLoading={registerMutation.isLoading}
-                  disabled={registerMutation.isLoading}
+                  disabled={registerMutation.isLoading || !isNotRobot}
                   type="submit"
-                  className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
+                  className="text-white w-full disabled:opacity-70 text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
                 >
                   {t('Register')}
                 </Button>

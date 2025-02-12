@@ -14,6 +14,8 @@ import { motion } from 'framer-motion';
 import { containerVariants, inputVariants } from "../../constants/animation.motion";
 import Button from "../../components/Button";
 import path from "../../constants/path"
+import RobotCaptcha from "@uth/components/CaptchaRobot";
+import { useState } from "react";
 
 type FormData = {
   firstField: string
@@ -31,6 +33,7 @@ export default function Login() {
     const  { t } = useTranslation();
     const { setIsAuthenticated, setUser } = useAuth()
     const navigate = useNavigate()
+    const [isNotRobot, setIsNotRobot] = useState(false)
 
     const {
         register,
@@ -42,7 +45,6 @@ export default function Login() {
     
     const loginMutation = useMutation({
         mutationFn: (body: FinalFormData) => {
-          console.log('>>',body)
           return authApi.loginAuth(body)
         }
     })
@@ -76,6 +78,7 @@ export default function Login() {
         }
       }) 
     })
+ 
 
     return (
         <div className="bg-orange">
@@ -117,6 +120,8 @@ export default function Login() {
                 </motion.div>
               ))}
 
+              <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>
+
               <motion.div
                 className="mt-8"
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -125,9 +130,9 @@ export default function Login() {
               >
                 <Button
                   type="submit"
-                  className="text-white w-full text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
+                  className="text-white w-full text-center py-4 disabled:opacity-60 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
                   isLoading={loginMutation.isLoading}
-                  disabled={loginMutation.isLoading}
+                  disabled={loginMutation.isLoading || !isNotRobot}
                 >
                   {t('Login')}
                 </Button>
@@ -146,6 +151,7 @@ export default function Login() {
                 </div>
               </motion.div>
             </form>
+            
           </motion.div>
         </motion.div>
       </div>
