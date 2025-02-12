@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { yupResolver } from '@hookform/resolvers/yup'
-import { schema, Schema } from "../../utils/validate";
+import { loginValidate, schema, Schema } from "../../utils/validate";
 import Input from "../../components/Input";
 import { useTranslation } from 'react-i18next';
 import { useMutation } from "@tanstack/react-query";
@@ -15,8 +15,16 @@ import { containerVariants, inputVariants } from "../../constants/animation.moti
 import Button from "../../components/Button";
 import path from "../../constants/path"
 
-type FormData = Pick<Schema, 'email' | 'username' | 'password'>
-const loginValidate = schema.pick(['email', 'username', 'password'])
+type FormData = {
+  firstField: string
+  password: string
+}
+ 
+type FinalFormData = {
+  email?: string 
+  username?: string 
+  password: string 
+} 
 
 
 export default function Login() {
@@ -33,11 +41,19 @@ export default function Login() {
     })
     
     const loginMutation = useMutation({
-        mutationFn: (body: FormData) => authApi.loginAuth(body)
+        mutationFn: (body: FinalFormData) => {
+          console.log('>>',body)
+          return authApi.loginAuth(body)
+        }
     })
 
     const onSubmit = handleSubmit((data) => {
-      loginMutation.mutate(data, {
+      const isEmail = /\S+@\S+\.\S+/.test(data.firstField as string); // check whether email or username 
+      const body = isEmail
+        ? { email: data.firstField, password: data.password }
+        : { username: data.firstField, password: data.password };
+
+      loginMutation.mutate(body, {
         onSuccess: (data) => {
           toast.success("You have logged in successfully!", {
             theme: 'colored',
@@ -89,19 +105,18 @@ export default function Login() {
               >
                 {t('Login')}
               </motion.div>
-              {(['email', 'username', 'password'] as Array<keyof FormData>).map(
-                (field, index) => (
-                  <motion.div key={field} custom={index} variants={inputVariants}>
-                    <Input
-                      name={field}
-                      register={register}
-                      type={field}
-                      errorMessage={errors[field]?.message}
-                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
-                    />
-                  </motion.div>
-                )
-              )}
+              {(['firstField', 'password'] as Array<keyof FormData>).map((field, index) => (
+                <motion.div key={field} custom={index} variants={inputVariants}>
+                  <Input
+                    name={field}
+                    register={register}
+                    type={field === 'password' ? 'password' : 'text'}
+                    errorMessage={errors[field]?.message}
+                    placeholder={t(field === 'firstField' ? 'Username or Email' : 'Password')}
+                  />
+                </motion.div>
+              ))}
+
               <motion.div
                 className="mt-8"
                 initial={{ opacity: 0, scale: 0.8 }}

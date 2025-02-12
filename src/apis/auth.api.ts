@@ -30,7 +30,7 @@ const authApi = {
    * @param body - The login details.
    * @returns A promise resolving to the authentication response data.
    */
-  loginAuth(body: { username?: string, email: string, password: string }) {
+  loginAuth(body: { username?: string, email?: string, password: string }) {
     return http
       .post<AuthResponse>(URL_LOGIN, body)
       .then((response) => response.data)

@@ -50,5 +50,19 @@ export const otpValidate = yup.object().shape({
   otp: yup.string().required('OTP is required').length(6, 'OTP must be 6 digits')
 })
 
+export const loginValidate = yup.object({
+  firstField: yup
+    .string()
+    .required('Email or Username is required') 
+    .test('is-email-or-username', 'Invalid email or username', (value) => 
+      /\S+@\S+\.\S+/.test(value)  
+        ? (schema.fields.email as yup.StringSchema<string>).isValidSync(value) 
+        : (schema.fields.username as yup.StringSchema<string>).isValidSync(value)  
+    ),
+  password: schema.fields.password as yup.StringSchema<string>  
+});
+
+
+
 export type Schema = yup.InferType<typeof schema>
 export type OtpSchema = yup.InferType<typeof otpValidate>;
