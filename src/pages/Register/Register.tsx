@@ -16,12 +16,14 @@ import { containerVariants, inputVariants } from "../../constants/animation.moti
 import Button from "../../components/Button"
 import path from "../../constants/path"
 import RobotCaptcha from "@uth/components/CaptchaRobot"
+import useInputRefs from "@uth/constants/inputRefs"
 
 export default function Register() {
   const [verifyToken, setVerifyToken] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isNotRobot, setIsNotRobot] = useState(false)
-
+  const fields: string[] = ['email', 'username', 'password', 'confirm_password']
+  const { emailRef, usernameRef, passwordRef, confirmPasswordRef } = useInputRefs();
   const { t } = useTranslation() //muti languages
 
   const registerMutation = useMutation({
@@ -63,6 +65,13 @@ export default function Register() {
       }
     })
   })
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      nextRef?.current?.focus()
+    }
+  }
   
   return (
     <div className="bg-orange">
@@ -92,18 +101,38 @@ export default function Register() {
               >
                 {t('Register')}
               </motion.div>
-              {(['email', 'username', 'password', 'confirm_password'] as Array<keyof Schema>).map(
-                (field, index) => (
-                  <motion.div key={field} custom={index} variants={inputVariants}>
-                    <Input
-                      name={field}
-                      register={register}
-                      type={field === 'confirm_password' ? 'password' : field}
-                      errorMessage={errors[field]?.message}
-                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
-                    />
-                  </motion.div>
-                )
+              {(fields as Array<keyof Schema>).map(
+                (field, index) => {
+                  let nextRef = null;
+                  if (index === 0) nextRef = usernameRef;
+                  else if (index === 1) nextRef = passwordRef;
+                  else nextRef = confirmPasswordRef;
+
+
+                  return (
+                    <motion.div key={field} custom={index} variants={inputVariants}>
+                      <Input
+                        name={field}
+                        register={register}
+                        type={field === 'confirm_password' ? 'password' : field}
+                        errorMessage={errors[field]?.message}
+                        placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
+                        refProp={
+                          field === 'email'
+                            ? emailRef
+                            : field === 'username'
+                            ? usernameRef
+                            : field === 'password'
+                            ? passwordRef
+                            : confirmPasswordRef
+                        }
+                        onKeyDown={(e) =>
+                          handleKeyDown(e, nextRef)
+                        }
+                      />
+                    </motion.div>
+                  )
+                }
               )}
 
               <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>

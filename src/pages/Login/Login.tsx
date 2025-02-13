@@ -15,7 +15,7 @@ import { containerVariants, inputVariants } from "../../constants/animation.moti
 import Button from "../../components/Button";
 import path from "../../constants/path"
 import RobotCaptcha from "@uth/components/CaptchaRobot";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type FormData = {
   firstField: string
@@ -30,7 +30,8 @@ type FinalFormData = {
 
 
 export default function Login() {
-    const  { t } = useTranslation();
+    const  { t } = useTranslation()
+    const firstRef = useRef<HTMLInputElement>(null)
     const { setIsAuthenticated, setUser } = useAuth()
     const navigate = useNavigate()
     const [isNotRobot, setIsNotRobot] = useState(false)
@@ -78,6 +79,14 @@ export default function Login() {
         }
       }) 
     })
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        console.log('check')
+        e.preventDefault()
+        firstRef?.current?.focus()
+      }
+    }
  
 
     return (
@@ -108,16 +117,20 @@ export default function Login() {
               >
                 {t('Login')}
               </motion.div>
+
               {(['firstField', 'password'] as Array<keyof FormData>).map((field, index) => (
-                <motion.div key={field} custom={index} variants={inputVariants}>
-                  <Input
-                    name={field}
-                    register={register}
-                    type={field === 'password' ? 'password' : 'text'}
-                    errorMessage={errors[field]?.message}
-                    placeholder={t(field === 'firstField' ? 'Username or Email' : 'Password')}
-                  />
-                </motion.div>
+                  <motion.div key={field} custom={index} variants={inputVariants}>
+                    <Input
+                      name={field}
+                      register={register}
+                      type={field === 'password' ? 'password' : 'text'}
+                      errorMessage={errors[field]?.message}
+                      placeholder={t(field === 'firstField' ? 'Username or Email' : 'Password')}
+                      refProp={field === 'password' ? firstRef : null}
+                      onKeyDown={(e) =>
+                        handleKeyDown(e)}
+                    />
+                  </motion.div>
               ))}
 
               <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>

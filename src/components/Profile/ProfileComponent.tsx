@@ -13,6 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { toast } from "react-toastify"
 import { useAuth } from "@uth/contexts/auth.context"
 import { setUserProfileToLS } from "@uth/utils/auth.http"
+import Avatar from "react-avatar"
 
 
 export default function ProfileComponent() {
@@ -188,10 +189,12 @@ export default function ProfileComponent() {
         <div className="flex justify-center md:w-72 md:border-l md:border-l-gray-200">
           <div className="flex flex-col items-center">
             <div className="my-5 h-24 w-24">
-              <img 
-                src={previewAvatar || avatar}
-                className="w-full h-full rounded-full object-cover"
+            {profile?.avatar
+            ? <img 
+              src={previewAvatar || avatar}
+              className="w-full h-full rounded-full object-cover"
               />
+            : <Avatar name={profile?.username || 'user'} size="45" round={true}/>}
             </div>
             <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
             <button type="button" onClick={handleUpload} className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">

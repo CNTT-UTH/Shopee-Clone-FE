@@ -1,9 +1,10 @@
-import { Fragment } from "react/jsx-runtime";
-import path from "../../constants/path";
-import { Link } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import classNames from "classnames";
-import { useAuth } from "@uth/contexts/auth.context";
+import { Fragment } from "react/jsx-runtime"
+import path from "../../constants/path"
+import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
+import classNames from "classnames"
+import { useAuth } from "@uth/contexts/auth.context"
+import Avatar from "react-avatar"
 
 export default function SideBarUser() {
   const { user } = useAuth()
@@ -12,9 +13,11 @@ export default function SideBarUser() {
     <Fragment>
       <div className="flex items-center border-b border-b-gray-200 py-4">
         <Link to={path.profile} className="h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-black/10">
-          <img src={user?.avatar} alt=""
-            className="h-full w-full object-cover" 
-          />
+          {user?.avatar 
+            ? <img src={user?.avatar} alt="avatar"
+              className="h-full w-full object-cover" 
+              />
+            : <Avatar name={user?.username || 'user'} size="45" round={true}/>}
         </Link>
         <div className="flex-grow pl-4">
           <div className="mb-1 truncate text-gray-600 font-semibold">Duc Tai</div>

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { toast } from 'react-toastify' 
+import Avatar from 'react-avatar'
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
@@ -123,15 +124,19 @@ export default function Header() {
             </svg>
           </Popover>  
 
-          {isAuthenticated ? <Popover 
+          {isAuthenticated 
+          ? <Popover 
             infoPopover={avatarPopover}
             className={"flex items-center h-16 hover:text-gray-300 cursor-pointer ml-4"}
-          >
-            <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full cursor-pointer">
-                <img src={user?.avatar || reactImg} alt="avatar" className='w-full h-full object-cover rounded-full' />
-              </div>
-            <div>{user?.username}</div>
-          </Popover> : 
+            >
+              <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full cursor-pointer">
+                {user?.avatar 
+                ? <img src={user?.avatar} alt="avatar"
+                  className="h-full w-full rounded-full object-cover" 
+                  />
+                : <Avatar name={user?.username || 'user'} size="45" className='h-full w-full rounded-full object-cover' round={true}/>}              </div>
+                <div>{user?.username}</div>
+            </Popover> : 
             (<div className='flex items-center'>
               <Link to={path.register} className='mx-3 capitalize hover:text-white/70 cursor-pointer'>
                 Register
