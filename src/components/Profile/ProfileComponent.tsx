@@ -6,7 +6,7 @@ import formatEmail from "@uth/utils/formatEmail"
 import { userSchema, UserSchemaType } from "@uth/schemas/user.schema"
 import { Controller, useForm } from "react-hook-form"
 import InputNumber from "../InputNumber"
-import { useEffect } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import defaultValue from "@uth/constants/defaultValue"
 import DateForm from "../DateForm"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -16,6 +16,12 @@ import { setUserProfileToLS } from "@uth/utils/auth.http"
 
 
 export default function ProfileComponent() {
+  const [file, setFile] = useState<File>()
+  const previewAvatar = useMemo(() => {
+    return file ? URL.createObjectURL(file) : ''
+  }, [file])
+
+  const fileRef = useRef<HTMLInputElement>(null)
   const { setUser } = useAuth()
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
     defaultValues: {
@@ -28,6 +34,8 @@ export default function ProfileComponent() {
     resolver: yupResolver(userSchema)
   })
 
+  const avatar = watch('avatar')
+
   const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: userApi.getProfile
@@ -37,6 +45,7 @@ export default function ProfileComponent() {
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
   })
+  const uploadAvatarMutation = useMutation(userApi.uploadAvatar)
   
   useEffect(() => {
     if(profile) {
@@ -45,20 +54,38 @@ export default function ProfileComponent() {
       setValue('phone', profile.phone || '')
       setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
       setValue('gender', profile.gender)
-      console.log('run', profile)
     }
   }, [profile, setValue])
 
   const onSubmit = handleSubmit(async (data) => {
-    const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
-    console.log(data)
-    setUser(result.result.user_profile)
-    setUserProfileToLS(result.result.user_profile)
-
-    toast.success(result.message)
-    refetch()
+    try {
+      if (file) {
+        const form = new FormData()
+        form.append('image', file as Blob)
+        const uploadResult = await uploadAvatarMutation.mutateAsync(form)
+        const avatarUrl = uploadResult.data.result.url
+        setValue('avatar', avatarUrl)
+      }
+      const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
+      console.log(result.result.user_profile)
+      setUser(result.result.user_profile)
+      setUserProfileToLS(result.result.user_profile)
+  
+      toast.success(result.message)
+      refetch()
+    } catch (error) {
+      console.log(error)
+    }
   })
 
+  const handleUpload = () => {
+    fileRef.current?.click()
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileFromLocal = event.target.files?.[0]
+    setFile(fileFromLocal)
+  }
 
   return (
     <div className="bg-white rounded-md px-2 md:px-7 pb-10 md:pb-20 shadow">
@@ -162,12 +189,12 @@ export default function ProfileComponent() {
           <div className="flex flex-col items-center">
             <div className="my-5 h-24 w-24">
               <img 
-                src="https://i.pinimg.com/736x/cf/d4/de/cfd4deea360693aea33bcc2afc7655b4.jpg" alt=""
+                src={previewAvatar || avatar}
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
-            <Input className="mt-0" name='avatar' errorMessage={errors.avatar?.message} register={register} classNameInput="hidden" type="file" />
-            <button type="button" className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">
+            <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
+            <button type="button" onClick={handleUpload} className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">
               Select Image
             </button>
             <div className="text-gray-400 mt-3">

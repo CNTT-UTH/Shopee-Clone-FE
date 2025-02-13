@@ -1,4 +1,4 @@
-import { User, UserBodyRequest, UserProfileResponse } from '../types/user.type'
+import { User, UserBodyRequest, UserProfileResponse, UserUploadAvatar } from '../types/user.type'
 import { ResponseApi } from '../types/utils.type'
 import http from '../utils/axios.http'
 
@@ -24,7 +24,7 @@ const userApi = {
   },
 
   uploadAvatar(body: FormData) {
-    return http.post<ResponseApi<string>>(`${USER_ENDPOINT}/upload_avatar`, body, {
+    return http.post<ResponseApi<UserUploadAvatar>>(`${USER_ENDPOINT}/upload-avatar`, body, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

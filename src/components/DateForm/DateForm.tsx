@@ -59,7 +59,7 @@ export default function DateForm({value, onChange, errorMessage}: Props) {
             value={value?.getDate() || date.date}
             onChange={handleChange}
             name="date"
-            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] rounded-lg border border-gray-300 px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
+            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] text-center max-w-32 rounded-lg border border-gray-300 px-4 md:px-0 lg:px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
             whileHover={{ scale: 1.02 }}
             whileFocus={{ scale: 1.03 }}
           >
@@ -76,7 +76,7 @@ export default function DateForm({value, onChange, errorMessage}: Props) {
             value={value?.getMonth() || date.month}
             onChange={handleChange}
             name="month"
-            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] rounded-lg border border-gray-300 px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
+            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] px-4 md:px-0 lg:px-4 rounded-lg border border-gray-300 px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
             whileHover={{ scale: 1.02 }}
             whileFocus={{ scale: 1.03 }}
           >
@@ -93,7 +93,7 @@ export default function DateForm({value, onChange, errorMessage}: Props) {
             value={value?.getFullYear() || date.year}
             onChange={handleChange}
             name="year"
-            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] rounded-lg border border-gray-300 px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
+            className="h-10 bg-gray-50 hover:bg-gray-100 cursor-pointer w-[32%] px-4 md:px-0 lg:px-4 rounded-lg border border-gray-300 px-4 text-gray-700 outline-none focus:ring-2 focus:ring-orange-500"
             whileHover={{ scale: 1.02 }}
             whileFocus={{ scale: 1.03 }}
           >
