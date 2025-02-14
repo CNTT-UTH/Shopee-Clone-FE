@@ -24,7 +24,7 @@ export interface UserBodyRequest extends UserGeneral {
   dob?: string   //send request with dob ISOString 8601
 }
 
-export interface UserUploadAvatar {
+export type UserUploadAvatar = [{
   url: string
   type: string
-}
+}]

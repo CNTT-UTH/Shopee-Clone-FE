@@ -71,6 +71,7 @@ export const getRefreshTokenFromLS = (): string => {
 
 export const setUserProfileToLS = (user: User): void => {
   try {
+    console.log(user)
     localStorage.setItem(USER_KEY, JSON.stringify(user))
   } catch (error) {
     console.error(`Failed to save user profile to localStorage [Key: ${USER_KEY}]`, error)

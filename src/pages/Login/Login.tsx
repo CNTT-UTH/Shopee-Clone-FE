@@ -1,21 +1,21 @@
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form"
+import { Link, useNavigate } from "react-router-dom"
 import { yupResolver } from '@hookform/resolvers/yup'
-import { loginValidate, schema, Schema } from "../../utils/validate";
-import Input from "../../components/Input";
-import { useTranslation } from 'react-i18next';
-import { useMutation } from "@tanstack/react-query";
-import authApi from "../../apis/auth.api";
-import { AuthError, ErrorResponse } from "../../types/utils.type";
-import { isAxiosUnprocessableEntityError } from "../../utils/axios.error";
-import { toast } from "react-toastify";
-import { useAuth } from "../../contexts/auth.context";
-import { motion } from 'framer-motion';
-import { containerVariants, inputVariants } from "../../constants/animation.motion";
-import Button from "../../components/Button";
+import { loginValidate, schema, Schema } from "../../utils/validate"
+import Input from "../../components/Input"
+import { useTranslation } from 'react-i18next'
+import { useMutation } from "@tanstack/react-query"
+import authApi from "../../apis/auth.api"
+import { AuthError, ErrorResponse } from "../../types/utils.type"
+import { isAxiosUnprocessableEntityError } from "../../utils/axios.error"
+import { toast } from "react-toastify"
+import { useAuth } from "../../contexts/auth.context"
+import { motion } from 'framer-motion'
+import { containerVariants, inputVariants } from "../../constants/animation.motion"
+import Button from "../../components/Button"
 import path from "../../constants/path"
-import RobotCaptcha from "@uth/components/CaptchaRobot";
-import { useRef, useState } from "react";
+import RobotCaptcha from "@uth/components/CaptchaRobot"
+import { useState } from "react"
 
 type FormData = {
   firstField: string
@@ -31,7 +31,6 @@ type FinalFormData = {
 
 export default function Login() {
     const  { t } = useTranslation()
-    const firstRef = useRef<HTMLInputElement>(null)
     const { setIsAuthenticated, setUser } = useAuth()
     const navigate = useNavigate()
     const [isNotRobot, setIsNotRobot] = useState(false)
@@ -78,16 +77,7 @@ export default function Login() {
           }
         }
       }) 
-    })
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === 'Enter') {
-        console.log('check')
-        e.preventDefault()
-        firstRef?.current?.focus()
-      }
-    }
- 
+    }) 
 
     return (
         <div className="bg-orange">
@@ -119,16 +109,13 @@ export default function Login() {
               </motion.div>
 
               {(['firstField', 'password'] as Array<keyof FormData>).map((field, index) => (
-                  <motion.div key={field} custom={index} variants={inputVariants}>
+                    <motion.div key={field} custom={index} variants={inputVariants}>
                     <Input
                       name={field}
                       register={register}
                       type={field === 'password' ? 'password' : 'text'}
                       errorMessage={errors[field]?.message}
                       placeholder={t(field === 'firstField' ? 'Username or Email' : 'Password')}
-                      refProp={field === 'password' ? firstRef : null}
-                      onKeyDown={(e) =>
-                        handleKeyDown(e)}
                     />
                   </motion.div>
               ))}
@@ -145,7 +132,7 @@ export default function Login() {
                   type="submit"
                   className="text-white w-full text-center py-4 disabled:opacity-60 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
                   isLoading={loginMutation.isLoading}
-                  disabled={loginMutation.isLoading || !isNotRobot}
+                  disabled={loginMutation.isLoading}
                 >
                   {t('Login')}
                 </Button>

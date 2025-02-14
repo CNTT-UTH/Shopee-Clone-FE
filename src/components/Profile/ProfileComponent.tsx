@@ -14,6 +14,7 @@ import { toast } from "react-toastify"
 import { useAuth } from "@uth/contexts/auth.context"
 import { setUserProfileToLS } from "@uth/utils/auth.http"
 import Avatar from "react-avatar"
+import { User } from "@uth/types/user.type"
 
 
 export default function ProfileComponent() {
@@ -21,7 +22,6 @@ export default function ProfileComponent() {
   const previewAvatar = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
-
   const fileRef = useRef<HTMLInputElement>(null)
   const { setUser } = useAuth()
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
@@ -41,7 +41,7 @@ export default function ProfileComponent() {
     queryKey: ['profile'],
     queryFn: userApi.getProfile
   })
-  const profile = profileData?.result.user_profile
+  const profile = profileData?.result.user_profile as User
 
   const updateProfileMutation = useMutation({
     mutationFn: userApi.updateProfile
@@ -57,14 +57,14 @@ export default function ProfileComponent() {
       setValue('gender', profile.gender)
     }
   }, [profile, setValue])
-
   const onSubmit = handleSubmit(async (data) => {
+    let avatarUrl = ""
     try {
       if (file) {
         const form = new FormData()
         form.append('image', file as Blob)
         const uploadResult = await uploadAvatarMutation.mutateAsync(form)
-        const avatarUrl = uploadResult.data.result.url
+        avatarUrl = uploadResult.data.result[0].url
         setValue('avatar', avatarUrl)
       }
       const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
@@ -75,7 +75,14 @@ export default function ProfileComponent() {
       toast.success(result.message)
       refetch()
     } catch (error) {
-      console.log(error)
+      if(file) { 
+        // console.log('url', avatarUrl, '>>>', avatar)
+        toast.success('Upload image successfully')
+        setUser({...profile, avatar: avatarUrl})
+        setUserProfileToLS({...profile, avatar: avatarUrl})
+        refetch()
+      }
+      else console.log(error)
     }
   })
 
@@ -194,7 +201,7 @@ export default function ProfileComponent() {
               src={previewAvatar || avatar}
               className="w-full h-full rounded-full object-cover"
               />
-            : <Avatar name={profile?.username || 'user'} size="45" round={true}/>}
+            : <Avatar name={profile?.username || 'user'} size="96" textSizeRatio={2}  round={true}/>}
             </div>
             <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
             <button type="button" onClick={handleUpload} className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">

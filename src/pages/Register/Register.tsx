@@ -25,6 +25,7 @@ export default function Register() {
   const fields: string[] = ['email', 'username', 'password', 'confirm_password']
   const { emailRef, usernameRef, passwordRef, confirmPasswordRef } = useInputRefs();
   const { t } = useTranslation() //muti languages
+  const buttonClass = "text-white w-full disabled:opacity-70 text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
 
   const registerMutation = useMutation({
     mutationFn: (body: Schema) => authApi.registerAuth(body)
@@ -41,6 +42,7 @@ export default function Register() {
 
 
   const onSubmit = handleSubmit(data => {
+    if(!isNotRobot) return
     registerMutation.mutate(data, {
       onSuccess: (data) => {
           toast.success("You have registered successfully!", {
@@ -64,14 +66,7 @@ export default function Register() {
           }
       }
     })
-  })
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextRef: React.RefObject<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      nextRef?.current?.focus()
-    }
-  }
+  }) 
   
   return (
     <div className="bg-orange">
@@ -101,54 +96,34 @@ export default function Register() {
               >
                 {t('Register')}
               </motion.div>
-              {(fields as Array<keyof Schema>).map(
-                (field, index) => {
-                  let nextRef = null;
-                  if (index === 0) nextRef = usernameRef;
-                  else if (index === 1) nextRef = passwordRef;
-                  else nextRef = confirmPasswordRef;
-
-
-                  return (
-                    <motion.div key={field} custom={index} variants={inputVariants}>
-                      <Input
-                        name={field}
-                        register={register}
-                        type={field === 'confirm_password' ? 'password' : field}
-                        errorMessage={errors[field]?.message}
-                        placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
-                        refProp={
-                          field === 'email'
-                            ? emailRef
-                            : field === 'username'
-                            ? usernameRef
-                            : field === 'password'
-                            ? passwordRef
-                            : confirmPasswordRef
-                        }
-                        onKeyDown={(e) =>
-                          handleKeyDown(e, nextRef)
-                        }
-                      />
-                    </motion.div>
-                  )
-                }
+              {(['email', 'username', 'password', 'confirm_password'] as Array<keyof Schema>).map(
+                (field, index) => (
+                  <motion.div key={field} custom={index} variants={inputVariants}>
+                    <Input
+                      name={field}
+                      register={register}
+                      type={field === 'confirm_password' ? 'password' : field}
+                      errorMessage={errors[field]?.message}
+                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
+                    />
+                  </motion.div>
+                )
               )}
 
               <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>
 
 
               <motion.div
-                className="mt-8"
+                className='mt-8'
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.8 }}
               >
                 <Button
                   isLoading={registerMutation.isLoading}
-                  disabled={registerMutation.isLoading || !isNotRobot}
+                  disabled={registerMutation.isLoading}
                   type="submit"
-                  className="text-white w-full disabled:opacity-70 text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
+                  className={!isNotRobot ? buttonClass + "pointer-events-none cursor-not-allowed opacity-70" : buttonClass}
                 >
                   {t('Register')}
                 </Button>
