@@ -14,6 +14,9 @@ import { useAuth } from '../contexts/auth.context'
 import UserLayout from '../layouts/UserLayout'
 import ChangePassword from '../pages/ChangePassword'
 import InfoPurchase from '../pages/InfoPurchase'
+import { PublicSellerCentre, SellerRoute } from '@uth/components/Routes/ShopRoute'
+import SellerCentre from '@uth/pages/SellerCentre'
+import RegisterSeller from '@uth/components/RegisterSeller'
 
 const router = createBrowserRouter([
   {
@@ -24,6 +27,34 @@ const router = createBrowserRouter([
         <ProductList />
       </MainLayout>
     )
+  },
+  {
+    path: '',
+    element: <SellerRoute />,
+    children: [
+      {
+        path: path.sellerCentre,
+        element: (
+          <MainLayout>
+            <SellerCentre />
+          </MainLayout>
+        )
+      }
+    ]
+  },
+  {
+    path: '',
+    element: <PublicSellerCentre />,
+    children: [
+      {
+        path: path.registerSeller,
+        element: (
+          <MainLayout>
+            <RegisterSeller />
+          </MainLayout>
+        )
+      }
+    ]
   },
   {
     path: '',

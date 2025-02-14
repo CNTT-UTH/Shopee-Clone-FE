@@ -108,9 +108,14 @@ export default function Header() {
   </div>)
 
   return (
-    <div className="pb-4 pt-2 bg-gradient-to-b from-[#d0011b] to-[#f53d2d]">
+    <div className="pb-4 bg-gradient-to-b from-[#d0011b] to-[#f53d2d]">
       <div className="container">
         <div className="flex justify-end text-white text-sm py-2">
+          <div className='flex items-center mr-auto'>
+            <Link to={path.sellerCentre} className='mx-3 text-md capitalize text-white hover:text-white/70 cursor-pointer'>
+              Seller Centre
+            </Link>
+          </div>
           <Popover 
             infoPopover={infoPopover}
             className={"flex items-center h-16 hover:text-gray-300 cursor-pointer"}
