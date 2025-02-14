@@ -17,6 +17,7 @@ import InfoPurchase from '../pages/InfoPurchase'
 import { PublicSellerCentre, SellerRoute } from '@uth/components/Routes/ShopRoute'
 import SellerCentre from '@uth/pages/SellerCentre'
 import RegisterSeller from '@uth/components/RegisterSeller'
+import RegisterShopLayout from '@uth/layouts/RegisterShopLayout'
 
 const router = createBrowserRouter([
   {
@@ -49,9 +50,9 @@ const router = createBrowserRouter([
       {
         path: path.registerSeller,
         element: (
-          <MainLayout>
+          <RegisterShopLayout>
             <RegisterSeller />
-          </MainLayout>
+          </RegisterShopLayout>
         )
       }
     ]

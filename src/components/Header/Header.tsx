@@ -139,7 +139,8 @@ export default function Header() {
                 ? <img src={user?.avatar} alt="avatar"
                   className="h-full w-full rounded-full object-cover" 
                   />
-                : <Avatar name={user?.username || 'user'} size="24" className='h-full w-full rounded-full object-cover' round={true}/>}              </div>
+                : <Avatar name={user?.username || 'user'} size="24" className='h-full w-full rounded-full object-cover' round={true}/>}              
+                </div>
                 <div>{user?.username}</div>
             </Popover> : 
             (<div className='flex items-center'>

@@ -34,6 +34,7 @@ export default function Login() {
     const { setIsAuthenticated, setUser } = useAuth()
     const navigate = useNavigate()
     const [isNotRobot, setIsNotRobot] = useState(false)
+    const buttonClass = "text-white w-full disabled:opacity-70 text-center py-4 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
 
     const {
         register,
@@ -130,9 +131,9 @@ export default function Login() {
               >
                 <Button
                   type="submit"
-                  className="text-white w-full text-center py-4 disabled:opacity-60 uppercase bg-orange rounded-md text-sm hover:bg-orange-500"
                   isLoading={loginMutation.isLoading}
                   disabled={loginMutation.isLoading}
+                  className={!isNotRobot ? buttonClass + "pointer-events-none cursor-not-allowed opacity-70" : buttonClass}
                 >
                   {t('Login')}
                 </Button>
