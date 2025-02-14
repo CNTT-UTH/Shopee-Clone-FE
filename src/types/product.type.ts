@@ -1,31 +1,37 @@
-import { Category } from "./category.type";
+import { Category, CategoryLevel } from "./category.type";
+import Shipping from "./shipping";
+import { ShopDTO } from "./shop.type";
 
 export interface Product {
-    product_id?: string;
+    product_id?: number;
     title?: string;
     description?: string;
 
     product_attributes?: Attribute[];
 
-    cat_id?: string;
+    cat_id?: number;
     cates?: Category[];
+    cate_levels: CategoryLevel;
 
     review?: ProductReview;
     options?: Options[];
-    variants?: variant[];
+    variants?: Variant[];
 
     product_price?: Price[];
 
     shipping_from?: string;
     shipping_channel?: Shipping[];
+    image_urls?: string[];
+    shop: ShopDTO
+    sku: string
 }
 
 export interface Attribute {
-    id?: string;
-    name?: string;
-    value?: string;
+    id: string;
+    name: string;
+    value: string;
     brand_id?: string;
-    url?: string;
+    // url?: string;
 }
 
 export interface ProductReview {
@@ -40,11 +46,12 @@ export interface Options {
     name?: string;
     value?: string[];
     image_urls?: string[];
-    sold_out?: boolean[];
+    // sold_out?: boolean[];
 }
 
-export interface variant {
-    product_id?: string;
+export interface Variant {
+    product_id?: number;
+    variant_id?: number;
     sku?: string;
     name?: string;
     price?: number;
@@ -65,17 +72,3 @@ export interface Price {
     range_max_before_discount?: number;
 }
 
-export interface Shipping {
-    channel_id?: number;
-    name?: number; // Ex: Nhanh, Hỏa tốc,...
-
-    fee?: number;
-    freeship?: boolean; // Miễn phí vận chuyển
-    unsupport?: boolean; // Không hổ trợ
-
-    estimated_delivery_date_from?: string; // timestamp
-    estimated_delivery_date_to?: string; // timestamp
-    delivery_text?: string; // Ex: Nhận từ 15 Th01 - 16 Th01
-
-    is_fastest?: boolean;
-}

@@ -5,8 +5,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const RegisterSellerSchema = yup.object().shape({
-  nameShop: yup.string().required('Tên shop là bắt buộc'),
-  phoneShop: yup.string().required('Số điện thoại là bắt buộc'),
+  nameShop: yup.string().required('Shop name is required'),
+  phoneShop: yup.string().required('Shop phone is required'),
   city: yup.string().optional(),
   district: yup.string().optional(),
   ward: yup.string().optional(),
