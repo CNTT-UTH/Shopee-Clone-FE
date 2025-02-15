@@ -9,7 +9,7 @@ export interface Product {
 
     product_attributes?: Attribute[];
 
-    cat_id?: number;
+    cate_id?: number;
     cates?: Category[];
     cate_levels: CategoryLevel;
 
