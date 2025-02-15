@@ -18,6 +18,7 @@ import { PublicSellerCentre, SellerRoute } from '@uth/components/Routes/ShopRout
 import SellerCentre from '@uth/pages/SellerCentre'
 import RegisterSeller from '@uth/components/RegisterSeller'
 import RegisterShopLayout from '@uth/layouts/RegisterShopLayout'
+import SellerLayout from '@uth/layouts/SellerLayout/SellerLayout'
 
 const router = createBrowserRouter([
   {
@@ -36,9 +37,9 @@ const router = createBrowserRouter([
       {
         path: path.sellerCentre,
         element: (
-          <MainLayout>
+          <SellerLayout>
             <SellerCentre />
-          </MainLayout>
+          </SellerLayout>
         )
       }
     ]
