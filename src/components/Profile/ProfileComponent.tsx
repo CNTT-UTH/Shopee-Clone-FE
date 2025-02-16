@@ -23,7 +23,7 @@ export default function ProfileComponent() {
     return file ? URL.createObjectURL(file) : ''
   }, [file])
   const fileRef = useRef<HTMLInputElement>(null)
-  const { setUser } = useAuth()
+  const { user, setUser } = useAuth()
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
     defaultValues: {
       gender: 2,
@@ -76,7 +76,7 @@ export default function ProfileComponent() {
       refetch()
     } catch (error) {
       if(file) { 
-        // console.log('url', avatarUrl, '>>>', avatar)
+        console.log('url', avatarUrl, '>>>', avatar)
         toast.success('Upload image successfully')
         setUser({...profile, avatar: avatarUrl})
         setUserProfileToLS({...profile, avatar: avatarUrl})
@@ -92,6 +92,7 @@ export default function ProfileComponent() {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileFromLocal = event.target.files?.[0]
+    console.log('filechange', fileFromLocal, '>>', previewAvatar)
     setFile(fileFromLocal)
   }
 
@@ -108,13 +109,13 @@ export default function ProfileComponent() {
           <div className="flex flex-wrap flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Username</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <div className="pt-3 text-gray-700">{profile?.username}</div>
+              <div className="pt-3 text-gray-700">{user?.username}</div>
             </div>
           </div>
           <div className="flex flex-wrap mt-4 flex-col sm:flex-row">
             <div className="sm:w-[20%] truncate pt-3 sm:text-right capitalize">Email</div>
             <div className="sm:w-[80%] sm:pl-5">
-              <div className="pt-3 text-gray-700">{formatEmail(profile?.email as string)}</div>
+              <div className="pt-3 text-gray-700">{formatEmail(user?.email as string)}</div>
             </div>
           </div>
           <div className="flex flex-wrap mt-8 flex-col sm:flex-row">
@@ -196,12 +197,14 @@ export default function ProfileComponent() {
         <div className="flex justify-center md:w-72 md:border-l md:border-l-gray-200">
           <div className="flex flex-col items-center">
             <div className="my-5 h-24 w-24">
-            {profile?.avatar
+            {user?.avatar
             ? <img 
-              src={previewAvatar || avatar}
+              src={avatar}
               className="w-full h-full rounded-full object-cover"
               />
-            : <Avatar name={profile?.username || 'user'} size="96" textSizeRatio={2}  round={true}/>}
+            : previewAvatar
+              ? <img src={previewAvatar} className="w-full h-full rounded-full object-cover"/>
+              : <Avatar name={user?.username || 'user'} size="96" textSizeRatio={2}  round={true}/>}
             </div>
             <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
             <button type="button" onClick={handleUpload} className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">

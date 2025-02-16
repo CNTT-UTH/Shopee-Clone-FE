@@ -4,17 +4,26 @@ import Input from '../Input'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';  // Dùng axios để gọi API
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import addressApi from '@uth/apis/addresses.api';
+import shopApi from '@uth/apis/shop.api';
+import { toast } from 'react-toastify';
+import { useNavigate, useRouteError } from 'react-router-dom';
+import path from '@uth/constants/path';
+import { useAuth } from '@uth/contexts/auth.context';
+import { User } from '@uth/types/user.type';
+import { setUserProfileToLS } from '@uth/utils/auth.http';
 
 const RegisterSellerSchema = yup.object().shape({
-  nameShop: yup.string().required('Shop name is required'),
-  phoneShop: yup.string().required('Shop phone is required'),
-  city: yup.string().optional(),
-  district: yup.string().optional(),
-  ward: yup.string().optional(),
+  name: yup.string().required('Shop name is required'),
+  phone: yup.string().required('Shop phone is required'),
+  city: yup.string().required('City is required'),
+  district: yup.string().required('District is required'),
+  ward: yup.string().required('Ward is required'),
   address_line: yup.string().optional(),
-});
+})
+
+const classNameError = 'ml-2 mb-3 -mt-2 text-red-600 min-h-[1.25rem] text-sm'
 
 const steps = [
   'Seller Information',
@@ -22,6 +31,8 @@ const steps = [
 ]
 
 export default function RegisterSeller() {
+  const navigate = useNavigate()
+  const {setUser} = useAuth()
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(RegisterSellerSchema)
   })
@@ -51,14 +62,32 @@ export default function RegisterSeller() {
     enabled: !!wards 
   })
 
-  const onSubmit = handleSubmit((data) => {
-    const formData = {
-      ...data,
-      city: selectedCity,
-      district: selectedDistrict,
-      ward: selectedWardName
+  const registerSellerMutation = useMutation({
+    mutationFn: shopApi.registerShop
+  })
+
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const formData = {
+        phone: data.phone,
+        name: data.name,
+        pickup_address: {
+          city: selectedCity || '',
+          district: selectedDistrict || '',
+          ward: selectedWardName || '',
+          address_line: data.address_line || "",
+          phone_number: data.phone
+        }
+      }
+      const result = await registerSellerMutation.mutateAsync(formData)
+      console.log('result', result)
+      toast.success("Register 'Seller Centre' successfully")
+      setUser(result.result.account as User)
+      setUserProfileToLS(result.result.account as User)
+      navigate(path.sellerCentre)
+    } catch (error) {
+      console.log(error)
     }
-    console.log(formData, errors) 
   })
 
   return (
@@ -79,18 +108,18 @@ export default function RegisterSeller() {
         {step === 1 && (
           <>
             <Input
-              name="nameShop"
+              name="name"
               placeholder="Shop name"
               register={register}
               rules={{ required: 'Shop name is required' }}
-              errorMessage={errors.nameShop?.message}
+              errorMessage={errors.name?.message}
             />
             <Input
-              name="phoneShop"
+              name="phone"
               placeholder="Shop phone"
               register={register}
               rules={{ required: 'Shop phone is required' }}
-              errorMessage={errors.phoneShop?.message}
+              errorMessage={errors.phone?.message}
             />
             <button
               type="button"
@@ -122,6 +151,7 @@ export default function RegisterSeller() {
                 </option>
               ))}
             </select>
+            <div className={classNameError}>{errors.city?.message}</div>
 
             {/* Chọn Quận */}
             <select
@@ -140,6 +170,7 @@ export default function RegisterSeller() {
                 </option>
               ))}
             </select>
+            <div className={classNameError}>{errors.district?.message}</div>
 
             {/* Chọn Phường */}
             <select
@@ -155,6 +186,7 @@ export default function RegisterSeller() {
                 </option>
               ))}
             </select>
+            <div className={classNameError}>{errors.ward?.message}</div>
 
             <Input name="address_line" placeholder="Detail Address" register={register} />
 
@@ -169,7 +201,7 @@ export default function RegisterSeller() {
               <button
                 type="submit"
                 className="bg-gradient-to-b from-[#d0011b] to-[#f53d2d] hover:opacity-70 text-white py-2 px-8 rounded-xl hover:bg-green-600"
-                onClick={() => {if(errors.nameShop || errors.phoneShop) setStep(1)}}              >
+                onClick={() => {if(errors.name || errors.phone) setStep(1)}}              >
                 Complete Registering
               </button>
             </div>
