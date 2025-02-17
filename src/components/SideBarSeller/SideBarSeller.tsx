@@ -22,7 +22,7 @@ const SidebarSeller = () => {
               <FaBoxOpen />
               <span>Manage Order</span>
             </div>
-            {openOrder ? <HiChevronUp /> : <HiChevronDown />}
+            <div>{openOrder ? <HiChevronUp /> : <HiChevronDown />}</div>
           </button>
           {openOrder && (
             <ul className="pl-4 mt-2 space-y-2">
