@@ -4,7 +4,7 @@ import freeshipImage from '@uth/assets/images/freeship.jpeg'
 
 export default function Product() {
   return <Link to="/">
-    <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem] hover:shadow-md duration-100 transition-transform'>
+    <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem]  duration-100 transition-transform hover:shadow-lg hover:shadow-orange'>
       <div className='w-full pt-[100%] relative'>
         <img 
           src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m5awwl3dvs3nba@resize_w450_nl.webp"

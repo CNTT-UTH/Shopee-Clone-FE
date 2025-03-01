@@ -23,6 +23,6 @@ export type RegisterResponse = ResponseApi<{
 }>
 
 export type RefreshTokenResponse = ResponseApi<{
-  accessToken: string
-  refreshToken: string
+  access_token: string
+  refresh_token: string
 }>

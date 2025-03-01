@@ -25,13 +25,6 @@ export default function ProfileComponent() {
   const fileRef = useRef<HTMLInputElement>(null)
   const { user, setUser } = useAuth()
   const {control, register, handleSubmit, setValue, setError, watch, formState: { errors }} = useForm<UserSchemaType>({
-    defaultValues: {
-      gender: 2,
-      name: '',
-      phone: '',
-      avatar: '',
-      dob: defaultValue.date_of_birth
-    },
     resolver: yupResolver(userSchema)
   })
 
@@ -52,12 +45,13 @@ export default function ProfileComponent() {
     if(profile) {
       setValue('name', profile.name || '')
       setValue('avatar', profile.avatar || '')
-      setValue('phone', profile.phone || '')
+      if(profile.phone) setValue('phone', profile.phone) 
       setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
       setValue('gender', profile.gender)
     }
   }, [profile, setValue])
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
     let avatarUrl = ""
     try {
       if (file) {
@@ -74,7 +68,7 @@ export default function ProfileComponent() {
   
       toast.success(result.message)
       refetch()
-    } catch (error) {
+    } catch (error: any) {
       if(file) { 
         console.log('url', avatarUrl, '>>>', avatar)
         toast.success('Upload image successfully')
@@ -82,7 +76,16 @@ export default function ProfileComponent() {
         setUserProfileToLS({...profile, avatar: avatarUrl})
         refetch()
       }
-      else console.log(error)
+      else {
+        const res = error.response.data.errors
+        for(const key in res) {
+          setError(key as keyof UserSchemaType, {
+            message: res[key].message,
+            type: 'Server'
+          })
+        }
+        console.log(errors)
+      }
     }
   })
 
