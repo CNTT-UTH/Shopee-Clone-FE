@@ -4,8 +4,9 @@ import http from "@uth/utils/axios.http"
 
 const URL_PRODUCT = '/products'
 
-const shopApi = {
+const productApi = {
   getAllProduct (params: ProductParams) {
+    console.log('params >>>', params)
     return http
       .get<ResponseApi<Product[]>>(`${URL_PRODUCT}/all`, {
         params
@@ -27,4 +28,4 @@ const shopApi = {
   }
 }
 
-export default shopApi
+export default productApi
