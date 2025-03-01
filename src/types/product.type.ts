@@ -72,3 +72,12 @@ export interface Price {
     range_max_before_discount?: number;
 }
 
+export interface ProductParams {
+  page: number;
+  limit: number;
+
+  prev_page?: number | null;
+  cur_page?: number | null;
+  next_page?: number | null;
+  total_page?: number | null;
+}

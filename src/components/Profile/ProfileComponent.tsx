@@ -48,6 +48,7 @@ export default function ProfileComponent() {
       if(profile.phone) setValue('phone', profile.phone) 
       setValue('dob', profile.dob ? new Date(profile.dob) : defaultValue.date_of_birth)
       setValue('gender', profile.gender)
+      setUser(profile)
     }
   }, [profile, setValue])
   const onSubmit = handleSubmit(async (data) => {
@@ -202,7 +203,7 @@ export default function ProfileComponent() {
             <div className="my-5 h-24 w-24">
             {user?.avatar
             ? <img 
-              src={avatar}
+              src={previewAvatar || avatar}
               className="w-full h-full rounded-full object-cover"
               />
             : previewAvatar
