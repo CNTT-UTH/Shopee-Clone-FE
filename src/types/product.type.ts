@@ -17,7 +17,7 @@ export interface Product {
     options?: Options[];
     variants?: Variant[];
 
-    product_price?: Price[];
+    product_price: Price;
 
     shipping_from?: string;
     shipping_channel?: Shipping[];
