@@ -1,21 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import freeshipImage from '@uth/assets/images/freeship.jpeg'
+import { Product } from '@uth/types/product.type'
 
-export default function Product() {
+export default function Product({product}: {product: Product}) {
   return <Link to="/">
     <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem]  duration-100 transition-transform hover:shadow-lg hover:shadow-orange'>
       <div className='w-full pt-[100%] relative'>
         <img 
-          src="https://down-vn.img.susercontent.com/file/vn-11134207-7ras8-m5awwl3dvs3nba@resize_w450_nl.webp"
+          src={product.image_urls?.[0]}
+          alt={product.title}
           className='absolute top-0 bg-white w-full h-full object-cover'
         />
         <img src={freeshipImage} className='w-12 h-7 absolute bottom-0 object-cover' alt="" />
       </div>
       <div className="p-2 overflow-hidden">
-        <div className='min-h-[1.75rem] line-clamp-2 text-sm'>
-          Sách - Combo 6 Cuốn: Cổ Học Kỳ Thư + Tư Duy Mở + Tư Duy Ngược
-        </div>
+        <div className='min-h-[1.75rem] line-clamp-2 text-sm'>{product.title}</div>
         <div className="flex items-center mt-3">
           <span className='text-xs text-orange'>₫</span>
           <span className="text-md max-w-[50%] text-orange truncate">299.000</span>
@@ -28,7 +28,7 @@ export default function Product() {
               width={10}
               height={10}
             />
-            <div className='text-xs'>4.8</div>
+            <div className='text-xs'>{(Math.random() * 3 + 2).toFixed(1)}</div>
           </div>
           <div className='text-xs'>Đã bán <span>192</span></div>
         </div>

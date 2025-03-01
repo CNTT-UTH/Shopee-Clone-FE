@@ -4,11 +4,16 @@ import http from "@uth/utils/axios.http"
 
 const URL_PRODUCT = '/products'
 
+interface ResponseAllProduct {
+  data: Product[],
+  pagination: ProductParams
+}
+
 const productApi = {
   getAllProduct (params: ProductParams) {
     console.log('params >>>', params)
     return http
-      .get<ResponseApi<Product[]>>(`${URL_PRODUCT}/all`, {
+      .get<ResponseApi<ResponseAllProduct>>(`${URL_PRODUCT}/all`, {
         params
       })
       .then((response) => response.data)
