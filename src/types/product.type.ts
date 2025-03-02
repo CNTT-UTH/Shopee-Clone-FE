@@ -37,7 +37,7 @@ export interface Attribute {
 export interface ProductReview {
     cmt_count?: number;
     liked_count?: number;
-    rating_count?: number[]; // [0]: tổng rating, 1->5 tổng ratings với số sao tương ứng
+    rating_count?: number[];
     rating_star?: number;
     global_sold?: number;
 }
@@ -57,7 +57,7 @@ export interface Variant {
     price?: number;
     price_before_discount?: number;
     sold?: number;
-    stock?: number; //số lượng tồn kho
+    stock?: number;  
 }
 
 export interface Price {
@@ -65,7 +65,6 @@ export interface Price {
     price?: number;
     price_before_discount?: number;
 
-    /* đối với sản phẩm có nhiều biến thể */
     range_min?: number;
     range_max?: number;
     range_min_before_discount?: number;
@@ -75,6 +74,7 @@ export interface Price {
 export interface ProductParams {
   page: number | string;
   limit: number | string;
+  category?: number | string;
 
   prev_page?: number | null | string;
   cur_page?: number | null | string;

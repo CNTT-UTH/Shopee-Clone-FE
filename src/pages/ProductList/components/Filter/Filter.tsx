@@ -1,12 +1,28 @@
 import path from '@uth/constants/path'
 import { AiOutlineMenuUnfold } from "react-icons/ai";
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import { FaFilter } from "react-icons/fa";
 import Input from '@uth/components/Input';
 import Button from '@uth/components/Button';
+import { Category } from '@uth/types/category.type';
+import { QueryConfig } from '../../ProductList';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
+
+interface Props {
+  categories: Category[],
+  queryConfig: QueryConfig
+}
 
 
-export default function Filter() {
+export default function Filter({categories, queryConfig}: Props ) {
+  const {category} = queryConfig
+  const [renderedCategories, setRenderedCategories] = useState<Category[]>([])
+  
+  useEffect(() => {
+    setRenderedCategories(categories.slice(0,5))
+  }, [categories])
+
   return <div className="py-4">
     <Link to={path.home} className='flex items-center font-bold gap-4'>
       <AiOutlineMenuUnfold size={18}/>
@@ -14,21 +30,30 @@ export default function Filter() {
     </Link>
     <div className="bg-gray-300 h-[1px] my-4" /> 
     <ul className='text-sm'>
-      <li className="py-2 pl-2">
-        <Link to={path.home} className='relative px-2 text-orange font-semibold'>Thời Trang Nam</Link>
-      </li>
-      <li className="py-2 pl-2">
-        <Link to={path.home} className='relative px-2'>Áo Khoác</Link>
-      </li>
-      <li className="py-2 pl-2">
-        <Link to={path.home} className='relative px-2'>Áo Vest và Blazer</Link>
-      </li>
-      <li className="py-2 pl-2">
-        <Link to={path.home} className='relative px-2'>Quần Jeans</Link>
-      </li>
-      <li className="py-2 pl-2">
-        <Link to={path.home} className='relative px-2'>Đồng Hồ</Link>
-      </li>
+       {renderedCategories.map((item) => {
+        const isActive = item.cate_id === category
+        return (
+          <li className='py-2 pl-2' key={item.cate_id}>
+            <Link 
+              to={{
+                pathname: path.home,
+                search: createSearchParams({
+                  ...queryConfig,
+                  category: item.cate_id || ''
+                }).toString()
+              }}
+              className={classNames('relative px-2', {
+                'font-semibold text-orange': isActive
+              })}
+            >
+              {isActive 
+                && <svg viewBox="0 0 4 7" className="shopee-svg-icon shopee-category-list__main-category__caret icon-down-arrow-right-filled"><polygon points="4 3.5 0 0 0 7"></polygon></svg>}
+              {item.name}
+            </Link>
+          </li>
+        )
+       })}
+       <button className='ml-4 font-semibold' onClick={() => setRenderedCategories(categories)}>....</button>
     </ul>
     <Link to={path.home} className='mt-12 flex font-bold items-center gap-4'>
       <FaFilter />
