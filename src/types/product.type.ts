@@ -73,11 +73,11 @@ export interface Price {
 }
 
 export interface ProductParams {
-  page: number;
-  limit: number;
+  page: number | string;
+  limit: number | string;
 
-  prev_page?: number | null;
-  cur_page?: number | null;
-  next_page?: number | null;
-  total_page?: number | null;
+  prev_page?: number | null | string;
+  cur_page?: number | null | string;
+  next_page?: number | null | string;
+  total_page?: number | null | string;
 }

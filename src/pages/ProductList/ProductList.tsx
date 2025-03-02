@@ -4,12 +4,21 @@ import SortProductList from "./components/SortProductList";
 import useQueryParams from "@uth/hooks/useQueryParams";
 import { useProductAll } from "@uth/queries/useProduct";
 import { useEffect, useState } from "react";
-import { Product as ProductType } from "@uth/types/product.type";
+import { ProductParams, Product as ProductType } from "@uth/types/product.type";
+import Pagination from "@uth/components/PaginationCustom";
+
+export type QueryConfig = {
+  [key in keyof ProductParams]: string
+}
 
 export default function ProductList() {
   const [sortPrice, setSortPrice] = useState<string>("")
-  const queryParam: any = useQueryParams()
-  const {data} = useProductAll(queryParam)
+  const queryParam = useQueryParams() as QueryConfig
+  const queryConfig: QueryConfig = {
+    page: queryParam.page || '1',
+    limit: queryParam.limit || '24'
+  }
+  const {data} = useProductAll(queryConfig)
   const [sortedProducts, setSortedProducts] = useState<ProductType[] | undefined>(data?.result.data)  
 
   useEffect(() => {
@@ -43,6 +52,7 @@ export default function ProductList() {
               </div>
             ))}
            </div>
+           <Pagination queryConfig={queryConfig} pageSize={data?.result.pagination.total_page} />
          </div>
       </div>
     </div>

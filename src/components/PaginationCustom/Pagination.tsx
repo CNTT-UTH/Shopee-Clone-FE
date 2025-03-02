@@ -1,11 +1,12 @@
+import { QueryConfig } from '@uth/pages/ProductList/ProductList'
 import classNames from 'classnames'
 import { Link, createSearchParams } from 'react-router-dom'
 import path from 'src/constants/path' 
 
-// interface Props {
-//   queryConfig?: QueryConfig
-//   pageSize?: number
-// }
+interface Props {
+  queryConfig: QueryConfig
+  pageSize: number
+}
  
 
 const RANGE = 2

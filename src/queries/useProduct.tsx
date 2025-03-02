@@ -1,14 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import productApi from "@uth/apis/product.api"
+import { QueryConfig } from "@uth/pages/ProductList/ProductList"
 import { ProductParams } from "@uth/types/product.type"
 
-export const useProductAll = (queryParam: ProductParams) => {
-  if(!queryParam.page || !queryParam.limit) queryParam = {page: queryParam.page || 1, limit: queryParam.limit || 30}
-  console.log('query', queryParam)
+export const useProductAll = (queryConfig: QueryConfig) => {
+  console.log('query', queryConfig)
   return useQuery({
-    queryKey: ['products', queryParam],
+    queryKey: ['products', queryConfig],
     queryFn: () => {
-      return productApi.getAllProduct(queryParam)
-    }
+      return productApi.getAllProduct(queryConfig)
+    },
+    keepPreviousData: true
   })
 }
