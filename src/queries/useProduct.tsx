@@ -13,3 +13,11 @@ export const useProductAll = (queryConfig: QueryConfig) => {
   })
 }
  
+export const useCateById = (queryConfig: QueryConfig) => {
+  return useQuery({
+    queryKey: ['cateId', queryConfig],
+    queryFn: () => {
+      return productApi.getCateById(queryConfig)
+    }
+  })
+}

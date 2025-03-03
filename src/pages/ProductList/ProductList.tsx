@@ -2,11 +2,14 @@ import Product from "@uth/components/Product";
 import Filter from "./components/Filter";
 import SortProductList from "./components/SortProductList";
 import useQueryParams from "@uth/hooks/useQueryParams";
-import { useProductAll } from "@uth/queries/useProduct";
+import { useCateById, useProductAll } from "@uth/queries/useProduct";
 import { useEffect, useState } from "react";
 import { ProductParams, Product as ProductType } from "@uth/types/product.type";
 import Pagination from "@uth/components/PaginationCustom";
 import { useCategories } from "@uth/queries/useCategories" 
+import Slider from "@uth/components/Slider";
+import CategoryGrid from "@uth/components/CategoryGrid";
+import { Category } from "@uth/types/category.type";
 
 export type QueryConfig = {
   [key in keyof ProductParams]: string
@@ -41,8 +44,10 @@ export default function ProductList() {
 
   const {data: cateData} = useCategories()
 
-  return <div className="bg-gray-200 py-6">
+  return <div className="bg-gray-200">
+    <Slider />
     <div className="container">
+      <CategoryGrid Categories={cateData?.result as Category[]}/>
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-3">
           <Filter categories={cateData?.result || []} queryConfig={queryConfig} />
