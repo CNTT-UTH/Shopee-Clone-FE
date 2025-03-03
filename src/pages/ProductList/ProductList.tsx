@@ -6,7 +6,7 @@ import { useProductAll } from "@uth/queries/useProduct";
 import { useEffect, useState } from "react";
 import { ProductParams, Product as ProductType } from "@uth/types/product.type";
 import Pagination from "@uth/components/PaginationCustom";
-import { useCategories } from "@uth/queries/useCategories";
+import { useCategories } from "@uth/queries/useCategories" 
 
 export type QueryConfig = {
   [key in keyof ProductParams]: string
@@ -22,7 +22,7 @@ export default function ProductList() {
   }
   const {data} = useProductAll(queryConfig)
   const [sortedProducts, setSortedProducts] = useState<ProductType[] | undefined>(data?.result.data)  
-
+ 
   useEffect(() => {
     if (data?.result?.data && sortPrice) { 
       const newSortedProducts = [...data.result.data];  

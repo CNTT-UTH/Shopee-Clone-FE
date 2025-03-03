@@ -18,7 +18,7 @@ interface Props {
 export default function Filter({categories, queryConfig}: Props ) {
   const {category} = queryConfig
   const [renderedCategories, setRenderedCategories] = useState<Category[]>([])
-  
+
   useEffect(() => {
     setRenderedCategories(categories.slice(0,5))
   }, [categories])
@@ -31,7 +31,8 @@ export default function Filter({categories, queryConfig}: Props ) {
     <div className="bg-gray-300 h-[1px] my-4" /> 
     <ul className='text-sm'>
        {renderedCategories.map((item) => {
-        const isActive = item.cate_id === category
+        const isActive = Number(item.cate_id) === Number(category)
+        console.log(isActive, '>>>', queryConfig, item.cate_id, queryConfig.category)
         return (
           <li className='py-2 pl-2' key={item.cate_id}>
             <Link 
@@ -47,7 +48,9 @@ export default function Filter({categories, queryConfig}: Props ) {
               })}
             >
               {isActive 
-                && <svg viewBox="0 0 4 7" className="shopee-svg-icon shopee-category-list__main-category__caret icon-down-arrow-right-filled"><polygon points="4 3.5 0 0 0 7"></polygon></svg>}
+              &&  <svg viewBox='0 0 4 7' className='absolute top-1 left-[-10px] h-2 w-2 fill-orange'>
+                      <polygon points='4 3.5 0 0 0 7' />
+                    </svg>}
               {item.name}
             </Link>
           </li>

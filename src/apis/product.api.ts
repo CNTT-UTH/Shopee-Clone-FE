@@ -1,3 +1,4 @@
+import { Category } from "@uth/types/category.type"
 import { Product, ProductParams } from "@uth/types/product.type"
 import { ResponseApi } from "@uth/types/utils.type"
 import http from "@uth/utils/axios.http"
@@ -30,6 +31,14 @@ const productApi = {
         console.warn(`Get product detail with id: ${id} fail`)
         throw error
       })
+  },
+  getCateById (params: ProductParams) {
+    return http
+      .get<ResponseApi<Category>>(`${URL_PRODUCT}/search-by-cate/${params.category}`, {
+        params
+      })
+      .then(res => res.data)
+      .catch(err => console.log('Get category by id fail', err))
   }
 }
 
