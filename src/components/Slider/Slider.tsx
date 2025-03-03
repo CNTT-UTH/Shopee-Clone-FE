@@ -41,33 +41,33 @@ export default function ShopeeSlider() {
   };
 
   return (
-    <div className="container flex justify-center items-center gap-4 p-4 bg-red-white py-8">
-      <div className="w-2/3 relative">
-        <Slider {...settings}>
-          {images.map((image, index) => (
-            <div key={index} className="relative">
-              <img
-                src={image}
-                alt={`Slide ${index + 1}`}
-                className="w-full h-auto rounded-lg"
-              />
-            </div>
-          ))}
-        </Slider>
-      </div>
+        <div className="container flex justify-center items-center gap-4 p-4 bg-red-white py-8">
+        <div className="w-2/3 relative">
+          <Slider {...settings}>
+            {images.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            ))}
+          </Slider>
+        </div>
 
-      <div className="w-1/3 flex flex-col gap-4">
-        <img
-          src="https://cf.shopee.vn/file/sg-11134258-7rd6k-m6w177wrd5sr33_xhdpi"
-          alt="Fixed Image 1"
-          className="w-full h-auto rounded-lg"
-        />
-        <img
-          src="https://cf.shopee.vn/file/sg-11134258-7rd50-m6v789a2ulqyc5_xhdpi"
-          alt="Fixed Image 2"
-          className="w-full h-auto rounded-lg"
-        />
+        <div className="w-1/3 flex flex-col gap-4">
+          <img
+            src="https://cf.shopee.vn/file/sg-11134258-7rd6k-m6w177wrd5sr33_xhdpi"
+            alt="Fixed Image 1"
+            className="w-full h-auto rounded-lg"
+          />
+          <img
+            src="https://cf.shopee.vn/file/sg-11134258-7rd50-m6v789a2ulqyc5_xhdpi"
+            alt="Fixed Image 2"
+            className="w-full h-auto rounded-lg"
+          />
+        </div>
       </div>
-    </div>
   );
 }

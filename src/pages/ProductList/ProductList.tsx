@@ -48,12 +48,12 @@ export default function ProductList() {
     <Slider />
     <div className="container">
       <CategoryGrid Categories={cateData?.result as Category[]}/>
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-3">
+      <div className="grid grid-cols-12 gap-6 pb-8 my-4">
+        {/* <div className="col-span-3">
           <Filter categories={cateData?.result || []} queryConfig={queryConfig} />
-        </div>
-         <div className="col-span-9">
-           <SortProductList setSortPrice={setSortPrice} />
+        </div> */}
+         <div className="col-span-12">
+           {/* <SortProductList setSortPrice={setSortPrice} /> */}
            <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {(sortedProducts || data?.result.data)?.map((product) => (
               <div className="col-span-1" key={product.product_id}>
