@@ -1,11 +1,11 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import freeshipImage from '@uth/assets/images/freeship.jpeg'
 import { Price, Product } from '@uth/types/product.type'
+import path from '@uth/constants/path'
 
 export default function Product({product}: {product: Product}) {
   
-  return <Link to="/">
+  return <Link to={`${path.product}/${product.product_id}`}>
     <div className='bg-white shadow rounded-xl hover:translate-y-[-0.0625rem]  duration-100 transition-transform hover:shadow-lg hover:shadow-orange'>
       <div className='w-full pt-[100%] relative'>
         <img 

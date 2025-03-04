@@ -19,6 +19,7 @@ import SellerCentre from '@uth/pages/SellerCentre'
 import RegisterSeller from '@uth/components/RegisterSeller'
 import RegisterShopLayout from '@uth/layouts/RegisterShopLayout'
 import SellerLayout from '@uth/layouts/SellerLayout/SellerLayout'
+import ProductDetail from '@uth/pages/ProductDetail'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,15 @@ const router = createBrowserRouter([
     element: (
       <MainLayout>
         <ProductList />
+      </MainLayout>
+    )
+  },
+  {
+    path: `${path.product}${path.productDetail}`,
+    index: true,
+    element: (
+      <MainLayout>
+        <ProductDetail />
       </MainLayout>
     )
   },

@@ -21,3 +21,10 @@ export const useCateById = (queryConfig: QueryConfig) => {
     }
   })
 }
+
+export const useProductDetail = (id: string) => {
+  return useQuery({
+    queryKey: ['productDetail', id],
+    queryFn: () => productApi.getProductDetail(id)
+  })
+}
