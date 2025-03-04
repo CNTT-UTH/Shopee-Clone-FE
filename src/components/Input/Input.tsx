@@ -1,12 +1,14 @@
+
+// Input.tsx
 import { InputHTMLAttributes, useState } from 'react'
 import type { UseFormRegister, RegisterOptions, FieldValues, FieldPath } from 'react-hook-form'
+import { sanitizeInput } from '@uth/utils/sanitize';
 
 interface Props<TFieldValues extends FieldValues> extends InputHTMLAttributes<HTMLInputElement> {
   errorMessage?: string
   classNameInput?: string
   classNameError?: string
   classNameEye?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: UseFormRegister<TFieldValues>
   rules?: RegisterOptions<TFieldValues>
   name: FieldPath<TFieldValues>
@@ -24,7 +26,10 @@ export default function Input<TFieldValues extends FieldValues = FieldValues>({
   ...rest
 }: Props<TFieldValues>) {
   const [openEye, setOpenEye] = useState(false)
-  const registerResult = register && name ? register(name, rules) : null
+  const registerResult = register && name ? register(name, {
+    ...rules,
+    setValueAs: (value) => sanitizeInput(value)
+  }) : null;
 
   const toggleEye = () => {
     setOpenEye((prev) => !prev)
@@ -75,7 +80,6 @@ export default function Input<TFieldValues extends FieldValues = FieldValues>({
           />
         </svg>
       )}
-
       <div className={classNameError}>{errorMessage}</div>
     </div>
   )

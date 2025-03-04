@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { forwardRef, InputHTMLAttributes, useState } from 'react'
 
 export interface InputNumberProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -14,7 +13,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
     classNameInput = 'p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm',
     classNameError = 'mt-1 text-red-600 min-h-[1.25rem] text-sm',
     onChange,
-    value = '',
+    value,
     ...rest
   },
   ref
@@ -24,7 +23,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (/^\d+$/.test(value) || value === '') {
-      // execute onChange callback if being passed from props
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       onChange && onChange(event)
       setLocalValue(value)
     }
