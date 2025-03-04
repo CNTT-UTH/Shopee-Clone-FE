@@ -1,8 +1,10 @@
 import { User } from "../types/user.type"
+import CryptoJS from 'crypto-js'
 
 const ACCESS_TOKEN_KEY = 'access_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
 const USER_KEY = 'user_profile'
+const SECRET_KEY = import.meta.env.VITE_SECRET_KEY
 
 export const EventTargetLS = new EventTarget()
 
@@ -12,7 +14,8 @@ export const EventTargetLS = new EventTarget()
  */
 export const setAccessTokenToLS = (access_token: string): void => {
   try {
-    localStorage.setItem(ACCESS_TOKEN_KEY, access_token)
+    const encryptedToken = CryptoJS.AES.encrypt(access_token, SECRET_KEY).toString()
+    localStorage.setItem(ACCESS_TOKEN_KEY, encryptedToken)
   } catch (error) {
     console.error("Failed to save access token to localStorage", error)
   }
@@ -24,7 +27,8 @@ export const setAccessTokenToLS = (access_token: string): void => {
  */
 export const setRefreshTokenToLS = (refresh_token: string): void => {
   try {
-    localStorage.setItem(REFRESH_TOKEN_KEY, refresh_token)
+    const encryptedToken = CryptoJS.AES.encrypt(refresh_token, SECRET_KEY).toString()
+    localStorage.setItem(REFRESH_TOKEN_KEY, encryptedToken)
   } catch (error) {
     console.error("Failed to save refresh token to localStorage", error)
   }
@@ -53,7 +57,12 @@ export const clearLS = (): void => {
  */
 export const getAccessTokenFromLS = (): string => {
   try {
-    return localStorage.getItem(ACCESS_TOKEN_KEY) || ''
+    const encryptedToken = localStorage.getItem("access_token")
+    if (!encryptedToken) return ''
+
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, SECRET_KEY)
+    return bytes.toString(CryptoJS.enc.Utf8)
+
   } catch (error) {
     console.error("Failed to retrieve access token from localStorage", error)
     return ''
@@ -62,8 +71,11 @@ export const getAccessTokenFromLS = (): string => {
 
 export const getRefreshTokenFromLS = (): string => {
   try {
-    return localStorage.getItem(REFRESH_TOKEN_KEY) || ''
-  } catch (error) {
+    const encryptedToken = localStorage.getItem("refresh_token")
+    if (!encryptedToken) return ''
+
+    const bytes = CryptoJS.AES.decrypt(encryptedToken, SECRET_KEY)
+    return bytes.toString(CryptoJS.enc.Utf8)  } catch (error) {
     console.error("Failed to retrieve refresh token from localStorage", error)
     return ''
   }
