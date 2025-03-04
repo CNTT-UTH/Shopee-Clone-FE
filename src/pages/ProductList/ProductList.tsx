@@ -26,21 +26,21 @@ export default function ProductList() {
   const {data} = useProductAll(queryConfig)
   const [sortedProducts, setSortedProducts] = useState<ProductType[] | undefined>(data?.result.data)  
  
-  useEffect(() => {
-    if (data?.result?.data && sortPrice) { 
-      const newSortedProducts = [...data.result.data];  
+  // useEffect(() => {
+  //   if (data?.result?.data && sortPrice) { 
+  //     const newSortedProducts = [...data.result.data];  
 
-      // console.log('run', sortPrice)
-      if (sortPrice === "price:asc") {
-        newSortedProducts?.sort((a, b) => (a.product_price?.price || 0) - (b.product_price?.price || 0)) 
-        setSortedProducts(newSortedProducts);
-      } else if (sortPrice === "price:des") {
-        newSortedProducts?.sort((a, b) => (b.product_price?.price || 0) - (a.product_price?.price || 0))
-        setSortedProducts(newSortedProducts);
-      }
+  //     // console.log('run', sortPrice)
+  //     if (sortPrice === "price:asc") {
+  //       newSortedProducts?.sort((a, b) => (a.product_price?.price || 0) - (b.product_price?.price || 0)) 
+  //       setSortedProducts(newSortedProducts);
+  //     } else if (sortPrice === "price:des") {
+  //       newSortedProducts?.sort((a, b) => (b.product_price?.price || 0) - (a.product_price?.price || 0))
+  //       setSortedProducts(newSortedProducts);
+  //     }
 
-    }
-  }, [sortPrice, data]);
+  //   }
+  // }, [sortPrice, data]);
 
   const {data: cateData} = useCategories()
 
@@ -55,7 +55,7 @@ export default function ProductList() {
          <div className="col-span-12">
            {/* <SortProductList setSortPrice={setSortPrice} /> */}
            <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {(sortedProducts || data?.result.data)?.map((product) => (
+            {(data?.result.data)?.map((product) => (
               <div className="col-span-1" key={product.product_id}>
                 <Product product={product} />
               </div>

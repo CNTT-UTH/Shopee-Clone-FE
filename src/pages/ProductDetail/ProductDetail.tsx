@@ -3,18 +3,33 @@ import { useProductDetail } from '@uth/queries/useProduct'
 import { FaChevronLeft, FaChevronRight, FaMinus, FaPlus } from "react-icons/fa"; 
 import { useParams } from 'react-router-dom'
 import cart from '@uth/assets/images/cart.svg'
+import { Product } from '@uth/types/product.type';
+import { useState } from 'react';
 export default function ProductDetail() {
   const {id} = useParams()
+  const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
 
   const {data} = useProductDetail(id as string)
   const productData = data?.result
   if(!productData) return
   const tmp = +Math.floor((Math.random() * 20000 + 1000) / 1000).toFixed(1) 
   
+  const next = () => {
+    if (currentIndexImages[1] < (productData?.image_urls!.length)) {
+      setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
+    }
+  }
+
+  const prev = () => {
+    if (currentIndexImages[0] > 0) {
+      setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
+    }
+  }
+
   return (
     <div className='bg-gray-200 py-6'>
-      <div className="bg-white p-4 shadow">
-        <div className="container"> 
+      <div className="container"> 
+        <div className="bg-white p-4 shadow rounded-md">
           <div className="grid grid-cols-12 gap-9">
             <div className="col-span-5">
               <div className="relative w-full pt-[100%] shadow">
@@ -129,8 +144,8 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <div className="mt-8 bg-white p-4 shadow">
-        <div className="container">
+      <div className="container">
+        <div className="mt-8 bg-white p-4 shadow">
           <div className="rounded bg-gray-50 p-4 text-lg capitalize text-slate-700">Mô tả sản phẩm</div>
           <div className="mx-4 mt-12 mb-4 text-sm leading-loose"></div>
         </div>
