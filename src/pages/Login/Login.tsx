@@ -68,12 +68,21 @@ export default function Login() {
 
         onError: (error) => {
           if (isAxiosUnprocessableEntityError<ErrorResponse<AuthError>>(error)) {
-             const authError = error.response?.data.errors
+             const authError = error?.response?.data.errors
+              console.log('>>>onerror', authError)
+
              if (authError) {
-              toast.error(authError.email.message, {
-                theme: 'dark',
-                pauseOnHover: true
-              })
+              if(authError.email) toast.error(authError.email.message)
+              else toast.error(authError.username.message)
+              
+              // toast.error(authError.email.message, {
+              //   theme: 'dark',
+              //   pauseOnHover: true
+              // })
+              // toast.error(authError.username.message, {
+              //   theme: 'dark',
+              //   pauseOnHover: true
+              // })
             } 
           }
         }

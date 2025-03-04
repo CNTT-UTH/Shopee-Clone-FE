@@ -20,7 +20,7 @@ export default function SideBarUser() {
             : <Avatar name={user?.username || 'user'} size="45" round={true}/>}
         </Link>
         <div className="flex-grow pl-4">
-          <div className="mb-1 truncate text-gray-600 font-semibold">Duc Tai</div>
+          <div className="mb-1 truncate text-gray-600 font-semibold">{user?.name || user?.username}</div>
           <p className="text-xs">Welcome to profile</p>
         </div>
       </div>

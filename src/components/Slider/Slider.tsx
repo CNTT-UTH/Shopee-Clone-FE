@@ -41,7 +41,8 @@ export default function ShopeeSlider() {
   };
 
   return (
-        <div className="container flex justify-center items-center gap-4 p-4 bg-red-white py-8">
+    <div className="bg-white mb-8">
+          <div className="container flex justify-center items-center gap-4 p-4 bg-red-white py-8">
         <div className="w-2/3 relative">
           <Slider {...settings}>
             {images.map((image, index) => (
@@ -69,5 +70,6 @@ export default function ShopeeSlider() {
           />
         </div>
       </div>
+        </div>
   );
 }

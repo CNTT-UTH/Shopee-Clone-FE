@@ -44,7 +44,7 @@ export default function CategorySlider({Categories}: {Categories: Category[]}) {
       <Slider {...settings}>
         {Categories && Categories.map((category, index) => (
           <div key={index} className="p-2">
-            <div className="flex flex-col items-center p-4 bg-white rounded-lg transition cursor-pointer">
+            <div className="flex flex-col items-center p-4 bg-white rounded-lg transition cursor-pointer border shadow-sm hover:shadow-xl hover:-translate-y-[0.25rem]">
               <img
                 src={category.image_url}
                 alt={category.name}
