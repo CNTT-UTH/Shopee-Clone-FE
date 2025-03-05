@@ -19,7 +19,7 @@ export default function Product({product}: {product: Product}) {
         <div className='min-h-[1.75rem] line-clamp-2 text-sm'>{product.title}</div>
         <div className="flex items-center mt-3">
           <span className='text-xs text-orange'>₫</span>
-          <span className="text-md max-w-[50%] text-orange truncate">{(product.product_price.price! * 20).toLocaleString('vi-VN')}</span>
+          <span className="text-md max-w-[50%] text-orange truncate">{(product.product_price.price!).toLocaleString('vi-VN')}</span>
           <span className='text-xs px-1 text-orange bg-[#ee4d2d]/10 ml-2 rounded-sm'>-{product.product_price.discount}%</span>
         </div>
         <div className="flex mb-2 items-center space-x-1 mt-6">
