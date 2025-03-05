@@ -97,7 +97,7 @@ export default function RegisterSeller() {
         <h2 className="text-xl font-semibold text-center mb-10">REGISTER FOR SELLING</h2>
         <div className="flex justify-between items-center">
           {steps.map((label, index) => (
-            <div key={index} className={`flex-1 mb-4 text-center text-lg ${step === index + 1 ? 'text-orange font-bold' : 'text-gray-500'}`}>
+            <div onClick={() => setStep(index+1)} key={index} className={`cursor-pointer flex-1 mb-4 text-center text-lg ${step === index + 1 ? 'text-orange font-bold' : 'text-gray-500'}`}>
               {label}
             </div>
           ))}

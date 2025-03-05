@@ -4,9 +4,10 @@ import { FaChevronLeft, FaChevronRight, FaMinus, FaPlus } from "react-icons/fa";
 import { useParams } from 'react-router-dom'
 import cart from '@uth/assets/images/cart.svg'
 import { Product } from '@uth/types/product.type';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import des from '@uth/assets/des/des';
 import { sanitizeInput } from '@uth/utils/sanitize';
+import FlashSale from '@uth/components/FlashSale';
 export default function ProductDetail() {
   const {id} = useParams()
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
@@ -14,16 +15,18 @@ export default function ProductDetail() {
 
   const {data, isLoading} = useProductDetail(id as string)
   const productData = data?.result
-  const tmp = +Math.floor((Math.random() * 20000 + 1000) / 1000).toFixed(1) 
-  const currentImages = useMemo(() => (productData?.image_urls?.slice(...currentIndexImages) || []), [productData])
-
-  // useEffect(() => {
-  //   if(productData) setImgActive(productData.image_urls?.[0] as string)
-  // }, [productData])
+  const tmp = useMemo(() => +Math.floor((Math.random() * 20000 + 1000) / 1000).toFixed(1), [data])
+  const sold = useMemo(() => (tmp * +(Math.random() * 3 + 3)).toFixed(1), [tmp])
+  const currentImages = useMemo(() => (productData?.image_urls?.slice(...currentIndexImages) || []), [productData, currentIndexImages])
+  useEffect(() => {
+    if(productData) setImgActive(productData.image_urls?.[0] as string)
+  }, [productData])
   
   const next = () => {
+    console.log('next')
     if (productData && (currentIndexImages[1] < (productData?.image_urls!.length))) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
+      console.log('text')
     }
   }
 
@@ -31,7 +34,8 @@ export default function ProductDetail() {
     if (currentIndexImages[0] > 0) {
       setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
     }
-  } 
+  }  
+
   if(isLoading) { 
     <div role="status">
       <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,19 +55,19 @@ export default function ProductDetail() {
             <div className="col-span-5">
               <div className="relative w-full pt-[100%] shadow">
                 <img 
-                  src={productData.image_urls?.[0]}
+                  src={imgActive}
                   alt={productData.title}
                   className='absolute top-0 bg-white w-full h-full object-cover rounded-lg'
                 />
               </div>
               <div className="relative mt-4 grid grid-cols-5 gap-1">
-                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button className='absolute left-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white' onClick={prev}>
                   <FaChevronLeft />
                 </button>
                 {currentImages?.map((image, index) => {
-                  const isActive = index === 0
+                  const isActive = image === imgActive
                   return (
-                    <div key={index} className='relative w-full pt-[100%]'>
+                    <div key={index} className='relative w-full pt-[100%] cursor-pointer' onMouseEnter={() => setImgActive(image)}>
                       <img 
                         src={image} 
                         className='absolute top-0 cursor-pointer bg-white w-full h-full object-cover rounded-lg'
@@ -72,7 +76,7 @@ export default function ProductDetail() {
                     </div>
                   )
                 })}
-                <button className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
+                <button onClick={next} className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'>
                   <FaChevronRight />
                 </button>
               </div>
@@ -90,25 +94,31 @@ export default function ProductDetail() {
                     </div>
                     <div className="mt-2 h-5 w-[1px] mx-4 bg-gray-300"></div>
                     <div className="mt-2 text-sm">
-                      <span>{(tmp * +(Math.random() * 3 + 3)).toFixed(1)}k</span>
+                      <span>{sold}k</span>
                       <span className='ml-1'>Đã bán</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 flex items-center bg-gray-50 px-5 py-4">
+                {productData.product_id! % 2 === 0
+                ? <div className="mt-8 flex items-center bg-gray-50 px-5 py-4">
                   <div className="text-3xl font-medium text-orange">đ{productData?.product_price?.price?.toLocaleString('vi-VN')} - đ{productData?.product_price?.range_max?.toLocaleString('vi-VN')}</div>
-                  {/* <div className="ml-6 text-gray-500 line-through">đ{productData?.product_price?.price_before_discount?.toLocaleString('vi-VN')} - đ{productData?.product_price?.range_max_before_discount?.toLocaleString('vi-VN')}</div> */}
                   <div className="ml-4 rounded-sm bg-orange px-1 py-[2xl] text-xs font-semibold uppercase text-white">
                     {(productData?.product_price?.discount as number) * 100}% GIẢM
                   </div>
                 </div>
+                : <FlashSale discount={productData.product_price.discount as number} salePrice={productData.product_price.price as number} originalPrice={productData.product_price.price_before_discount as number} />}
 
-                <div className='mt-16'>
+                <div className="mt-12 flex items-center">
+                  <div className="text-gray-500">Deal Sốc</div>
+                  <div className="text-orange ml-10 p-1 bg-orange/10 flex-inline">Mua để nhận quà</div>
+                </div> 
+
+                <div className='mt-12'>
                   {productData.options?.map((value, index) => {
                     return (
                       <div key={index} className='grid grid-cols-12 mt-8'>
-                        <div className='col-span-2'>{value.name}:</div>
+                        <div className='col-span-2 text-gray-500'>{value.name}</div>
                         <div key={index} className='flex items-center col-span-10 -mt-1 flex-wrap gap-2'>
                           {value.value?.map((item, index) => {
                             return <div key={index} className='border px-4 py-1 rounded-md shadow cursor-pointer hover:shadow-lg'>{item}</div>
@@ -120,9 +130,9 @@ export default function ProductDetail() {
                   
                 </div>
 
-                <div className="mt-12 mr-2 flex items-center">
-                  <div className="capitalize">Số lượng:</div>
-                  <div className="ml-4 flex items-center">
+                <div className="mt-12 grid grid-cols-12 items-center">
+                  <div className="text-gray-500 capitalize col-span-2">Số lượng</div>
+                  <div className="ml-4 col-span-10 flex -ml-0.5 items-center">
                     <button className="flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600">
                       <FaMinus />
                     </button>
@@ -130,9 +140,9 @@ export default function ProductDetail() {
                     <button className="flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600">
                       <FaPlus />
                     </button>
+                    <div className="ml-6 text-sm text-gray-500">{tmp * 2379} sản phẩm có sẵn</div>
                   </div>
 
-                  <div className="ml-6 text-sm text-gray-500">{tmp * 2379} sản phẩm có sẵn</div>
                 </div>
 
                 <div className="mt-12 flex items-center">

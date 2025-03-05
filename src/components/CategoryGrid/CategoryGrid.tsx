@@ -26,13 +26,14 @@ const CustomNextArrow = ({ onClick }: { onClick: () => void }) => (
   </button>
 );
 
+const width = window.innerWidth
 export default function CategorySlider({Categories}: {Categories: Category[]}) {
   const settings = {
     dots: false,  
     infinite: false,   
     speed: 500,  
-    slidesToShow: 6, 
-    slidesToScroll: 5,  
+    slidesToShow: width >= 768 ? 6 : 4, 
+    slidesToScroll: width >= 768 ? 6 : 4,  
     rows: 2, 
     nextArrow: <CustomNextArrow onClick={() => {}} />, 
     prevArrow: <CustomPrevArrow onClick={() => {}} />,  
@@ -50,7 +51,9 @@ export default function CategorySlider({Categories}: {Categories: Category[]}) {
                 alt={category.name}
                 className="w-16 h-16 object-contain rounded-full"
               />
-              <p className="mt-2 text-sm text-gray-700 text-center truncate">{category.name}</p>
+                <p className="mt-2 text-sm text-gray-700 text-center truncate w-[100%]">
+                  {category.name}
+                </p> 
             </div>
           </div>
         ))}
