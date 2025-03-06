@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { toast } from 'react-toastify' 
 import Avatar from 'react-avatar'
+import { useCart } from '@uth/queries/useCart'
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
@@ -34,6 +35,11 @@ export default function Header() {
     })
   }
 
+  //when changing the page, the header is just re-render, not unmount - mounting again
+  const {data, isLoading} = useCart()
+  const cartData = data?.result.cart_items
+  
+
   const infoPopover = (
       <div className="flex flex-col py-1 px-1">
         <button onClick={() => changeLanguage('en')} className='hover:bg-gray-50 hover:text-orange py-3 px-3 rounded-md'>English</button>
@@ -47,65 +53,33 @@ export default function Header() {
   </div>)
 
   const cartPopover = (
-  <div className='text-sm p-4 max-w-[400px] border-gray-200 border'>
+    !cartData
+    ? <div className='p-14 px-16 z-100 bg-gray-100'>
+      <img className='w-[100px] h-[100px] rounded-full m-auto object-cover' src="https://mir-s3-cdn-cf.behance.net/projects/404/54b13147340145.Y3JvcCw0MDUsMzE3LDAsNDI.png" alt="" />
+      <p className='mt-4 text-orange font-semibold'>The cart is empty</p>
+    </div>
+    : <div className='text-sm z-100 p-4 max-w-[400px] border-gray-200 border'>
     <p className='text-gray-400 capitalize'>Added new product</p>
     <div className='mt-5'>
-      <div className="mt-4 flex gap-1">
+      {cartData.map((item, index) => (
+      <div className="mt-4 flex gap-1" key={index}>
         <img className='object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/736x/6c/2d/88/6c2d88652b7606ab5d280b41d138fa17.jpg" alt="" />
         <div className='flex-grow ml-2 overflow-hidden'>
           <div className="truncate">
-            Bộ bài ma sói Choice TOPBOARD1 (7 - 20 người chơi) Chất liệu cứng dày gọn nhẹ      
+            {/* {item.product.title}      */}
           </div>
           <div className="text-orange mt-2">₫131.300</div>
         </div>
-      </div>
-
-      <div className="mt-4 flex gap-1">
-        <img className='block object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/474x/ef/24/e7/ef24e71d3541fb9d5cf5330997de3710.jpg" alt="" />
-        <div className='flex-grow ml-2 overflow-hidden'>
-          <div className="truncate">
-          [Choice] BodyMist Nam Nữ Unisex BODYMISS ES-67.30 Chính Hãng Thơm Lâu
-          </div>
-          <div className="text-orange mt-2">₫91.300</div>
-        </div>
-      </div>
-
-      <div className="mt-4 flex gap-1">
-        <img className='object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/736x/6c/2d/88/6c2d88652b7606ab5d280b41d138fa17.jpg" alt="" />
-        <div className='flex-grow ml-2 overflow-hidden'>
-          <div className="truncate">
-            Bộ bài ma sói Choice TOPBOARD1 (7 - 20 người chơi) Chất liệu cứng dày gọn nhẹ      
-          </div>
-          <div className="text-orange mt-2">₫131.300</div>
-        </div>
-      </div>
-
-      <div className="mt-4 flex gap-1">
-        <img className='object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/474x/fc/eb/41/fceb41ed28b6e8abd4018a75028c76b3.jpg" alt="" />
-        <div className='flex-grow ml-2 overflow-hidden'>
-          <div className="truncate">
-            Bộ bài ma sói Choice TOPBOARD1 (7 - 20 người chơi) Chất liệu cứng dày gọn nhẹ      
-          </div>
-          <div className="text-orange mt-2">₫131.300</div>
-        </div>
-      </div>
-
-      <div className="mt-4 flex gap-1">
-        <img className='object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/736x/b3/95/36/b395368d495c3939e81842e9682f0e27.jpg" alt="" />
-        <div className='flex-grow ml-2 overflow-hidden'>
-          <div className="truncate">
-            Bộ bài ma sói Choice TOPBOARD1 (7 - 20 người chơi) Chất liệu cứng dày gọn nhẹ      
-          </div>
-          <div className="text-orange mt-2">₫131.300</div>
-        </div>
-      </div>
+      </div> 
+      ))}
     </div>
 
     <div className="flex mt-2 items-center justify-between text-white ">
       <div className="text-black text-opacity-70">5 More Products In Cart</div>
       <button className="bg-orange p-2 rounded-md hover:bg-opacity-80">View My Shopping Cart</button>
     </div>
-  </div>)
+    </div>
+  )
 
   return (
     <div className="pb-4 bg-gradient-to-b from-[#d0011b] to-[#f53d2d]">

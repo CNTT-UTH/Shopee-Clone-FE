@@ -10,6 +10,7 @@ import { useCategories } from "@uth/queries/useCategories"
 import Slider from "@uth/components/Slider";
 import CategoryGrid from "@uth/components/CategoryGrid";
 import { Category } from "@uth/types/category.type";
+import Loading from "@uth/components/Loading";
 
 export type QueryConfig = {
   [key in keyof ProductParams]: string
@@ -43,6 +44,7 @@ export default function ProductList() {
   // }, [sortPrice, data]);
 
   const {data: cateData} = useCategories()
+  if(!data) return <Loading />
 
   return <div className="bg-gray-200">
     <Slider />

@@ -24,6 +24,7 @@ export interface Product {
     image_urls?: string[];
     shop: ShopDTO
     sku: string
+    variants_mapping: Record<string, number>
 }
 
 export interface Attribute {
@@ -80,4 +81,58 @@ export interface ProductParams {
   cur_page?: number | null | string;
   next_page?: number | null | string;
   total_page?: number | null | string;
+}
+
+
+export interface IProduct {
+  _id: number;
+  title: string;
+  sku: string
+  description: string;
+  specification: string
+  category_id: number; // Foreign key to category
+  quantity: number
+  price: number;
+  old_price: number;
+  price_range_min: number
+  price_range_max: number
+  price_range_min_old: number
+  price_range_max_old: number
+  discount: number; // Optional discount price
+  buyturn: string,
+  weight: 710,
+  width: number,
+  height: number,
+  length: number,
+  created_at?: string,
+  updated_at?: string,
+  image: string
+}
+
+
+export interface IProductVariant {
+  id: number;
+  product_id: number; // Foreign key to product
+  variant_name: string; // Name of the variant (e.g., "Red - Size M")
+  price: number; // Variant-specific price
+  discount_price?: number; // Discounted price (optional)
+  stock: number; // Available stock for this variant
+  sku?: string; // Stock Keeping Unit (optional)
+  image?: string; // Image of the variant (optional)
+  attributes?: Record<string, string>; // Example: { color: "Red", size: "M" }
+  created_at: string;
+  updated_at: string;
+}
+
+
+export interface IShop {
+  id: number;
+  name: string;
+  description: string;
+  phone: string;
+  avatar: string;
+  default_address_id: string;
+  shop_location: string
+  created_at: string;
+  updated_at: string;
 }

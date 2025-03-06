@@ -1,4 +1,4 @@
-import { Cart, CartItem } from "@uth/types/cart.type"
+import { Cart, CartItem, CartRes } from "@uth/types/cart.type"
 import { ResponseApi } from "@uth/types/utils.type"
 import http from "@uth/utils/axios.http"
 
@@ -11,14 +11,14 @@ interface deleteBodyType {
 const cartApi = {
   getMyCart () {
     return http
-      .get<ResponseApi<Cart>>(`${URL_CART}/get-my-cart`)
+      .get<ResponseApi<CartRes>>(`${URL_CART}/get-my-cart`)
       .then(res => res.data)
       .catch(err => console.log('Get my cart fail', err))
   }, 
 
   addToCart (body: CartItem) {
     return http
-      .post<ResponseApi<Cart>>(`${URL_CART}/add-or-update-item`, body)
+      .post<ResponseApi<CartRes>>(`${URL_CART}/add-or-update-item`, body)
       .then(res => res.data)
       .catch(err => console.warn('Update cart fail', err))
   },

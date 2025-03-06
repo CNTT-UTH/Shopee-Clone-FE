@@ -20,7 +20,7 @@ const CustomPrevArrow = ({ onClick }: { onClick: () => void }) => {
 const CustomNextArrow = ({ onClick }: { onClick: () => void }) => {
   return (
     <button
-      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-10 hover:bg-opacity-80"
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full z-2 hover:bg-opacity-80"
       onClick={onClick}
     >
       <FaChevronRight size={20} />

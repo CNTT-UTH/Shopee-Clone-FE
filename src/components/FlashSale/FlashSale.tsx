@@ -47,7 +47,7 @@ const FlashSale: React.FC<{ salePrice: number; originalPrice: number; discount: 
         <span className="text-2xl font-bold">₫{salePrice.toLocaleString()}</span>
         <span className="line-through text-lg opacity-75">₫{originalPrice.toLocaleString()}</span>
         <span className="bg-white text-[#F97D58] px-2 py-1 text-sm font-semibold rounded-md">
-          -{discount}%
+          -{discount * 100}%
         </span>
       </div>
     </div>
