@@ -1,18 +1,18 @@
-import InputNumber from '@uth/components/InputNumber'
 import { useProductDetail } from '@uth/queries/useProduct'
-import { FaChevronLeft, FaChevronRight, FaMinus, FaPlus, FaShopify } from 'react-icons/fa'
+import { FaChevronLeft, FaChevronRight, FaShopify } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import { IoIosChatbubbles } from 'react-icons/io'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import des from '@uth/assets/des/des'
 import { sanitizeInput } from '@uth/utils/sanitize'
 import FlashSale from '@uth/components/FlashSale'
 import shopName from '@uth/assets/images/shopName'
+import InputQuantity from '@uth/components/InputQuantity'
 export default function ProductDetail() {
   const { id } = useParams()
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [imgActive, setImgActive] = useState('')
-  const {quantity, setQuantity} = useState(1)
+  const [quantity, setQuantity] = useState(1)
   const { data, isLoading } = useProductDetail(id as string)
   const productData = data?.result
   const tmp = useMemo(() => +Math.floor((Math.random() * 20000 + 1000) / 1000).toFixed(1), [data])
@@ -59,6 +59,10 @@ export default function ProductDetail() {
       </svg>
       <span className='sr-only'>Loading...</span>
     </div>
+  }
+
+  const handleCount = (value: number) => {
+    setQuantity(value)
   }
 
   return (
@@ -177,18 +181,7 @@ export default function ProductDetail() {
                 <div className='mt-12 grid grid-cols-12 items-center'>
                   <div className='text-gray-500 capitalize col-span-2'>Số lượng</div>
                   <div className='ml-4 col-span-10 flex -ml-0.5 items-center'>
-                    <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600'>
-                      <FaMinus />
-                    </button>
-                    <InputNumber
-                      value={1}
-                      className=''
-                      classNameInput='h-8 w-14 border-b border-t border-gray-300 p-1 text-center outline-none'
-                      classNameError='hidden'
-                    />
-                    <button className='flex h-8 w-8 items-center justify-center rounded-l-sm border border-gray-300 text-gray-600'>
-                      <FaPlus />
-                    </button>
+                    <InputQuantity max={100} onDecrease={handleCount} onIncrease={handleCount} onType={handleCount} value={quantity} />
                     <div className='ml-6 text-sm text-gray-500'>{tmp * 2379} sản phẩm có sẵn</div>
                   </div>
                 </div>
