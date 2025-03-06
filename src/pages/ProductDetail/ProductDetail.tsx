@@ -7,11 +7,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import des from '@uth/assets/des/des'
 import { sanitizeInput } from '@uth/utils/sanitize'
 import FlashSale from '@uth/components/FlashSale'
+import shopName from '@uth/assets/images/shopName'
 export default function ProductDetail() {
   const { id } = useParams()
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [imgActive, setImgActive] = useState('')
-
+  const {quantity, setQuantity} = useState(1)
   const { data, isLoading } = useProductDetail(id as string)
   const productData = data?.result
   const tmp = useMemo(() => +Math.floor((Math.random() * 20000 + 1000) / 1000).toFixed(1), [data])
@@ -242,7 +243,7 @@ export default function ProductDetail() {
               <div className='w-19 h-19'>
                 <img
                   className='rounded-full w-full h-full object-cover'
-                  src='https://down-vn.img.susercontent.com/file/vn-11134216-7r98o-lq8yyfzf3t1u35@resize_w80_nl.webp'
+                  src={shopName[productData.product_id! % 6]}
                   alt=''
                 />
               </div>
