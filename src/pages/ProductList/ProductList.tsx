@@ -24,7 +24,7 @@ export default function ProductList() {
     limit: queryParam.limit || '24',
     category: queryParam.category
   }
-  const {data} = useProductAll(queryConfig)
+  const {data, isLoading} = useProductAll(queryConfig)
   const [sortedProducts, setSortedProducts] = useState<ProductType[] | undefined>(data?.result.data)  
  
   // useEffect(() => {
@@ -44,28 +44,30 @@ export default function ProductList() {
   // }, [sortPrice, data]);
 
   const {data: cateData} = useCategories()
-  if(!data) return <Loading />
 
   return <div className="bg-gray-200">
-    <Slider />
-    <div className="container">
-      <CategoryGrid Categories={cateData?.result as Category[]}/>
-      <div className="grid grid-cols-12 gap-6 pb-8 my-4">
-        {/* <div className="col-span-3">
-          <Filter categories={cateData?.result || []} queryConfig={queryConfig} />
-        </div> */}
-         <div className="col-span-12">
-           {/* <SortProductList setSortPrice={setSortPrice} /> */}
-           <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {(data?.result.data)?.map((product) => (
-              <div className="col-span-1" key={product.product_id}>
-                <Product product={product} />
+        {isLoading ? <Loading />
+        : <>
+        <Slider />
+        <div className="container">
+          <CategoryGrid Categories={cateData?.result as Category[]}/>
+          <div className="grid grid-cols-12 gap-6 pb-8 my-4">
+            {/* <div className="col-span-3">
+              <Filter categories={cateData?.result || []} queryConfig={queryConfig} />
+            </div> */}
+            <div className="col-span-12">
+              {/* <SortProductList setSortPrice={setSortPrice} /> */}
+              <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                {(data?.result.data)?.map((product) => (
+                  <div className="col-span-1" key={product.product_id}>
+                    <Product product={product} />
+                  </div>
+                ))}
               </div>
-            ))}
-           </div>
-           <Pagination queryConfig={queryConfig} pageSize={data?.result.pagination.total_page} />
-         </div>
+              <Pagination queryConfig={queryConfig} pageSize={data?.result.pagination.total_page} />
+            </div>
+          </div>
+        </div>  
+      </>}
       </div>
-    </div>
-  </div>
 }

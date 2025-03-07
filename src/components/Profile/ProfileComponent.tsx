@@ -203,8 +203,8 @@ export default function ProfileComponent() {
             <div className="my-5 max-h-20 max-w-20">
             {user?.avatar
             ? <img 
-              src={previewAvatar || avatar}
-              className="max-w-20 max-h-20 rounded-full object-cover"
+                src={previewAvatar || avatar}
+                className="max-w-20 max-h-20 rounded-full object-cover"
               />
             : previewAvatar
               ? <img src={previewAvatar} className="max-w-20 max-h-20 rounded-full object-cover"/>
