@@ -13,6 +13,8 @@ import { AuthProvider } from './contexts/auth.context'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 1000 * 60 * 5, //don't refetch if data is new
+      cacheTime: 1000 * 60 * 10,
       refetchOnWindowFocus: false,
       retry: 0
     },

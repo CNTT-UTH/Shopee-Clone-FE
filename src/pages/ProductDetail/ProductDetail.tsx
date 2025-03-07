@@ -11,6 +11,7 @@ import InputQuantity from '@uth/components/InputQuantity'
 import { useMutation } from '@tanstack/react-query'
 import cartApi from '@uth/apis/cart.api'
 import Loading from '@uth/components/Loading'
+import { getVariantId } from '@uth/utils/utils'
 export default function ProductDetail() {
   const { id } = useParams()
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
@@ -52,24 +53,12 @@ export default function ProductDetail() {
     setQuantity(value)
   }
 
+  
   if(!productData || isLoading) {
     return <Loading />
-  }
-
-  const getVariantId = () => {
-    if(!productData.options?.length) return null
-    else if(productData.options.length === 1) {
-      return productData.variants_mapping[selectedOptions[productData?.options?.[0]?.name!]]
-    } else if (productData.options.length === 2) {
-      const firstElement = selectedOptions[productData?.options?.[0]?.name as string] as string
-      const secondElement = selectedOptions[productData?.options?.[1]?.name as string] as string
-      if (firstElement && secondElement) {
-        return ((productData.variants_mapping as any)[firstElement][secondElement] as number) || (productData.variants_mapping as any)[secondElement][firstElement]
-      }
-      return null
-    }
-  }
-  console.log(getVariantId())
+  } 
+  
+  const _variantId = getVariantId({productData, selectedOptions})
  
   
   const addProduct = () => {
@@ -79,6 +68,7 @@ export default function ProductDetail() {
       shop_id: Number(productData?.shop.shopid)
     })
   }
+
   return (
     productData && (
       <div className='bg-gray-200 py-6'>
@@ -149,10 +139,16 @@ export default function ProductDetail() {
 
                 {productData.product_id! % 2 === 0 ? (
                   <div className='mt-8 flex items-center bg-gray-50 px-5 py-4'>
-                    <div className='text-3xl font-medium text-orange'>
+                    {_variantId ?
+                      <div className='text-3xl font-medium text-orange'>
+                        đ{productData?.variants?.find(vItem => (
+                          vItem.variant_id === _variantId
+                        ))?.price?.toLocaleString('VN')}
+                      </div>
+                    : <div className='text-3xl font-medium text-orange'>
                       đ{productData?.product_price?.price?.toLocaleString('vi-VN')} - đ
                       {productData?.product_price?.range_max?.toLocaleString('vi-VN')}
-                    </div>
+                    </div>}
                     <div className='ml-4 rounded-sm bg-orange px-1 py-[2xl] text-xs font-semibold uppercase text-white'>
                       {(productData?.product_price?.discount as number) * 100}% GIẢM
                     </div>
