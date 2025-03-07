@@ -13,14 +13,14 @@ const cartApi = {
     return http
       .get<ResponseApi<Cart>>(`${URL_CART}/get-my-cart`)
       .then(res => res.data)
-      .catch(err => console.log('Get my cart fail', err))
+      .catch(err => console.warn('Get my cart fail', err))
   }, 
 
   addToCart (body: CartItem) {
     return http
       .post<ResponseApi<CartRes>>(`${URL_CART}/add-or-update-item`, body)
       .then(res => res.data)
-      .catch(err => console.warn('Update cart fail', err))
+      .catch(err => {throw new Error(err)})
   },
 
   removeItemFromCart (item_id: number) {
@@ -28,6 +28,8 @@ const cartApi = {
       .delete(`${URL_CART}/remove-item`, {
         data: {item_id}
       })
+      .then(res => res.data)
+      .catch(err => {throw new Error(err)})
   }
 }
 

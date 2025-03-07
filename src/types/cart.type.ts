@@ -12,6 +12,7 @@ export interface CartItem {
   id?: number
   product_id?: number
   product_variant_id?: number
+  variant_id?: number
   shop_id: number
   block_id?: number
   quantity?: number

@@ -37,7 +37,7 @@ export default function Header() {
 
   //when changing the page, the header is just re-render, not unmount - mounting again
   const {data, isLoading} = useCart()
-  const cartData = data?.result.cart_items
+  const cartData = data?.result.items
   
 
   const infoPopover = (
@@ -61,21 +61,21 @@ export default function Header() {
     : <div className='text-sm z-100 p-4 max-w-[400px] border-gray-200 border'>
     <p className='text-gray-400 capitalize'>Added new product</p>
     <div className='mt-5'>
-      {cartData.map((item, index) => (
+      {cartData.slice(0, 4).map((item, index) => (
       <div className="mt-4 flex gap-1" key={index}>
-        <img className='object-cover w-28 h-20 flex-shrink-0' src="https://i.pinimg.com/736x/6c/2d/88/6c2d88652b7606ab5d280b41d138fa17.jpg" alt="" />
+        <img className='object-cover w-28 h-20 flex-shrink-0 rounded-md' src={item?.image} alt="" />
         <div className='flex-grow ml-2 overflow-hidden'>
           <div className="truncate">
-            {/* {item.product.title}      */}
+            {item?.product_name}     
           </div>
-          <div className="text-orange mt-2">₫131.300</div>
+          <div className="text-orange mt-2">₫{item?.price?.toLocaleString('VN')}</div>
         </div>
       </div> 
       ))}
     </div>
 
     <div className="flex mt-2 items-center justify-between text-white ">
-      <div className="text-black text-opacity-70">5 More Products In Cart</div>
+      <div className="text-black text-opacity-70">{cartData.length} Products In Cart</div>
       <button className="bg-orange p-2 rounded-md hover:bg-opacity-80">View My Shopping Cart</button>
     </div>
     </div>
@@ -106,9 +106,9 @@ export default function Header() {
           {isAuthenticated 
           ? <Popover 
             infoPopover={avatarPopover}
-            className={"flex items-center h-16 hover:text-gray-300 cursor-pointer ml-4"}
+            className={"flex items-center hover:text-gray-300 cursor-pointer ml-4"}
             >
-              <div className="mx-2 w-6 h-6 bg-white flex-shrink-0 rounded-full cursor-pointer">
+              <div className="mx-2  bg-white flex-shrink-0 rounded-full cursor-pointer">
                 {user?.avatar 
                 ? <img src={user?.avatar} alt="avatar"
                   className="h-full w-full rounded-full object-cover" 

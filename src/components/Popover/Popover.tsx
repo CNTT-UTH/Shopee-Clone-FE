@@ -15,7 +15,7 @@ export default function Popover({children, infoPopover, placement = 'bottom-end'
     const id = useId()
   
     const {refs, x, y, strategy,middlewareData} = useFloating({
-      middleware: [offset(6), shift(), arrow({element: arrowElement})],
+      middleware: [offset(2), shift(), arrow({element: arrowElement})],
       placement: "bottom-end"
     })
   

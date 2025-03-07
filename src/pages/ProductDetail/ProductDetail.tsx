@@ -12,6 +12,9 @@ import { useMutation } from '@tanstack/react-query'
 import cartApi from '@uth/apis/cart.api'
 import Loading from '@uth/components/Loading'
 import { getVariantId } from '@uth/utils/utils'
+import { toast } from 'react-toastify'
+import { ResponseApi } from '@uth/types/utils.type'
+import { CartRes } from '@uth/types/cart.type'
 export default function ProductDetail() {
   const { id } = useParams()
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
@@ -61,12 +64,22 @@ export default function ProductDetail() {
   const _variantId = getVariantId({productData, selectedOptions})
  
   
-  const addProduct = () => {
-    addToCartMutation.mutateAsync({
-      product_id: productData?.product_id || 1,
-      quantity,
-      shop_id: Number(productData?.shop.shopid)
-    })
+  const addProduct = async () => {
+      const body = {
+        product_id: productData?.product_id || 1,
+        quantity,
+        shop_id: Number(productData?.shop.shopid)
+      }
+      const bodyAddCart = _variantId ? {...body, variant_id: _variantId} : body
+      await addToCartMutation.mutate(bodyAddCart, {
+        onSuccess: (data) => {
+          console.log('success', data)
+          toast.success("Add new product successfully") 
+        },
+        onError: (error: any) => {
+          console.log('error',error)
+        }
+      })
   }
 
   return (
@@ -108,7 +121,7 @@ export default function ProductDetail() {
                   })}
                   <button
                     onClick={next}
-                    className='absolute right-0 top-1/2 z-10 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'
+                    className='absolute right-0 top-1/2 z-1 h-9 w-5 -translate-y-1/2 bg-black/20 text-white'
                   >
                     <FaChevronRight />
                   </button>
@@ -121,7 +134,7 @@ export default function ProductDetail() {
                     src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/productdetailspage/5f1ccc915066fa7bb851.svg'
                     alt=''
                   />
-                  <span className='font-medium uppercase text-xl'>{productData.title} </span>
+                  <span className='font-medium uppercase text-xl'>{_variantId ? productData?.variants?.find(vItem => vItem.variant_id === _variantId)?.name : productData.title} </span>
                 </div>
                 <div className='mt-2 flex items-center'>
                   <div className='flex items-center justify-center'>
