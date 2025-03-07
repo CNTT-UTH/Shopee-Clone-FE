@@ -1,22 +1,28 @@
 import { IProduct, IProductVariant, IShop } from "./product.type"
 
 export interface Cart {
-  username?: string
   items?: CartItem[]
 
   total?: number
   total_before_discount?: number
+  shops?: number[]
 }
 
 export interface CartItem {
-  product_id: number
-  shop_id: number
-  quantity: number;
-
-  //________optional_________
+  id?: number
+  product_id?: number
   product_variant_id?: number
-  block_id?: number;
-  selected_to_checkout?: false;
+  shop_id: number
+  block_id?: number
+  quantity?: number
+  selected_to_checkout?: number
+  price?: number
+  price_before_discount?: number
+  total_price?: number
+  product_name?: string
+  image?: string
+  shop_name?: string
+  shop_avatar?: string
 }
 
 export interface UpdateQuantity {

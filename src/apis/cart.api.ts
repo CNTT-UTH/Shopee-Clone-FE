@@ -11,7 +11,7 @@ interface deleteBodyType {
 const cartApi = {
   getMyCart () {
     return http
-      .get<ResponseApi<CartRes>>(`${URL_CART}/get-my-cart`)
+      .get<ResponseApi<Cart>>(`${URL_CART}/get-my-cart`)
       .then(res => res.data)
       .catch(err => console.log('Get my cart fail', err))
   }, 
