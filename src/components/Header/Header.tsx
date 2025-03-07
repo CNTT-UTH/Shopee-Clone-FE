@@ -55,9 +55,9 @@ export default function Header() {
   const cartPopover = (
     !cartData
     ? <div className='p-14 px-16 z-100 bg-gray-100'>
-      <img className='w-[100px] h-[100px] rounded-full m-auto object-cover' src="https://mir-s3-cdn-cf.behance.net/projects/404/54b13147340145.Y3JvcCw0MDUsMzE3LDAsNDI.png" alt="" />
-      <p className='mt-4 text-orange font-semibold'>The cart is empty</p>
-    </div>
+        <img className='w-[100px] h-[100px] rounded-full m-auto object-cover' src="https://mir-s3-cdn-cf.behance.net/projects/404/54b13147340145.Y3JvcCw0MDUsMzE3LDAsNDI.png" alt="" />
+        <p className='mt-4 text-orange font-semibold'>The cart is empty</p>
+      </div>
     : <div className='text-sm z-100 p-4 max-w-[400px] border-gray-200 border'>
     <p className='text-gray-400 capitalize'>Added new product</p>
     <div className='mt-5'>
@@ -111,9 +111,9 @@ export default function Header() {
               <div className="mx-2  bg-white flex-shrink-0 rounded-full cursor-pointer">
                 {user?.avatar 
                 ? <img src={user?.avatar} alt="avatar"
-                  className="h-full w-full rounded-full object-cover" 
+                  className="max-w-8 max-h-8 rounded-full object-cover" 
                   />
-                : <Avatar name={user?.username || 'user'} size="24" className='h-full w-full rounded-full object-cover' round={true}/>}              
+                : <Avatar name={user?.username || 'user'} size="24" className='max-h-8 max-w-8 rounded-full object-cover' round={true}/>}              
                 </div>
                 <div>{user?.username}</div>
             </Popover> : 
@@ -150,10 +150,11 @@ export default function Header() {
 
           <div className='col-span-1 text-white ml-auto mr-2'>
             <Popover infoPopover={cartPopover}>
-              <Link to={path.home} className='hover:text-gray-300 hover:cursor-pointer py-2'>
+              <Link to={path.home} className='relative hover:text-gray-300 hover:cursor-pointer py-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="size-7">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg> 
+                {cartData && <div className='bg-white absolute px-2 py-[1px] rounded-full -right-2 text-orange top-0'>{cartData?.length}</div>}
               </Link>
             </Popover>
           </div>

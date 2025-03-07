@@ -200,14 +200,14 @@ export default function ProfileComponent() {
         </div>
         <div className="flex justify-center md:w-72 md:border-l md:border-l-gray-200">
           <div className="flex flex-col items-center">
-            <div className="my-5 h-24 w-24">
+            <div className="my-5 max-h-20 max-w-20">
             {user?.avatar
             ? <img 
               src={previewAvatar || avatar}
-              className="w-full h-full rounded-full object-cover"
+              className="max-w-20 max-h-20 rounded-full object-cover"
               />
             : previewAvatar
-              ? <img src={previewAvatar} className="w-full h-full rounded-full object-cover"/>
+              ? <img src={previewAvatar} className="max-w-20 max-h-20 rounded-full object-cover"/>
               : <Avatar name={user?.username || 'user'} size="96" textSizeRatio={2}  round={true}/>}
             </div>
             <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
