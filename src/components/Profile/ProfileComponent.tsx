@@ -200,15 +200,15 @@ export default function ProfileComponent() {
         </div>
         <div className="flex justify-center md:w-72 md:border-l md:border-l-gray-200">
           <div className="flex flex-col items-center">
-            <div className="my-5 max-h-20 max-w-20">
-            {user?.avatar
-            ? <img 
-                src={previewAvatar || avatar}
-                className="max-w-20 max-h-20 rounded-full object-cover"
+            <div className="my-5 w-24 h-24 rounded-full">
+            {previewAvatar || avatar ? (
+              <img 
+                src={previewAvatar || avatar} 
+                className="w-full h-full rounded-full object-cover"
               />
-            : previewAvatar
-              ? <img src={previewAvatar} className="max-w-20 max-h-20 rounded-full object-cover"/>
-              : <Avatar name={user?.username || 'user'} size="96" textSizeRatio={2}  round={true}/>}
+              ) : (
+                <Avatar name={user?.username || 'user'} size="96" textSizeRatio={2} round={true}/>
+              )}
             </div>
             <input ref={fileRef} onChange={handleFileChange} type="file" name="" className="hidden" accept=".jpg,.jpeg,.png" id="" />
             <button type="button" onClick={handleUpload} className="h-10 flex items-center justify-end rounded-md border bg-white px-6 text-sm text-gray-600 shadow-sm">

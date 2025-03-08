@@ -65,7 +65,7 @@ export default function ProductDetail() {
       const body = {
         product_id: productData?.product_id || 1,
         quantity,
-        shop_id: Number(productData?.shop.shopid)
+        shop_id: Number(productData?.shop?.shopid) || 1217321194
       }
       const bodyAddCart = _variantId ? {...body, variant_id: _variantId} : body
       await addToCartMutation.mutate(bodyAddCart, {
