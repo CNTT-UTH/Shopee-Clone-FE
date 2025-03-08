@@ -126,6 +126,11 @@ export default function Login() {
                       type={field === 'password' ? 'password' : 'text'}
                       errorMessage={errors[field]?.message}
                       placeholder={t(field === 'firstField' ? 'Username or Email' : 'Password')}
+                      onKeyDown={(e) => {
+                        if (field === 'password' && !isNotRobot && e.key === "Enter") {
+                          e.preventDefault();
+                        }
+                      }}
                     />
                   </motion.div>
               ))}

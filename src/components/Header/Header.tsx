@@ -11,6 +11,7 @@ import authApi from '../../apis/auth.api'
 import { toast } from 'react-toastify' 
 import Avatar from 'react-avatar'
 import { useCart } from '@uth/queries/useCart'
+import { queryClient } from '@uth/main'
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
@@ -30,6 +31,7 @@ export default function Header() {
         toast.success('Logout success')
         setIsAuthenticated(false)
         setUser(null)
+        queryClient.removeQueries({queryKey: ['cart']})
       },
       onError: () => console.log('Error logout')
     })
@@ -53,7 +55,7 @@ export default function Header() {
   </div>)
 
   const cartPopover = (
-    !cartData
+    !cartData?.length
     ? <div className='p-14 px-16 z-100 bg-gray-100'>
         <img className='w-[100px] h-[100px] rounded-full m-auto object-cover' src="https://mir-s3-cdn-cf.behance.net/projects/404/54b13147340145.Y3JvcCw0MDUsMzE3LDAsNDI.png" alt="" />
         <p className='mt-4 text-orange font-semibold'>The cart is empty</p>
@@ -154,7 +156,7 @@ export default function Header() {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="size-7">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg> 
-                {cartData && <div className='bg-white absolute px-2 py-[1px] rounded-full -right-2 text-orange top-0'>{cartData?.length}</div>}
+                {cartData?.length ? <div className='bg-white absolute px-2 py-[1px] rounded-full -right-2 text-orange top-0'>{cartData?.length}</div> : ''}
               </Link>
             </Popover>
           </div>

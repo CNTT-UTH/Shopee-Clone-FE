@@ -5,7 +5,6 @@ import { IoIosChatbubbles } from 'react-icons/io'
 import { useEffect, useMemo, useState } from 'react'
 import des from '@uth/assets/des/des'
 import { sanitizeInput } from '@uth/utils/sanitize'
-import FlashSale from '@uth/components/FlashSale'
 import shopName from '@uth/assets/images/shopName'
 import InputQuantity from '@uth/components/InputQuantity'
 import { useMutation } from '@tanstack/react-query'
@@ -14,6 +13,7 @@ import Loading from '@uth/components/Loading'
 import { getVariantId } from '@uth/utils/utils'
 import { toast } from 'react-toastify' 
 import React from 'react'
+import { queryClient } from '@uth/main'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -36,11 +36,9 @@ export default function ProductDetail() {
   }, [productData])
 
 
-  const next = () => {
-    console.log('next')
+  const next = () => { 
     if (productData && currentIndexImages[1] < productData?.image_urls!.length) {
       setCurrentIndexImages((prev) => [prev[0] + 1, prev[1] + 1])
-      console.log('text')
     }
   }
 
@@ -48,19 +46,14 @@ export default function ProductDetail() {
     if (currentIndexImages[0] > 0) {
       setCurrentIndexImages((prev) => [prev[0] - 1, prev[1] - 1])
     }
-  }
-  
-  
+  } 
 
   const handleCount = (value: number) => {
     setQuantity(value)
-  }
-
-  
+  } 
   
   const _variantId = getVariantId({productData, selectedOptions})
- 
-  
+   
   const addProduct = async () => {
       const body = {
         product_id: productData?.product_id || 1,
@@ -72,6 +65,7 @@ export default function ProductDetail() {
         onSuccess: (data) => {
           console.log('success', data)
           toast.success("Add new product successfully") 
+          queryClient.invalidateQueries({queryKey: ['cart']})
         },
         onError: (error: any) => {
           console.log('error',error)
@@ -86,7 +80,7 @@ export default function ProductDetail() {
         : <React.Fragment>
             <div className='container'>
               <div className='bg-white p-10 shadow rounded-md'>
-                <div className='grid grid-cols-12 gap-12'>
+                <div className='grid grid-cols-1 md:grid-cols-12 gap-12'>
                   <div className='col-span-5'>
                     <div className='relative w-full pt-[100%] shadow'>
                       <img
@@ -151,7 +145,6 @@ export default function ProductDetail() {
                       </div>
                     </div>
 
-                    {productData.product_id! % 2 === 0 ? (
                       <div className='mt-8 flex items-center bg-gray-50 px-5 py-4'>
                         {_variantId ?
                           <div className='text-3xl font-medium text-orange'>
@@ -167,13 +160,6 @@ export default function ProductDetail() {
                           {(productData?.product_price?.discount as number) * 100}% GIẢM
                         </div>
                       </div>
-                    ) : (
-                      <FlashSale
-                        discount={productData.product_price.discount as number}
-                        salePrice={productData.product_price.price as number}
-                        originalPrice={productData.product_price.price_before_discount as number}
-                      />
-                    )}
 
                     <div className='mt-12 flex items-center'>
                       <div className='text-gray-500'>Deal Sốc</div>

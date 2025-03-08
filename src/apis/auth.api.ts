@@ -65,6 +65,7 @@ const authApi = {
       .post(URL_LOGOUT, {refresh_token: getRefreshTokenFromLS()})
       .then((response) => response.data)
       .catch((error) => {
+        throw new Error(error)
         console.log('logout method is fail : ', error)
       })
   },

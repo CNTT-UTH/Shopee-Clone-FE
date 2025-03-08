@@ -105,6 +105,11 @@ export default function Register() {
                       type={field === 'confirm_password' ? 'password' : field}
                       errorMessage={errors[field]?.message}
                       placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
+                      onKeyDown={(e) => {
+                        if (field === 'confirm_password' && !isNotRobot && e.key === "Enter") {
+                          e.preventDefault();
+                        }
+                      }}
                     />
                   </motion.div>
                 )
