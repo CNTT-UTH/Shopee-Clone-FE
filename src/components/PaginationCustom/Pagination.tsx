@@ -5,12 +5,13 @@ import path from 'src/constants/path'
 
 interface Props {
   queryConfig: QueryConfig
-  pageSize: number
+  pageSize: number,
+  search?: boolean
 }
  
 
 const RANGE = 2
-export default function Pagination({ queryConfig, pageSize = 30 }: any) {
+export default function Pagination({ queryConfig, pageSize = 30, search = false }: Props) {
   const page = Number(queryConfig.page)
 
   const renderPagination = () => {
@@ -59,7 +60,7 @@ export default function Pagination({ queryConfig, pageSize = 30 }: any) {
         return (
           <Link
             to={{
-              pathname: path.home,
+              pathname: search ? path.search : path.home,
               search: createSearchParams({
                 ...queryConfig,
                 page: pageNumber.toString()
@@ -83,7 +84,7 @@ export default function Pagination({ queryConfig, pageSize = 30 }: any) {
       ) : (
         <Link
           to={{
-            pathname: path.home,
+            pathname: search ? path.search : path.home,
             search: createSearchParams({
               ...queryConfig,
               page: (page - 1).toString()
@@ -101,7 +102,7 @@ export default function Pagination({ queryConfig, pageSize = 30 }: any) {
       ) : (
         <Link
           to={{
-            pathname: path.home,
+            pathname: search ? path.search : path.home,
             search: createSearchParams({
               ...queryConfig,
               page: (page + 1).toString()

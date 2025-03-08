@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import reactImg from '../../assets/react.svg'
 import logo from '../../assets/images/logo.svg' 
 import Popover from '../Popover'
@@ -12,10 +12,19 @@ import { toast } from 'react-toastify'
 import Avatar from 'react-avatar'
 import { useCart } from '@uth/queries/useCart'
 import { queryClient } from '@uth/main'
+import Input from '../Input'
+import { QueryConfig } from '@uth/pages/ProductList/ProductList'
+import { useState } from 'react'
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
+  const [searchValue, setSearchValue] = useState('Quần')
   const { i18n, t } = useTranslation(['auth', 'global'])
+  const queryConfig: QueryConfig = {
+      page: '1',
+      limit: '12',
+      keyword: searchValue
+  }
 
   const changeLanguage = (lng: 'vi' | 'en') => {
     i18n.changeLanguage(lng) 
@@ -139,16 +148,25 @@ export default function Header() {
               <img src={logo} alt="" className='h-10 lg:h-12' />
               <span className="text-xl lg:text-2xl text-white">Shopee</span>
           </Link>
-          <form className='col-span-9'>
-            <div className="rounded-sm p-1 flex bg-white ">
-              <input name='search' type="text" placeholder='Search something bro...' className='flex-grow px-3 py-2 text-black border-none outline-none bg-transparent'/>
-              <button className='bg-[#f53d2d] py-2 px-6 hover:opacity-90 rounded-sm flex-shrink-0 text-white lg:px-10'>
+          <div className='col-span-9'>
+            <div className="rounded-lg p-1 flex gap-4 bg-white ">
+              <Input onChange={(e) => setSearchValue(e.target.value)} name="search" className='flex-grow p-2 px-4' classNameInput='w-full px-2 text-black text-lg outline-none bg-transparent' classNameError='none' placeholder='Search the product that you want to find'/>
+              <Link 
+                to={{
+                  pathname: path.search,
+                  search: createSearchParams({
+                    ...queryConfig,
+                    keyword: searchValue
+                  }).toString()
+                }}   
+                className='bg-[#f53d2d] px-6 hover:opacity-90 flex items-center justify-center rounded-lg flex-shrink-0 text-white lg:px-10'
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
-              </button>
+              </Link>
             </div>
-          </form>
+          </div>
 
           <div className='col-span-1 text-white ml-auto mr-2'>
             <Popover infoPopover={cartPopover}>
