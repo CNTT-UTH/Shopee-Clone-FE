@@ -28,6 +28,7 @@ export default function SearchPage() {
                   <Filter categories={cateData?.result || []} queryConfig={queryConfig} />
                 </div>
                 <div className="col-span-9">
+                  <p className='text-lg ml-1 text-gray-600'>Kết quả tìm kiếm cho từ khoá '{queryConfig.keyword}'</p>
                   {/* <SortProductList setSortPrice={setSortPrice} /> */}
                   <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                     {(data?.result.data)?.map((product) => (

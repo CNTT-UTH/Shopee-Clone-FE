@@ -14,17 +14,18 @@ import { useCart } from '@uth/queries/useCart'
 import { queryClient } from '@uth/main'
 import Input from '../Input'
 import { QueryConfig } from '@uth/pages/ProductList/ProductList'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export default function Header() {
   const { setIsAuthenticated, isAuthenticated, user, setUser } = useAuth()
-  const [searchValue, setSearchValue] = useState('Quần')
+  const [searchValue, setSearchValue] = useState('Quần') 
+  const inputRef = useRef<HTMLAnchorElement>(null)
   const { i18n, t } = useTranslation(['auth', 'global'])
   const queryConfig: QueryConfig = {
       page: '1',
       limit: '12',
       keyword: searchValue
-  }
+  } 
 
   const changeLanguage = (lng: 'vi' | 'en') => {
     i18n.changeLanguage(lng) 
@@ -150,15 +151,26 @@ export default function Header() {
           </Link>
           <div className='col-span-9'>
             <div className="rounded-lg p-1 flex gap-4 bg-white ">
-              <Input onChange={(e) => setSearchValue(e.target.value)} name="search" className='flex-grow p-2 px-4' classNameInput='w-full px-2 text-black text-lg outline-none bg-transparent' classNameError='none' placeholder='Search the product that you want to find'/>
+              <Input 
+                onChange={(e) => setSearchValue(e.target.value)} 
+                name="search" className='flex-grow p-2 px-4' 
+                classNameInput='w-full px-2 text-black text-lg outline-none bg-transparent' 
+                classNameError='none' placeholder='Search the product that you want to find'
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    inputRef.current?.click()
+                  }
+                }}
+              />
               <Link 
                 to={{
                   pathname: path.search,
                   search: createSearchParams({
                     ...queryConfig,
-                    keyword: searchValue
+                    keyword: searchValue.trim()
                   }).toString()
                 }}   
+                ref={inputRef}
                 className='bg-[#f53d2d] px-6 hover:opacity-90 flex items-center justify-center rounded-lg flex-shrink-0 text-white lg:px-10'
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
