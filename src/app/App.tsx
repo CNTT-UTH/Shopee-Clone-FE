@@ -20,6 +20,7 @@ import RegisterSeller from '@uth/components/RegisterSeller'
 import RegisterShopLayout from '@uth/layouts/RegisterShopLayout'
 import SellerLayout from '@uth/layouts/SellerLayout/SellerLayout'
 import ProductDetail from '@uth/pages/ProductDetail'
+import SearchPage from '@uth/pages/SearchPage/SearchPage'
 
 const router = createBrowserRouter([
   {
@@ -33,10 +34,17 @@ const router = createBrowserRouter([
   },
   {
     path: `${path.product}${path.productDetail}`,
-    index: true,
     element: (
       <MainLayout>
         <ProductDetail />
+      </MainLayout>
+    )
+  },
+  {
+    path: path.search,
+    element: (
+      <MainLayout>
+        <SearchPage />
       </MainLayout>
     )
   },

@@ -13,7 +13,7 @@ import Loading from '@uth/components/Loading'
 import { getVariantId } from '@uth/utils/utils'
 import { toast } from 'react-toastify' 
 import React from 'react'
-import { queryClient } from '@uth/main'
+import { queryClient } from '@uth/main' 
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -74,7 +74,7 @@ export default function ProductDetail() {
   }
 
   return (  
-     <div className='bg-gray-200 py-6 min-h-[200px]'>
+     <div className='bg-gray-200 py-6'>
         {(isLoading || !productData)
         ? <Loading />
         : <React.Fragment>

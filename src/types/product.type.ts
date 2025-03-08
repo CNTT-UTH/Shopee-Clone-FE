@@ -76,12 +76,13 @@ export interface ProductParams {
   page: number | string;
   limit: number | string;
   category?: number | string;
+  keyword?: string
 
   prev_page?: number | null | string;
   cur_page?: number | null | string;
   next_page?: number | null | string;
   total_page?: number | null | string;
-}
+} 
 
 
 export interface IProduct {

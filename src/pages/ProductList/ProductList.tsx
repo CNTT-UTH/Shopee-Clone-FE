@@ -17,31 +17,13 @@ export type QueryConfig = {
 }
 
 export default function ProductList() {
-  const [sortPrice, setSortPrice] = useState<string>("")
   const queryParam = useQueryParams() as QueryConfig
   const queryConfig: QueryConfig = {
     page: queryParam.page || '1',
     limit: queryParam.limit || '24',
     category: queryParam.category
   }
-  const {data, isLoading} = useProductAll(queryConfig)
-  const [sortedProducts, setSortedProducts] = useState<ProductType[] | undefined>(data?.result.data)  
- 
-  // useEffect(() => {
-  //   if (data?.result?.data && sortPrice) { 
-  //     const newSortedProducts = [...data.result.data];  
-
-  //     // console.log('run', sortPrice)
-  //     if (sortPrice === "price:asc") {
-  //       newSortedProducts?.sort((a, b) => (a.product_price?.price || 0) - (b.product_price?.price || 0)) 
-  //       setSortedProducts(newSortedProducts);
-  //     } else if (sortPrice === "price:des") {
-  //       newSortedProducts?.sort((a, b) => (b.product_price?.price || 0) - (a.product_price?.price || 0))
-  //       setSortedProducts(newSortedProducts);
-  //     }
-
-  //   }
-  // }, [sortPrice, data]);
+  const {data, isLoading} = useProductAll(queryConfig) 
 
   const {data: cateData} = useCategories()
 

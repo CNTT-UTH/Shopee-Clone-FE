@@ -38,7 +38,21 @@ const productApi = {
         params
       })
       .then(res => res.data)
-      .catch(err => console.log('Get category by id fail', err))
+      .catch(err => {
+        console.warn(err)
+        throw new Error(err) 
+      })
+  },
+  searchProduct (params: ProductParams) {
+    return http
+      .get<ResponseApi<ResponseAllProduct>>(`${URL_PRODUCT}/search-by-keyword`, {
+        params
+      })
+      .then(res => res.data)
+      .catch(err => {
+        console.warn(err)
+        throw new Error(err) 
+      })
   }
 }
 

@@ -11,7 +11,8 @@ const path = {
   sellerCentre: '/seller-centre',
   registerSeller: '/register-seller',
   product: '/products',
-  productDetail: '/:id'
+  productDetail: '/:id',
+  search: '/search'
 }
 
 export default path
