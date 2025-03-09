@@ -15,13 +15,11 @@ import { motion } from 'framer-motion'
 import { containerVariants, inputVariants } from "../../constants/animation.motion"
 import Button from "../../components/Button"
 import path from "../../constants/path"
-import RobotCaptcha from "@uth/components/CaptchaRobot"
 import useInputRefs from "@uth/constants/inputRefs"
 
 export default function Register() {
   const [verifyToken, setVerifyToken] = useState<string | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isNotRobot, setIsNotRobot] = useState(false)
   const fields: string[] = ['email', 'username', 'password', 'confirm_password']
   const { emailRef, usernameRef, passwordRef, confirmPasswordRef } = useInputRefs();
   const { t } = useTranslation() //muti languages
@@ -42,7 +40,6 @@ export default function Register() {
 
 
   const onSubmit = handleSubmit(data => {
-    if(!isNotRobot) return
     registerMutation.mutate(data, {
       onSuccess: (data) => {
           toast.success("You have registered successfully!", {
@@ -104,18 +101,13 @@ export default function Register() {
                       register={register}
                       type={field === 'confirm_password' ? 'password' : field}
                       errorMessage={errors[field]?.message}
-                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))}
-                      onKeyDown={(e) => {
-                        if (field === 'confirm_password' && !isNotRobot && e.key === "Enter") {
-                          e.preventDefault();
-                        }
-                      }}
+                      placeholder={t(field.charAt(0).toUpperCase() + field.slice(1))} 
                     />
                   </motion.div>
                 )
               )}
 
-              <RobotCaptcha onVerify={() => setIsNotRobot(true)}/>
+              {/* <RobotCaptcha onVerify={() => setIsNotRobot(true)}/> */}
 
 
               <motion.div
@@ -128,7 +120,7 @@ export default function Register() {
                   isLoading={registerMutation.isLoading}
                   disabled={registerMutation.isLoading}
                   type="submit"
-                  className={!isNotRobot ? buttonClass + "pointer-events-none cursor-not-allowed opacity-70" : buttonClass}
+                  className={buttonClass}
                 >
                   {t('Register')}
                 </Button>
