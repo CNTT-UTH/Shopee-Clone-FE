@@ -11,11 +11,11 @@ interface ResponseAllProduct {
 }
 
 const productApi = {
-  getAllProduct (params: ProductParams) {
-    console.log('params >>>', params)
+  getAllProduct (params?: ProductParams) {
+    const bodyParams: ProductParams = params ? params : {page: '1', limit: '12'}
     return http
       .get<ResponseApi<ResponseAllProduct>>(`${URL_PRODUCT}/all`, {
-        params
+        params: bodyParams
       })
       .then((response) => response.data)
       .catch((error) => {
