@@ -63,9 +63,9 @@ export default function ProfileComponent() {
         setValue('avatar', avatarUrl)
       }
       const result = await updateProfileMutation.mutateAsync({...data, dob: data.dob?.toISOString()})
-      console.log(result.result.user_profile)
-      setUser(result.result.user_profile)
-      setUserProfileToLS(result.result.user_profile)
+      // console.log(result.result.user_profile)
+      setUser({...result.result.user_profile, avatar: avatarUrl})
+      setUserProfileToLS({...result.result.user_profile, avatar: avatarUrl})
   
       toast.success(result.message)
       refetch()
