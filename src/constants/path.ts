@@ -11,7 +11,7 @@ const path = {
   sellerCentre: '/seller-centre',
   registerSeller: '/register-seller',
   product: '/products',
-  productDetail: '/:id',
+  productDetail: '/:productSlug',
   search: '/search'
 }
 

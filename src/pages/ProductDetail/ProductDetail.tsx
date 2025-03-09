@@ -10,13 +10,15 @@ import InputQuantity from '@uth/components/InputQuantity'
 import { useMutation } from '@tanstack/react-query'
 import cartApi from '@uth/apis/cart.api'
 import Loading from '@uth/components/Loading'
-import { getVariantId } from '@uth/utils/utils'
+import { getIdFromNameId, getVariantId } from '@uth/utils/utils'
 import { toast } from 'react-toastify' 
 import React from 'react'
 import { queryClient } from '@uth/main' 
 
 export default function ProductDetail() {
-  const { id } = useParams()
+  const {productSlug} = useParams()
+  // console.log(productSlug)
+  const id = getIdFromNameId(productSlug as string)
   const [currentIndexImages, setCurrentIndexImages] = useState([0, 5])
   const [imgActive, setImgActive] = useState('')
   const [quantity, setQuantity] = useState(1)

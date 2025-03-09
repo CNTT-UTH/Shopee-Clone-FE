@@ -2,10 +2,15 @@ import { Link } from 'react-router-dom'
 import freeshipImage from '@uth/assets/images/freeship.jpeg'
 import { Price, Product } from '@uth/types/product.type'
 import path from '@uth/constants/path'
+import { generateNameId } from '@uth/utils/utils'
 
 export default function Product({product}: {product: Product}) {
   
-  return <Link to={`${path.product}/${product.product_id}`}>
+  return (
+    <Link to={`${path.product}/${generateNameId({
+      name: product?.title as string,
+      id: product?.product_id as number
+    })}`}>
     <div className='bg-white shadow rounded-xl hover:translate-y-[-0.0625rem]  duration-100 transition-transform hover:shadow-lg hover:shadow-orange'>
       <div className='w-full pt-[100%] relative'>
         <img 
@@ -39,5 +44,5 @@ export default function Product({product}: {product: Product}) {
         </div>
       </div>
     </div>
-  </Link>
+  </Link>)
 }
