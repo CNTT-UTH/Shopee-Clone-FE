@@ -27,7 +27,7 @@ export default function ProductList() {
 
   const {data: cateData} = useCategories()
 
-  return <div className="bg-gray-200">
+  return <div className="bg-gray-200 relative">
         {isLoading ? <Loading />
         : <>
         <Slider />

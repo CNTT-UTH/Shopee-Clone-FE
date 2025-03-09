@@ -74,11 +74,11 @@ export default function ProductDetail() {
   }
 
   return (  
-     <div className='bg-gray-200 py-6'>
+     <div className='bg-gray-200 py-6 relative'>
         {(isLoading || !productData)
         ? <Loading />
         : <React.Fragment>
-            <div className='container'>
+            <div className='container min-h-[80vh]'>
               <div className='bg-white p-10 shadow rounded-md'>
                 <div className='grid grid-cols-1 md:grid-cols-12 gap-12'>
                   <div className='col-span-5'>

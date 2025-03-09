@@ -21,6 +21,7 @@ import RegisterShopLayout from '@uth/layouts/RegisterShopLayout'
 import SellerLayout from '@uth/layouts/SellerLayout/SellerLayout'
 import ProductDetail from '@uth/pages/ProductDetail'
 import SearchPage from '@uth/pages/SearchPage/SearchPage'
+import Cart from '@uth/pages/Cart'
 
 const router = createBrowserRouter([
   {
@@ -102,6 +103,13 @@ const router = createBrowserRouter([
           }
         ]
       },
+      {
+        path: path.cart,
+        element: (
+        <MainLayout>
+          <Cart />
+        </MainLayout>)
+      }
     ]
   },
   {
