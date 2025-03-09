@@ -49,7 +49,7 @@ export default function Header() {
 
   //when changing the page, the header is just re-render, not unmount - mounting again
   const {data, isLoading} = useCart()
-  const cartData = data?.result.items
+  const cartData = data?.result?.items
   
 
   const infoPopover = (

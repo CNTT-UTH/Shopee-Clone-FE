@@ -57,6 +57,7 @@ export default function ProductDetail() {
   const _variantId = getVariantId({productData, selectedOptions})
    
   const addProduct = async () => {
+      if(addToCartMutation.isLoading) return
       const body = {
         product_id: productData?.product_id || 1,
         quantity,

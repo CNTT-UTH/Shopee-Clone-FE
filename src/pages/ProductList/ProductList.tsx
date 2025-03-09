@@ -40,8 +40,8 @@ export default function ProductList() {
             <div className="col-span-12">
               {/* <SortProductList setSortPrice={setSortPrice} /> */}
               <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {(data?.result.data)?.map((product) => (
-                  <div className="col-span-1" key={product.product_id}>
+                {(data?.result?.data)?.map((product) => (
+                  <div className="col-span-1" key={product?.product_id}>
                     <Product product={product} />
                   </div>
                 ))}

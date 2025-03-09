@@ -1,5 +1,7 @@
+import InputQuantity from '@uth/components/InputQuantity'
 import path from '@uth/constants/path'
 import { useCart } from '@uth/queries/useCart'
+import { generateNameId } from '@uth/utils/utils'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -43,8 +45,48 @@ export default function Cart() {
                         </div>
                         <div className="flex-grow">
                           <div className="flex">
-                            <Link to={`${path.home}${path.product}`} className="h-20 w-20 flex-shrink-0"></Link>
+                            <Link to={`${path.product}/${generateNameId({
+                                name: item?.product_name as string,
+                                id: item?.product_id as number
+                              })}`} 
+                              className="h-20 w-20 flex-shrink-0"
+                            >
+                              <img src={item?.image} alt="" />
+                            </Link>
+                            <div className="flex-grow px-2 pt-1 pb-2">
+                              <Link to={`${path.product}/${generateNameId({
+                                name: item?.product_name as string,
+                                id: item?.product_id as number
+                              })}`} className='line-clamp-2' >
+                                {item?.product_name}
+                              </Link>
+                            </div>
                           </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-span-6">
+                      <div className="grid grid-cols-5 items-center">
+                        <div className="col-span-2">
+                          <div className="flex items-center justify-center">
+                            <span className="text-gray-300 line-through">
+                              đ{item.price_before_discount?.toLocaleString('VN')}
+                            </span>
+                            <span className="ml-3">đ{item.price?.toLocaleString('VN')}</span>
+                          </div>
+                        </div>
+                        <div className="col-span-1">
+                          <InputQuantity 
+                            max={50}
+                            value={item.quantity}
+                            classNameWrapper='flex items-center'
+                          />
+                        </div>
+                        <div className="col-span-1 ml-1">
+                          <span className="text-orange">đ{((item?.price || 1) * (item?.quantity || 1)).toLocaleString('VN')}</span>
+                        </div>
+                        <div className="col-span-1">
+                          <button className='bg-orange/10 p-2 rounded-lg text-black transition-colors hover:text-orange'>Xóa</button>
                         </div>
                       </div>
                     </div>

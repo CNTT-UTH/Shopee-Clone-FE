@@ -6,6 +6,7 @@ import { generateNameId } from '@uth/utils/utils'
 
 export default function Product({product}: {product: Product}) {
   
+  if(!product) return
   return (
     <Link to={`${path.product}/${generateNameId({
       name: product?.title as string,
@@ -14,8 +15,8 @@ export default function Product({product}: {product: Product}) {
     <div className='bg-white shadow rounded-xl hover:translate-y-[-0.0625rem]  duration-100 transition-transform hover:shadow-lg hover:shadow-orange'>
       <div className='w-full pt-[100%] relative'>
         <img 
-          src={product.image_urls?.[0]}
-          alt={product.title}
+          src={product?.image_urls?.[0]}
+          alt={product?.title}
           className='absolute top-0 bg-white w-full h-full object-cover rounded-t-xl'
         />
         <img src={freeshipImage} className='w-12 h-7 absolute bottom-0 object-cover' alt="" />
