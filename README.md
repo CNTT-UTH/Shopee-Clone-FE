@@ -1,47 +1,53 @@
-Shopee Clone Front-End
-Welcome to the Shopee Clone Front-End project! This project is a front-end clone of the popular e-commerce platform, Shopee, developed using modern web technologies to replicate its user interface and user experience.
- 
-You can access the live demo of the project at: Shopee Clone Demo
+# Shopee Clone Front-End
 
-Features
-Homepage: Displays promotional banners, product categories, and featured products.
-Product Listing: Browse products with sorting and filtering options.
-Product Detail: View detailed information about a product, including images, descriptions, and reviews.  
-Search Functionality: Search for products by keywords.
-User Authentication: Sign up, log in, and manage user profiles.
-Shopping Cart: Add products to the cart and proceed to checkout.
-Responsive Design: Optimized for various screen sizes, including desktops, tablets, and mobile devices.
-Technologies Used
-React: JavaScript library for building user interfaces.
-TypeScript: Superset of JavaScript that adds static typing.
-Vite: Next-generation front-end build tool.
-Tailwind CSS: Utility-first CSS framework for styling.
-React Router: Declarative routing for React applications.
-Axios: Promise-based HTTP client for the browser and Node.js.
-React Query: Data-fetching library for React.
-ESLint: Pluggable linting utility for JavaScript and TypeScript.
-Prettier: Code formatter to ensure consistent code style. 
- 
+📢 **Shopee Clone Front-End** là một dự án clone giao diện Shopee, giúp bạn tìm hiểu cách xây dựng một nền tảng thương mại điện tử bằng các công nghệ hiện đại.
+
+## 🚀 Demo
+👉 **[Shopee Clone Demo](https://shopee-reactjs-zeta.vercel.app)**
+
+❗ *Lưu ý:* Server deploy trên **Render (free)**, có thể bị **delay hoặc lỗi mạng**. Nếu demo không hoạt động, hãy thử tải lại trang sau **vài phút**.
+
+
+## ✨ Tính năng nổi bật
+- 🏠 **Trang chủ**: Hiển thị banner, danh mục và sản phẩm nổi bật.
+- 🏠 **Seller Centre**: Dashboard shop người bán, đăng ký bán hàng, tạo sản phẩm sàn thương mại điện tử shopee bán.
+- 🔎 **Tìm kiếm sản phẩm**: Lọc và sắp xếp sản phẩm theo nhu cầu.
+- 📦 **Chi tiết sản phẩm**: Xem thông tin, hình ảnh, đánh giá.
+- 🛒 **Giỏ hàng - Checkout**: Thêm, xóa sản phẩm và tiến hành thanh toán.
+- 🔑 **Đăng nhập/Đăng ký**: Xác thực người dùng.
+- 📱 **Giao diện responsive**: Tương thích trên cả mobile, tablet và desktop.
+
+## 🛠 Công nghệ sử dụng
+- **⚛ React** - Thư viện xây dựng UI.
+- **📜 TypeScript** - Ngôn ngữ JavaScript có kiểu tĩnh.
+- **⚡ Vite** - Công cụ build nhanh chóng.
+- **🎨 Tailwind CSS** - Framework CSS tiện lợi.
+- **🚦 React Router** - Điều hướng trang trong ứng dụng.
+- **🔗 Axios** - Gọi API dễ dàng.
+- **🛍 React Query/ Redux Toolkit** - Quản lý dữ liệu hiệu quả, gọi và handle api dễ dàng.
+- **🛍 React Hook Form** - Quản lý form hiệu quả.
+- **🔍 ESLint & Prettier** - Chuẩn hóa code.
+
+## 📥 Cài đặt & chạy dự án
+1️⃣ **Clone repo:** 
+git clone https://github.com/CNTT-UTH/Shopee-Clone-FE.git
+```bash 
+
+
 Shopee-Clone-FE/
-├── public/                 # Public assets
-│   └── ...
-├── src/                    # Source code
-│   ├── assets/             # Images, fonts, etc.
-│   ├── components/         # Reusable UI components
-│   ├── pages/              # Page components
-│   ├── routes/             # Application routes
-│   ├── services/           # API calls and services
-│   ├── styles/             # Global and component-specific styles
-│   ├── utils/              # Utility functions
-│   ├── App.tsx             # Root component
-│   └── main.tsx            # Entry point
-├── .editorconfig           # Editor configuration
-├── .gitignore              # Git ignore rules
-├── .prettierignore         # Prettier ignore rules
-├── .prettierrc             # Prettier configuration
-├── index.html              # Main HTML file
-├── package.json            # NPM scripts and dependencies
-├── postcss.config.cjs      # PostCSS configuration
-├── tailwind.config.cjs     # Tailwind CSS configuration
-├── tsconfig.json           # TypeScript configuration
-└── vite.config.ts          # Vite configuration
+├── public/          # Tệp tĩnh (favicon, logo)
+├── src/             # Code chính
+│   ├── assets/      # Hình ảnh, icon
+│   ├── components/  # Component dùng chung
+│   ├── pages/       # Các trang chính
+│   ├── routes/      # Điều hướng
+│   ├── services/    # API call
+│   ├── styles/      # CSS, Tailwind
+│   ├── utils/       # Hàm tiện ích
+│   ├── App.tsx      # Component gốc
+│   └── main.tsx     # Điểm vào ứng dụng
+├── package.json     # Danh sách dependencies
+├── tsconfig.json    # Cấu hình TypeScript
+├── vite.config.ts   # Cấu hình Vite
+└── README.md        # Tài liệu dự án
+
