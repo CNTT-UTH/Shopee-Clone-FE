@@ -1,50 +1,53 @@
-# React + TypeScript + Vite
+# Shopee Clone Front-End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+📢 **Shopee Clone Front-End** là một dự án clone giao diện Shopee, giúp bạn tìm hiểu cách xây dựng một nền tảng thương mại điện tử bằng các công nghệ hiện đại.
 
-Currently, two official plugins are available:
+## 🚀 Demo
+👉 **[Shopee Clone Demo](https://shopee-reactjs-zeta.vercel.app)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+❗ *Lưu ý:* Server deploy trên **Render (free)**, có thể bị **delay hoặc lỗi mạng**. Nếu demo không hoạt động, hãy thử tải lại trang sau **vài phút**.
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## ✨ Tính năng nổi bật
+- 🏠 **Trang chủ**: Hiển thị banner, danh mục và sản phẩm nổi bật.
+- 🏠 **Seller Centre**: Dashboard shop người bán, đăng ký bán hàng, tạo sản phẩm sàn thương mại điện tử shopee bán.
+- 🔎 **Tìm kiếm sản phẩm**: Lọc và sắp xếp sản phẩm theo nhu cầu.
+- 📦 **Chi tiết sản phẩm**: Xem thông tin, hình ảnh, đánh giá.
+- 🛒 **Giỏ hàng - Checkout**: Thêm, xóa sản phẩm và tiến hành thanh toán.
+- 🔑 **Đăng nhập/Đăng ký**: Xác thực người dùng.
+- 📱 **Giao diện responsive**: Tương thích trên cả mobile, tablet và desktop.
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠 Công nghệ sử dụng
+- **⚛ React** - Thư viện xây dựng UI.
+- **📜 TypeScript** - Ngôn ngữ JavaScript có kiểu tĩnh.
+- **⚡ Vite** - Công cụ build nhanh chóng.
+- **🎨 Tailwind CSS** - Framework CSS tiện lợi.
+- **🚦 React Router** - Điều hướng trang trong ứng dụng.
+- **🔗 Axios** - Gọi API dễ dàng.
+- **🛍 React Query/ Redux Toolkit** - Quản lý dữ liệu hiệu quả, gọi và handle api dễ dàng.
+- **🛍 React Hook Form** - Quản lý form hiệu quả.
+- **🔍 ESLint & Prettier** - Chuẩn hóa code.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 📥 Cài đặt & chạy dự án
+1️⃣ **Clone repo:** 
+git clone https://github.com/CNTT-UTH/Shopee-Clone-FE.git
+```bash 
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+Shopee-Clone-FE/
+├── public/          # Tệp tĩnh (favicon, logo)
+├── src/             # Code chính
+│   ├── assets/      # Hình ảnh, icon
+│   ├── components/  # Component dùng chung
+│   ├── pages/       # Các trang chính
+│   ├── routes/      # Điều hướng
+│   ├── services/    # API call
+│   ├── styles/      # CSS, Tailwind
+│   ├── utils/       # Hàm tiện ích
+│   ├── App.tsx      # Component gốc
+│   └── main.tsx     # Điểm vào ứng dụng
+├── package.json     # Danh sách dependencies
+├── tsconfig.json    # Cấu hình TypeScript
+├── vite.config.ts   # Cấu hình Vite
+└── README.md        # Tài liệu dự án
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
