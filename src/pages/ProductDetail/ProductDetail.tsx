@@ -14,6 +14,7 @@ import { getIdFromNameId, getVariantId } from '@uth/utils/utils'
 import { toast } from 'react-toastify' 
 import React from 'react'
 import { queryClient } from '@uth/main' 
+import { useCart } from '@uth/queries/useCart'
 
 export default function ProductDetail() {
   const {productSlug} = useParams()
@@ -31,12 +32,14 @@ export default function ProductDetail() {
     () => productData?.image_urls?.slice(...currentIndexImages) || [],
     [productData, currentIndexImages]
   )
+  const {data: cartData} = useCart()
+  const cartDataDetail = cartData?.result.items
   const addToCartMutation = useMutation(cartApi.addToCart)
 
   useEffect(() => {
     if (productData) setImgActive(productData.image_urls?.[0] as string)
   }, [productData])
-
+ 
 
   const next = () => { 
     if (productData && currentIndexImages[1] < productData?.image_urls!.length) {
@@ -55,19 +58,25 @@ export default function ProductDetail() {
   } 
   
   const _variantId = getVariantId({productData, selectedOptions})
+
+  const checkOnCart = () => {
+    return cartDataDetail?.find(item => item.product_variant_id === _variantId)?.quantity
+  }
+  console.log(checkOnCart()) 
    
   const addProduct = async () => {
       if(addToCartMutation.isLoading) return
+      const checkCart = checkOnCart()
       const body = {
         product_id: productData?.product_id || 1,
-        quantity,
+        quantity: checkCart ? quantity + checkCart : quantity,
         shop_id: Number(productData?.shop?.shopid) || 1217321194
       }
       const bodyAddCart = _variantId ? {...body, variant_id: _variantId} : body
       await addToCartMutation.mutate(bodyAddCart, {
         onSuccess: (data) => {
           console.log('success', data)
-          toast.success("Add new product successfully") 
+          toast.success("Add/Update product successfully") 
           queryClient.invalidateQueries({queryKey: ['cart']})
         },
         onError: (error: any) => {

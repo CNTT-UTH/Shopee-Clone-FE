@@ -4,14 +4,49 @@ import Product from '@uth/components/Product'
 import path from '@uth/constants/path'
 import { useCart } from '@uth/queries/useCart'
 import { useProductAll } from '@uth/queries/useProduct'
+import { CartItem } from '@uth/types/cart.type'
 import { generateNameId } from '@uth/utils/utils'
-import React from 'react'
+import { produce } from 'immer'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+ 
+interface stateProps extends CartItem {
+  checked: boolean
+}
 
 export default function Cart() {
+    const [ extendedPurchases, setExtendedPurchases ] = useState<stateProps[]>([])
+
     const {data, isLoading} = useCart()
     const cartData = data?.result.items
-    const {data: productListData} = useProductAll() 
+    const {data: productListData} = useProductAll()
+    const isAllChecked = extendedPurchases.every((item) => item.checked)
+    
+    useEffect(() => {
+      setExtendedPurchases(cartData?.map(item => ({
+        ...item,
+        checked: false
+      })) || []
+    )
+    }, [cartData])
+
+    const handleCheck = (purchaseIndex: number) => 
+      (event: React.ChangeEvent<HTMLInputElement>) => {
+        setExtendedPurchases(
+          produce((draft) => {
+            draft[purchaseIndex].checked = event.target.checked;
+          })
+        );
+      };
+
+      const handleCheckAll = () => {
+        setExtendedPurchases(prev => prev.map(item => ({
+          ...item,
+          checked: !isAllChecked
+        })))
+      }
+
+    
 
     return (
       <div className='bg-neutral-100 py-16'>
@@ -22,7 +57,7 @@ export default function Cart() {
                 <div className="col-span-6">
                   <div className="flex items-center">
                     <div className="flex flex-shrink-0 items-center justify-center pr-3">
-                      <input type="checkbox" className='h-5 w-5 cursor-pointer accent-orange' id="" />
+                      <input onChange={handleCheckAll} type="checkbox" checked={isAllChecked} className='h-5 w-5 cursor-pointer accent-orange' id="" />
                     </div>
                     <div className="flex-grow text-black">Sản phẩm</div>
                   </div>
@@ -37,7 +72,7 @@ export default function Cart() {
                 </div>
               </div>
               <div className="my-3 rounded-sm bg-white p-5 shadow">
-                {cartData?.map((item, index) => (
+                {extendedPurchases?.map((item, index) => (
                   <div
                     key={index}
                     className='mt-5 grid grid-cols-12 rounded-sm border border-gray-200 bg-white py-5 px-4 text-center text-sm text-gray-500'
@@ -45,7 +80,7 @@ export default function Cart() {
                     <div className="col-span-6">
                       <div className="flex">
                         <div className="flex flex-shrink-0 items-center justify-center pr-3">
-                          <input type="checkbox" className='h-5 w-5 cursor-pointer accent-orange' id="" />
+                          <input checked={item?.checked} type="checkbox" onChange={handleCheck(index)} className='h-5 w-5 cursor-pointer accent-orange' id="" />
                         </div>
                         <div className="flex-grow">
                           <div className="flex">
@@ -102,7 +137,7 @@ export default function Cart() {
           <div className="mt-10 sticky bottom-0 z-10 flex sm:flex-row flex-col sm:items-center rounded-sm bg-white border border-gray-300 p-5 shadow">
             <div className="flex items-center">
               <div className="flex flex-shrink-0 items-center justify-center pr-3">
-                <input type="checkbox" className='h-5 w-5 accent-orange' name="" id="" />
+                <input type="checkbox" checked={isAllChecked} onChange={handleCheckAll} className='h-5 w-5 accent-orange' name="" id="" />
               </div>
               <button className="mx-3 border-none bg-none">Chọn tất cả</button>
               <button className="mx-3 border-none bg-none">Xóa</button>
