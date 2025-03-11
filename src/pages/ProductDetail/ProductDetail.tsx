@@ -72,7 +72,7 @@ export default function ProductDetail() {
         quantity: checkCart ? quantity + checkCart : quantity,
         shop_id: Number(productData?.shop?.shopid) || 1217321194
       }
-      const bodyAddCart = _variantId ? {...body, variant_id: _variantId} : body
+      const bodyAddCart = _variantId ? {...body, product_variant_id: _variantId} : body
       await addToCartMutation.mutate(bodyAddCart, {
         onSuccess: (data) => {
           console.log('success', data)

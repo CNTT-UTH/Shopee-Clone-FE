@@ -2,13 +2,15 @@ import Button from '@uth/components/Button'
 import InputQuantity from '@uth/components/InputQuantity'
 import Product from '@uth/components/Product'
 import path from '@uth/constants/path'
-import { useCart } from '@uth/queries/useCart'
+import { queryClient } from '@uth/main'
+import { useCart, useDeleteMutation } from '@uth/queries/useCart'
 import { useProductAll } from '@uth/queries/useProduct'
 import { CartItem } from '@uth/types/cart.type'
 import { generateNameId } from '@uth/utils/utils'
 import { produce } from 'immer'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
  
 interface stateProps extends CartItem {
   checked: boolean
@@ -17,10 +19,11 @@ interface stateProps extends CartItem {
 export default function Cart() {
     const [ extendedPurchases, setExtendedPurchases ] = useState<stateProps[]>([])
 
-    const {data, isLoading} = useCart()
+    const {data, isLoading, refetch} = useCart()
     const cartData = data?.result.items
     const {data: productListData} = useProductAll()
     const isAllChecked = extendedPurchases.every((item) => item.checked)
+
     
     useEffect(() => {
       setExtendedPurchases(cartData?.map(item => ({
@@ -46,7 +49,20 @@ export default function Cart() {
         })))
       }
 
-    
+    const handleDelete = async (id?: number) => {
+      if(!id) return
+      const deleteMutation = useDeleteMutation(id)
+      await deleteMutation.mutateAsync(id, {
+        onSuccess: () => {
+          toast.success("You have deleted product successfully")
+          queryClient.invalidateQueries({queryKey: ['cart']})
+        }, 
+        onError: (error) => {
+          console.warn('Delete product fail', error)
+        }
+      })
+      
+    }
 
     return (
       <div className='bg-neutral-100 py-16'>
@@ -125,7 +141,7 @@ export default function Cart() {
                           <span className="text-orange">đ{((item?.price || 1) * (item?.quantity || 1)).toLocaleString('VN')}</span>
                         </div>
                         <div className="col-span-1">
-                          <button type="button" className="py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-50 hover:text-orange/70 focus:z-10 focus:ring-4 focus:ring-orange/70">Xóa</button>
+                          <button onClick={() => handleDelete(item?.id)} type="button" className="py-2 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-50 hover:text-orange/70 focus:z-10 focus:ring-4 focus:ring-orange/70">Xóa</button>
                         </div>
                       </div>
                     </div>
@@ -145,7 +161,7 @@ export default function Cart() {
             <div className="flex-col sm:flex-row sm:ml-auto flex sm:items-center mt-5 sm:mt-0">
               <div>
                 <div className="flex items-center sm:justify-end">
-                  <div>Tổng thanh toán (0 sản phẩm):</div>
+                  <div>Tổng thanh toán ({cartData?.length || 0} sản phẩm):</div>
                   <div className="ml-2 text-2xl text-orange">đ139000</div>
                 </div>
                 <div className="flex items-center sm:justify-end text-sm">
