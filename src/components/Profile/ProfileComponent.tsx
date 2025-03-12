@@ -15,9 +15,14 @@ import { useAuth } from "@uth/contexts/auth.context"
 import { setUserProfileToLS } from "@uth/utils/auth.http"
 import Avatar from "react-avatar"
 import { User } from "@uth/types/user.type"
+import addressApi from "@uth/apis/addresses.api"
 
 
 export default function ProfileComponent() {
+  const {} = useQuery({
+    queryKey: ['address'],
+    queryFn: addressApi.getMyAddress
+  })
   const [file, setFile] = useState<File>()
   const previewAvatar = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''

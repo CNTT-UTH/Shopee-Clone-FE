@@ -1,4 +1,5 @@
-import { AddressAll } from "@uth/types/address.type"
+import { AddressAll, addressSchemaType } from "@uth/types/address.type"
+import { ResponseApi } from "@uth/types/utils.type"
 import http from "@uth/utils/axios.http"
 
 const URL_ADDRESS = "/addresses"
@@ -46,6 +47,26 @@ const addressApi = {
         console.error("Get all wards failed", error)
         throw error
       })
+  },
+
+  getMyAddress() {
+    return http
+      .get<ResponseApi<addressSchemaType[]>>(`${URL_ADDRESS}/get-user-addresses`)
+      .then((res) => res.data)
+      .catch((error) => {
+        console.error("Get my address failed", error)
+        throw error
+      })
+  },
+
+  createNewAddress(body: addressSchemaType) {
+    return http
+    .post<ResponseApi<addressSchemaType>>(`${URL_ADDRESS}/create-user-address`)
+    .then((res) => res.data)
+    .catch((error) => {
+      console.error("Create my address failed", error)
+      throw error
+    })
   }
 }
 
