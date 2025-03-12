@@ -16,13 +16,19 @@ import { setUserProfileToLS } from "@uth/utils/auth.http"
 import Avatar from "react-avatar"
 import { User } from "@uth/types/user.type"
 import addressApi from "@uth/apis/addresses.api"
+import AddressInfo from "../AddressInfo"
 
 
 export default function ProfileComponent() {
-  const {} = useQuery({
+  const {data: addressData} = useQuery({
     queryKey: ['address'],
     queryFn: addressApi.getMyAddress
   })
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const detailAddress = addressData?.result
+  const defaultAddress = detailAddress?.find(item => item?.phone_number === '0940010000')
+  console.log(defaultAddress)
   const [file, setFile] = useState<File>()
   const previewAvatar = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
@@ -197,7 +203,18 @@ export default function ProfileComponent() {
             render={({field}) => (
               <DateForm errorMessage={errors.dob?.message} value={field.value} onChange={field.onChange} />
             )}
-          />
+          /> 
+          <div className=""> 
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="text-orange text-lg py-2 px-4 rounded ml-32"
+            >
+              Thêm Địa Chỉ
+            </button> 
+            {isModalOpen && detailAddress && <AddressInfo address={detailAddress} setIsModalOpen={setIsModalOpen} />}
+          </div>
+
           <div className="flex flex-wrap mt-6 flex-col sm:flex-row">
             <div className="sm:w-[20%] sm:mr-5 pt-3"></div>
             <Button type="submit" className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-8 py-2.5 text-center mt-4">Save</Button>
