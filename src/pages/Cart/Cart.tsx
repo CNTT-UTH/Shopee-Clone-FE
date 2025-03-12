@@ -38,7 +38,7 @@ export default function Cart() {
           cartData?.map(item => ({
             ...item,
             disabled: false,
-            checked: Boolean(item.selected_to_checkout)
+            checked: Boolean(item?.selected_to_checkout)
           })) || []
         )
       }
@@ -104,7 +104,8 @@ export default function Cart() {
       
     }
 
-    const handleInputQuantity = async (cartIndex: number, value: number) => {
+    const handleInputQuantity = async (cartIndex: number, value: number, enable: boolean) => {
+      if(!enable) return
       const item = extendedPurchases[cartIndex]
       setExtendedPurchases(
         produce((draft) => {
@@ -121,6 +122,14 @@ export default function Cart() {
           queryClient.invalidateQueries({queryKey: ['cart']})
         }
       })
+    }
+
+    const handleTypeInput = (index: number) => (value: number) => {
+      setExtendedPurchases(
+        produce((draft) => {
+          draft[index].quantity = value
+        })
+      )
     }
 
     return (
@@ -191,12 +200,14 @@ export default function Cart() {
                         </div>
                         <div className="col-span-1">
                           <InputQuantity 
-                            max={50}
+                            max={999}
                             value={item.quantity}
                             classNameWrapper='flex items-center'
-                            onIncrease={value => handleInputQuantity(index, value)}
-                            onDecrease={value => handleInputQuantity(index, value)}
+                            onIncrease={value => handleInputQuantity(index, value, value < 1000)}
+                            onDecrease={value => handleInputQuantity(index, value, value >= 1)}
                             disabled={item.disabled}
+                            onType={handleTypeInput(index)}
+                            onFocusOut={value => handleInputQuantity(index, value, value >= 1 && value < 1000 && value !== cartData?.[index]?.quantity)}
                           />
                         </div>
                         <div className="col-span-1 ml-1">
