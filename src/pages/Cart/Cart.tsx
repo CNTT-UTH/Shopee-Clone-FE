@@ -30,7 +30,13 @@ export default function Cart() {
     const isAllChecked = extendedPurchases.every((item) => item.checked)
     const updateToCartMutation = useMutation(cartApi.addToCart)
 
-    
+    const checkedCart = extendedPurchases.filter(item => item.checked)
+    const checkedCartTotal = checkedCart.length
+
+    const totalCheckedPrice = checkedCart.reduce((result, current) => {
+      return result + (current.price! * current.quantity) 
+    }, 0)
+
     useEffect(() => {
       setExtendedPurchases((prev) => {
         // const extendObj = keyBy(prev, 'id')
@@ -102,6 +108,21 @@ export default function Cart() {
         }
       })
       
+    }
+
+    const handleDeleteAll = async () => {
+      if(checkedCart.length === 0) return 
+      try {
+        const allItemDelete = checkedCart.map(item => 
+          deleteMutation.mutateAsync(item.id as number)
+        )
+
+        await Promise.all(allItemDelete)
+        toast.success("Delete products successfully")
+        queryClient.invalidateQueries({queryKey: ['cart']})
+      } catch (error) {
+        console.warn('Handle delete all fail', error)
+      }
     }
 
     const handleInputQuantity = async (cartIndex: number, value: number, enable: boolean) => {
@@ -228,14 +249,14 @@ export default function Cart() {
               <div className="flex flex-shrink-0 items-center justify-center pr-3">
                 <input type="checkbox" checked={isAllChecked} onChange={handleCheckAll} className='h-5 w-5 accent-orange' name="" id="" />
               </div>
-              <button className="mx-3 border-none bg-none">Chọn tất cả</button>
-              <button className="mx-3 border-none bg-none">Xóa</button>
+              <button onClick={handleCheckAll} className="mx-3 border-none bg-none">Chọn tất cả</button>
+              <button onClick={handleDeleteAll} className="mx-3 border-none bg-none">Xóa</button>
             </div>
             <div className="flex-col sm:flex-row sm:ml-auto flex sm:items-center mt-5 sm:mt-0">
               <div>
                 <div className="flex items-center sm:justify-end">
-                  <div>Tổng thanh toán ({cartData?.length || 0} sản phẩm):</div>
-                  <div className="ml-2 text-2xl text-orange">đ{data?.result?.total?.toLocaleString('VN')}</div>
+                  <div>Tổng thanh toán ({checkedCartTotal || 0} sản phẩm):</div>
+                  <div className="ml-2 text-2xl text-orange">đ{totalCheckedPrice?.toLocaleString('VN')}</div>
                 </div>
                 <div className="flex items-center sm:justify-end text-sm">
                   <div className='text-gray-500'>Tiết kiệm</div>
