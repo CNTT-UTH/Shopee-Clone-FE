@@ -1,6 +1,6 @@
 import { useProductDetail } from '@uth/queries/useProduct'
 import { FaChevronLeft, FaChevronRight, FaShopify } from 'react-icons/fa'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { IoIosChatbubbles } from 'react-icons/io'
 import { useEffect, useMemo, useState } from 'react'
 import des from '@uth/assets/des/des'
@@ -15,8 +15,11 @@ import { toast } from 'react-toastify'
 import React from 'react'
 import { queryClient } from '@uth/main' 
 import { useCart } from '@uth/queries/useCart'
+import { useAuth } from '@uth/contexts/auth.context'
 
 export default function ProductDetail() {
+  const navigate = useNavigate()
+  const {isAuthenticated} = useAuth()
   const {productSlug} = useParams()
   // console.log(productSlug)
   const id = getIdFromNameId(productSlug as string)
@@ -33,7 +36,7 @@ export default function ProductDetail() {
     [productData, currentIndexImages]
   )
   const {data: cartData} = useCart()
-  const cartDataDetail = cartData?.result.items
+  const cartDataDetail = cartData?.result?.items
   const addToCartMutation = useMutation(cartApi.addToCart)
 
   useEffect(() => {
@@ -62,9 +65,13 @@ export default function ProductDetail() {
   const checkOnCart = () => {
     return cartDataDetail?.find(item => item.product_variant_id === _variantId)?.quantity
   }
-  console.log(checkOnCart()) 
-   
   const addProduct = async () => {
+      console.log('...')
+      if(!isAuthenticated) {
+        toast.info("Please login to add product")
+        navigate('/login')
+        return
+      }
       if(addToCartMutation.isLoading) return
       const checkCart = checkOnCart()
       const body = {
