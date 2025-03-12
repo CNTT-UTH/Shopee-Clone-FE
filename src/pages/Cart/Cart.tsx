@@ -1,9 +1,11 @@
+import { useMutation } from '@tanstack/react-query'
+import cartApi from '@uth/apis/cart.api'
 import Button from '@uth/components/Button'
 import InputQuantity from '@uth/components/InputQuantity'
 import Product from '@uth/components/Product'
 import path from '@uth/constants/path'
 import { queryClient } from '@uth/main'
-import { useCart, useDeleteMutation } from '@uth/queries/useCart'
+import { useCart } from '@uth/queries/useCart'
 import { useProductAll } from '@uth/queries/useProduct'
 import { CartItem } from '@uth/types/cart.type'
 import { generateNameId } from '@uth/utils/utils'
@@ -18,6 +20,7 @@ interface stateProps extends CartItem {
 
 export default function Cart() {
     const [ extendedPurchases, setExtendedPurchases ] = useState<stateProps[]>([])
+    const deleteMutation = useMutation(cartApi.removeItemFromCart)
 
     const {data, isLoading, refetch} = useCart()
     const cartData = data?.result.items
@@ -51,7 +54,6 @@ export default function Cart() {
 
     const handleDelete = async (id?: number) => {
       if(!id) return
-      const deleteMutation = useDeleteMutation(id)
       await deleteMutation.mutateAsync(id, {
         onSuccess: () => {
           toast.success("You have deleted product successfully")

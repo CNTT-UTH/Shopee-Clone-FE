@@ -10,9 +10,4 @@ export const useCart = () => {
     enabled: isAuthenticated
   })
 }
- 
-export const useDeleteMutation = (id: number) => {
-  return useMutation({
-    mutationFn: cartApi.removeItemFromCart
-  })
-}
+  
