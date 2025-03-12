@@ -12,7 +12,8 @@ const path = {
   registerSeller: '/register-seller',
   product: '/products',
   productDetail: '/:productSlug',
-  search: '/search'
+  search: '/search',
+  checkout: '/checkout'
 }
 
 export default path

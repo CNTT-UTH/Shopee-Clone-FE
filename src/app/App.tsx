@@ -22,6 +22,7 @@ import SellerLayout from '@uth/layouts/SellerLayout/SellerLayout'
 import ProductDetail from '@uth/pages/ProductDetail'
 import SearchPage from '@uth/pages/SearchPage/SearchPage'
 import Cart from '@uth/pages/Cart'
+import CheckoutPage from '@uth/pages/Checkout'
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,14 @@ const router = createBrowserRouter([
         <MainLayout>
           <Cart />
         </MainLayout>)
+      },
+      {
+        path: path.checkout,
+        element: (
+          <MainLayout>
+            <CheckoutPage />
+          </MainLayout>
+        )
       }
     ]
   },
