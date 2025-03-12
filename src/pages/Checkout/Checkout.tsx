@@ -1,6 +1,18 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import { stateProps } from "../Cart/Cart";
 
-const CheckoutPage: React.FC = () => {
+const CheckoutPage = () => {
+  const location = useLocation();
+
+  // Lấy dữ liệu state từ location
+  const data = location.state?.data as stateProps[];
+  const totalCheckedPrice = data.reduce((result, current) => {
+    return result + (current.price! * current.quantity) 
+  }, 0)
+
+  const voucher = totalCheckedPrice * 0.15
+
   return (
     <div className="bg-gray-100 py-20">
       {/* Header */}
@@ -19,23 +31,31 @@ const CheckoutPage: React.FC = () => {
                Sản phẩm 
             </div>
             <div className="col-span-5 flex items-center justify-between text-center">
-              <div className="cols-span-2">Đơn giá</div>
-              <div className="cols-span-1">Số lượng</div>
-              <div className="cols-span-1">Thành tiền</div> 
+              <div className="text-lg">Đơn giá</div>
+              <div className="text-lg">Số lượng</div>
+              <div className="text-lg">Thành tiền</div> 
             </div>
           </div>
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <img src="/path/to/product.jpg" alt="Product" className="w-16 h-16 mr-4" />
-              <div>
-                <span className="block font-medium">Bộ chăn gối cho bé đi học hình thú ngộ nghĩnh, Loại: Cún Vàng Bò</span>
-                <span className="text-gray-600">₫125.000</span>
+
+
+        {data.map((item, index) => (
+          <div className="bg-white p-4 px-8 rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-xl hover:-translate-y-[0.10rem]">
+            <div className="grid grid-cols-12 justify-between items-center">
+              <div className="flex col-span-7 items-center">
+                <img src={item.image} alt="Product" className="w-16 h-16 mr-4" />
+                <div className="grid gap-2">
+                  <span className="block font-medium truncate max-w-md">{item?.product_name}</span>
+                  <span className="text-gray-600">₫{item?.price?.toLocaleString('VN')}</span>
+                </div>
+              </div>
+              <div className="col-span-5 flex justify-between text-center items-center">
+                  <div className="">đ{item?.price?.toLocaleString('VN')}</div>
+                  <div className="mr-5">{item?.quantity}</div>
+                  <div className="mr-4 text-gray-600">₫{((item?.price || 1000) * item?.quantity).toLocaleString('VN')}</div>
               </div>
             </div>
-            <span className="text-gray-600">₫125.000</span>
           </div>
-        </div>
+        ))}
 
         {/* Insurance */}
         <div className="flex items-center mb-6">
@@ -51,37 +71,32 @@ const CheckoutPage: React.FC = () => {
             <span className="text-gray-600">Phương thức vận chuyển: </span>
             <span className="font-semibold text-blue-500 ml-2">Nhanh</span>
           </div>
-          <span className="text-gray-600">₫443.900</span>
+          <span className="text-gray-600">₫43.900</span>
         </div>
 
         {/* Total */}
         <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-6">
-          <span className="font-bold text-xl">Tổng số tiền (1 sản phẩm):</span>
-          <span className="font-bold text-red-500 text-xl">₫168.900</span>
-        </div>
-
-        {/* Voucher */}
-        <div className="mb-6">
-          <button className="text-blue-500">Chọn Voucher</button>
-        </div>
+          <span className="font-bold text-xl">Tổng số tiền ({data?.length} sản phẩm):</span>
+          <span className="font-bold text-red-500 text-xl">₫{totalCheckedPrice?.toLocaleString('VN')}</span>
+        </div> 
 
         {/* Payment */}
         <div className="flex flex-col bg-white p-4 rounded-lg shadow-md">
           <div className="flex justify-between mb-4">
             <span className="text-lg">Shopee Voucher</span>
-            <span className="text-gray-600">Không thể sử dụng Xu</span>
+            <span className="text-gray-600">Giảm đ{voucher.toLocaleString('VN')}</span>
           </div>
           <div className="flex justify-between mb-6">
             <span className="text-lg">Tổng tiền hàng</span>
-            <span className="text-gray-600">₫125.000</span>
+            <span className="text-gray-600">đ{totalCheckedPrice.toLocaleString('VN')}</span>
           </div>
           <div className="flex justify-between mb-6">
             <span className="text-lg">Tổng tiền phí vận chuyển</span>
-            <span className="text-gray-600">₫443.900</span>
+            <span className="text-gray-600">₫43.900</span>
           </div>
           <div className="flex justify-between mb-6">
             <span className="font-bold text-lg">Tổng thanh toán</span>
-            <span className="font-bold text-red-500 text-lg">₫168.900</span>
+            <span className="font-bold text-red-500 text-lg">₫{(totalCheckedPrice * 0.9 - 43900).toLocaleString('VN')}</span>
           </div>
 
           {/* Button */}

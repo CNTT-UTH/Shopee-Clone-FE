@@ -12,15 +12,16 @@ import { generateNameId } from '@uth/utils/utils'
 import { produce } from 'immer'
 // import { keyBy } from 'lodash'
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
  
-interface stateProps extends CartItem {
+export interface stateProps extends CartItem {
   checked: boolean,
   disabled: boolean
 }
 
 export default function Cart() {
+    const navigate = useNavigate()
     const [ extendedPurchases, setExtendedPurchases ] = useState<stateProps[]>([])
     const deleteMutation = useMutation(cartApi.removeItemFromCart)
 
@@ -153,6 +154,14 @@ export default function Cart() {
       )
     }
 
+    const handleBuy = () => {
+      navigate('/checkout', {
+        state: {
+          data: checkedCart
+        }
+      })
+    }
+
     return (
       <div className='bg-neutral-100 py-16'>
         <div className="container">
@@ -263,7 +272,7 @@ export default function Cart() {
                   <div className="ml-6 text-orange">đ{(((data?.result?.total || 100000) * 0.25)).toLocaleString('VN')}</div>
                 </div>
               </div>
-              <Button className='flex mt-5 sm:mt-0 h-10 w-52 sm:ml-4 items-center justify-center bg-red-500 text-sm uppercase text-white hover:bg-red-600'>Mua hàng</Button>
+              <Button onClick={handleBuy} className='flex mt-5 sm:mt-0 h-10 w-52 sm:ml-4 items-center justify-center bg-red-500 text-sm uppercase text-white hover:bg-red-600'>Mua hàng</Button>
             </div>
           </div>
 
