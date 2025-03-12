@@ -15,8 +15,8 @@ export interface CartItem {
   variant_id?: number
   shop_id: number
   block_id?: number
-  quantity?: number
-  selected_to_checkout?: number
+  quantity: number
+  selected_to_checkout?: boolean
   price?: number
   price_before_discount?: number
   total_price?: number
