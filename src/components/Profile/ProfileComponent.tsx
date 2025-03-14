@@ -204,11 +204,12 @@ export default function ProfileComponent() {
               <DateForm errorMessage={errors.dob?.message} value={field.value} onChange={field.onChange} />
             )}
           /> 
-          <div className=""> 
+          <div className="flex flex-wrap mt-6 flex-col sm:flex-row"> 
+            <div className="sm:w-[20%] sm:mr-5 pt-3"></div>
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="text-orange text-lg py-2 px-4 rounded ml-32"
+              className="text-orange text-lg text-left"
             >
               Thêm Địa Chỉ
             </button> 

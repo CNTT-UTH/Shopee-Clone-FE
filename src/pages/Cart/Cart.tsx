@@ -278,10 +278,10 @@ export default function Cart() {
 
 
           {/* product */}
-          <div className="mt-16 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="mt-16 grid grid-cols-6 gap-3">
             <p className="text-gray-500 text-xl uppercase col-span-6">Có thể bạn cũng thích</p>
             {(productListData?.result?.data)?.map((product) => (
-              <div className="col-span-1" key={product?.product_id}>
+              <div className="col-span-3 md:col-span-2 lg:col-span-1" key={product?.product_id}>
                 <Product product={product} />
               </div>
             ))}

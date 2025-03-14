@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Input from '../Input';  
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,17 +7,17 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import addressApi from '@uth/apis/addresses.api';
 import { toast } from 'react-toastify';
 import { AddressSchema, addressSchemaType } from '@uth/types/address.type';
+import { queryClient } from '@uth/main';
  
  
 
 const classNameError = 'ml-2 mb-3 -mt-2 text-red-600 min-h-[1.25rem] text-sm';
 
 interface AddressModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  setModalAddOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
+export default function AddressModal({ setModalAddOpen}: AddressModalProps) {
   const { register, handleSubmit, formState: { errors } } = useForm<addressSchemaType>({
     resolver: yupResolver(AddressSchema),
   });
@@ -40,19 +40,10 @@ export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
     { enabled: !!wards }
   );
 
-  const addressMutation = useMutation({
-    mutationFn: (data: addressSchemaType) => axios.post('/api/address', data),
-    onSuccess: () => {
-      toast.success('Address saved successfully');
-      onClose();  // Close modal after success
-    },
-    onError: (error) => {
-      toast.error('Error saving address');
-      console.error(error);
-    }
-  });
+  const addressMutation = useMutation(addressApi.createNewAddress)
 
   const onSubmit: SubmitHandler<addressSchemaType> = async (data) => {
+    
     const formData = {
       address_line: data.address_line,
       phone_number: data.phone_number,
@@ -60,25 +51,24 @@ export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
       district: selectedDistrict || '',
       ward: selectedWardName || '',
     };
-    // addressMutation.mutate(formData);
-    console.log(formData)
-  };
+    try {
+      await addressMutation.mutateAsync(formData);
+      toast.success('Add new address successfully')
+      queryClient.invalidateQueries({queryKey: ['address']})
+      setModalAddOpen(false)
+    } catch (error) {
+      console.warn('Add new address fail', error)
+    }
 
-  if (!isOpen) return null;
+  };
+ 
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg w-96">
+      <div className="bg-white p-12 rounded-lg w-6/12">
         <h3 className="text-center text-lg font-semibold">Enter Address</h3>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Input
-              name="address_line"
-              placeholder="Address Line"
-              register={register}
-              errorMessage={errors.address_line?.message}
-            />
-          </div>
+        <div className="space-y-4">
+          
 
           {/* City Select */}
           <select
@@ -87,7 +77,7 @@ export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
               setSelectedCity(e.target.selectedOptions[0].text);
               setDistricts(e.target.value);
             }}
-            className="w-full p-3 border rounded-xl mb-4"
+            className="w-full p-3 border rounded-xl mt-8"
           >
             <option value="">Select City</option>
             {cities?.result.map((city) => (
@@ -133,6 +123,15 @@ export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
           </select>
           <div className={classNameError}>{errors.ward?.message}</div>
 
+          <div>
+            <Input
+              name="address_line"
+              placeholder="Address Line"
+              register={register}
+              errorMessage={errors.address_line?.message}
+            />
+          </div>
+
           {/* Phone Number */}
           <Input
             name="phone_number"
@@ -145,18 +144,21 @@ export default function AddressModal({ isOpen, onClose }: AddressModalProps) {
             <button
               type="button"
               className="bg-gray-400 text-white py-3 px-4 rounded-xl hover:bg-gray-500"
-              onClick={onClose}
+              onClick={() => {
+                setModalAddOpen(false)
+              }} 
             >
               Close
             </button>
             <button
-              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              type="button"
               className="bg-gradient-to-b from-[#d0011b] to-[#f53d2d] text-white py-3 px-4 rounded-xl hover:opacity-70"
             >
               Save Address
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

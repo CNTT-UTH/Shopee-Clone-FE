@@ -61,7 +61,7 @@ const addressApi = {
 
   createNewAddress(body: addressSchemaType) {
     return http
-    .post<ResponseApi<addressSchemaType>>(`${URL_ADDRESS}/create-user-address`)
+    .post<ResponseApi<addressSchemaType>>(`${URL_ADDRESS}/create-user-address`, body)
     .then((res) => res.data)
     .catch((error) => {
       console.error("Create my address failed", error)
