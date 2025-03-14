@@ -5,6 +5,8 @@
 ## 🚀 Demo
 👉 **[Shopee Clone Demo](https://shopee-reactjs-zeta.vercel.app)**
 
+👉 **[Server backend của project này](https://shopee-clone-be.onrender.com/api-docs)**  -  [Nhật Linh](https://github.com/linhhuynhcoding)**
+
 ❗ *Lưu ý:* Server deploy trên **Render (free)**, có thể bị **delay hoặc lỗi mạng**. Nếu demo không hoạt động, hãy thử tải lại trang sau **vài phút**.
 
 
