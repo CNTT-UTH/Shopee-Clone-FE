@@ -1,20 +1,21 @@
 import { Cart, CartItem, CartRes } from "@uth/types/cart.type"
+import { CheckoutTemp } from "@uth/types/order.type"
 import { ResponseApi } from "@uth/types/utils.type"
 import http from "@uth/utils/axios.http"
 
 const URL_ORDER = '/orders' 
 
 const orderApi = {
-  getMyCheckout () {
+  getMyCheckout (session_checkout_id: string) {
     return http
-      .get<ResponseApi<Cart>>(`${URL_ORDER}/checkout`)
+      .get<ResponseApi<CheckoutTemp>>(`${URL_ORDER}/checkout/${session_checkout_id}` )
       .then(res => res.data)
       .catch(err => console.warn('Get my checkout fail', err))
   }, 
 
   updateMyCheckout () {
     return http
-      .post<ResponseApi<CartRes>>(`${URL_ORDER}/checkout`)
+      .post<ResponseApi<{session_checkout_id: string}>>(`${URL_ORDER}/checkout`)
       .then(res => res.data)
       .catch(err => {throw new Error(err)})
   },

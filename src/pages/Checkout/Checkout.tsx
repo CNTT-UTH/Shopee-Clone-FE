@@ -1,10 +1,17 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { stateProps } from "../Cart/Cart";
+import { useQuery } from "@tanstack/react-query";
+import orderApi from "@uth/apis/order.api";
+import Button from "@uth/components/Button";
 
 const CheckoutPage = () => {
   const location = useLocation();
-
+  const {data: checkoutData} = useQuery({
+    queryKey: ['checkout'],
+    queryFn: () => orderApi.getMyCheckout(location.state._id)
+  })
+  console.log('run', checkoutData, '>>>', location.state.data)
   // Lấy dữ liệu state từ location
   const data = location.state?.data as stateProps[];
   const totalCheckedPrice = data.reduce((result, current) => {
@@ -38,41 +45,38 @@ const CheckoutPage = () => {
           </div>
 
 
-        {data.map((item, index) => (
-          <div className="bg-white p-4 px-8 rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-xl hover:-translate-y-[0.10rem]">
-            <div className="grid grid-cols-12 justify-between items-center">
-              <div className="flex col-span-7 items-center">
-                <img src={item.image} alt="Product" className="w-16 h-16 mr-4" />
-                <div className="grid gap-2">
-                  <span className="block font-medium truncate max-w-md">{item?.product_name}</span>
-                  <span className="text-gray-600">₫{item?.price?.toLocaleString('VN')}</span>
+        {checkoutData?.result?.orders?.map((item, index) => (
+          <div key={index} className="bg-white mt-12 p-4 px-8 rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-xl hover:-translate-y-[0.10rem]">
+            <div className="flex gap-4 items-center text-base">
+              <span className="bg-orange p-1 text-sm rounded text-white">Yêu thích</span>
+              {item?.items?.[0].shop_name}
+            </div>
+            {item?.items?.map((product) => {
+              return  <div className="grid grid-cols-12 justify-between items-center">
+                <div className="flex col-span-7 items-center mt-8">
+                  <img src={product.image} alt="Product" className="w-16 h-16 mr-4" />
+                  <div className="grid gap-2">
+                    <span className="block font-medium truncate max-w-md">{product?.variant_name || product?.product_name}</span>
+                    <span className="text-gray-600">₫{product?.price?.toLocaleString('VN')}</span>
+                  </div>
+                </div>
+                <div className="col-span-5 flex justify-between text-center items-center">
+                    <div className="">đ{product?.price?.toLocaleString('VN')}</div>
+                    <div className="mr-5">{product?.quantity}</div>
+                    <div className="mr-4 text-gray-600">₫{((product?.price || 1000) * product?.quantity).toLocaleString('VN')}</div>
                 </div>
               </div>
-              <div className="col-span-5 flex justify-between text-center items-center">
-                  <div className="">đ{item?.price?.toLocaleString('VN')}</div>
-                  <div className="mr-5">{item?.quantity}</div>
-                  <div className="mr-4 text-gray-600">₫{((item?.price || 1000) * item?.quantity).toLocaleString('VN')}</div>
-              </div>
-            </div>
+            })}
           </div>
         ))}
 
         {/* Insurance */}
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6 mt-8">
           <input type="checkbox" id="insurance" className="mr-2" />
           <label htmlFor="insurance" className="text-gray-600">
             Bảo hiểm Thiệt hại sản phẩm
           </label>
-        </div>
-
-        {/* Delivery */}
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center">
-            <span className="text-gray-600">Phương thức vận chuyển: </span>
-            <span className="font-semibold text-blue-500 ml-2">Nhanh</span>
-          </div>
-          <span className="text-gray-600">₫43.900</span>
-        </div>
+        </div> 
 
         {/* Total */}
         <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-6">
@@ -88,19 +92,19 @@ const CheckoutPage = () => {
           </div>
           <div className="flex justify-between mb-6">
             <span className="text-lg">Tổng tiền hàng</span>
-            <span className="text-gray-600">đ{totalCheckedPrice.toLocaleString('VN')}</span>
+            <span className="text-gray-600">đ{checkoutData?.result.total_products_price?.toLocaleString('VN')}</span>
           </div>
           <div className="flex justify-between mb-6">
             <span className="text-lg">Tổng tiền phí vận chuyển</span>
-            <span className="text-gray-600">₫43.900</span>
+            <span className="text-gray-600">₫{checkoutData?.result?.total_ship_fee?.toLocaleString('VN')}</span>
           </div>
           <div className="flex justify-between mb-6">
             <span className="font-bold text-lg">Tổng thanh toán</span>
-            <span className="font-bold text-red-500 text-lg">₫{(totalCheckedPrice * 0.9 - 43900).toLocaleString('VN')}</span>
+            <span className="font-bold text-red-500 text-lg">₫{checkoutData?.result?.total_price?.toLocaleString('VN')}</span>
           </div>
 
           {/* Button */}
-          <button className="w-full py-3 bg-red-500 text-white rounded-lg">Đặt hàng</button>
+          <Button className="w-full py-3 bg-red-500 text-white rounded-lg">Đặt hàng</Button>
         </div>
       </div>
     </div>

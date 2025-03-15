@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import cartApi from '@uth/apis/cart.api'
+import orderApi from '@uth/apis/order.api'
 import Button from '@uth/components/Button'
 import InputQuantity from '@uth/components/InputQuantity'
 import Product from '@uth/components/Product'
@@ -24,7 +25,7 @@ export default function Cart() {
     const navigate = useNavigate()
     const [ extendedPurchases, setExtendedPurchases ] = useState<stateProps[]>([])
     const deleteMutation = useMutation(cartApi.removeItemFromCart)
-
+    const checkoutMutation = useMutation(orderApi.updateMyCheckout)
     const {data, isLoading, refetch} = useCart()
     const cartData = data?.result.items
     const {data: productListData} = useProductAll()
@@ -154,12 +155,19 @@ export default function Cart() {
       )
     }
 
-    const handleBuy = () => {
-      navigate('/checkout', {
-        state: {
-          data: checkedCart
-        }
-      })
+    const handleBuy = async () => {
+      if(checkoutMutation.isLoading) return
+      try {
+        const result = await checkoutMutation.mutateAsync()
+        navigate('/checkout', {
+          state: {
+            data: checkedCart,
+            _id: result?.result?.session_checkout_id
+          }
+        })
+      } catch (error) {
+        console.log('checkout is fail', error)
+      }
     }
 
     return (
@@ -272,7 +280,7 @@ export default function Cart() {
                   <div className="ml-6 text-orange">đ{(((data?.result?.total || 100000) * 0.25)).toLocaleString('VN')}</div>
                 </div>
               </div>
-              <Button onClick={handleBuy} className='flex mt-5 sm:mt-0 h-10 w-52 sm:ml-4 items-center justify-center bg-red-500 text-sm uppercase text-white hover:bg-red-600'>Mua hàng</Button>
+              <Button isLoading={updateToCartMutation.isLoading} onClick={handleBuy} className='flex mt-5 sm:mt-0 h-10 w-52 sm:ml-4 items-center justify-center bg-red-500 text-sm uppercase text-white hover:bg-red-600'>Mua hàng</Button>
             </div>
           </div>
 
