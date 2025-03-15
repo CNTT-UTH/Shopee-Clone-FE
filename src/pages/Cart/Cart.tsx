@@ -258,8 +258,8 @@ export default function Cart() {
               <div className="flex flex-shrink-0 items-center justify-center pr-3">
                 <input type="checkbox" checked={isAllChecked} onChange={handleCheckAll} className='h-5 w-5 accent-orange' name="" id="" />
               </div>
-              <button onClick={handleCheckAll} className="mx-3 border-none bg-none">Chọn tất cả</button>
-              <button onClick={handleDeleteAll} className="mx-3 border-none bg-none">Xóa</button>
+              <Button onClick={handleCheckAll} className="mx-3 border-none bg-none">Chọn tất cả</Button>
+              <Button isLoading={deleteMutation.isLoading} onClick={handleDeleteAll} className="mx-3 border-none bg-none">Xóa</Button>
             </div>
             <div className="flex-col sm:flex-row sm:ml-auto flex sm:items-center mt-5 sm:mt-0">
               <div>
@@ -287,6 +287,6 @@ export default function Cart() {
             ))}
           </div>
         </div>
-      </div>
+      </div> 
     )
 }

@@ -16,6 +16,8 @@ import React from 'react'
 import { queryClient } from '@uth/main' 
 import { useCart } from '@uth/queries/useCart'
 import { useAuth } from '@uth/contexts/auth.context'
+import Button from '@uth/components/Button'
+import path from '@uth/constants/path'
 
 export default function ProductDetail() {
   const navigate = useNavigate()
@@ -65,13 +67,18 @@ export default function ProductDetail() {
   const checkOnCart = () => {
     return cartDataDetail?.find(item => item.product_variant_id === _variantId)?.quantity
   }
-  const addProduct = async () => {
-      console.log('...')
-      if(!isAuthenticated) {
-        toast.info("Please login to add product")
-        navigate('/login')
-        return
-      }
+
+  const check = () => {
+    if(!isAuthenticated) {
+      toast.info("Please login to add product")
+      navigate('/login')
+      return false
+    }
+    return true
+  }
+
+  const addProduct = async () => { 
+      if(!check()) return
       if(addToCartMutation.isLoading) return
       const checkCart = checkOnCart()
       const body = {
@@ -89,6 +96,26 @@ export default function ProductDetail() {
         onError: (error: any) => {
           console.log('error',error)
         }
+      })
+  }
+
+  const handleBuy = async () => {
+    if(!check()) return
+    if(addToCartMutation.isLoading) return
+    const checkCart = checkOnCart()
+      const body = {
+        product_id: productData?.product_id || 12,
+        quantity: checkCart ? quantity + checkCart : quantity,
+        shop_id: Number(productData?.shop?.shopid) || 1217321194,
+        selected_to_checkout: true 
+      }
+      const bodyAddCart = _variantId ? {...body, product_variant_id: _variantId} : body
+      await addToCartMutation.mutate(bodyAddCart, {
+        onSuccess: (data) => { 
+          queryClient.invalidateQueries({queryKey: ['cart']})
+          navigate(path.cart)
+       },
+        onError: (error: any) => {console.log('Error to buy now', error)}
       })
   }
 
@@ -218,7 +245,7 @@ export default function ProductDetail() {
                     </div>
 
                     <div className='mt-12 flex items-center'>
-                      <button onClick={addProduct} className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm hover:bg-orange/5`}>
+                      <Button isLoading={addToCartMutation.isLoading} onClick={addProduct} className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} flex h-12 items-center justify-center rounded-sm border border-orange bg-orange/10 px-5 capitalize text-orange shadow-sm hover:bg-orange/5`}>
                         <svg
                           enableBackground='new 0 0 15 15'
                           viewBox='0 0 15 15'
@@ -251,10 +278,10 @@ export default function ProductDetail() {
                           </g>
                         </svg>
                         Thêm vào giỏ hàng
-                      </button>
-                      <button className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90`}>
+                      </Button>
+                      <Button onClick={handleBuy} className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90`}>
                         Mua ngay
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
