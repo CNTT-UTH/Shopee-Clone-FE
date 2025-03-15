@@ -40,6 +40,7 @@ export default function ProductDetail() {
   const {data: cartData} = useCart()
   const cartDataDetail = cartData?.result?.items
   const addToCartMutation = useMutation(cartApi.addToCart)
+  const buyNowMutation = useMutation(cartApi.addToCart)  
 
   useEffect(() => {
     if (productData) setImgActive(productData.image_urls?.[0] as string)
@@ -87,7 +88,7 @@ export default function ProductDetail() {
         shop_id: Number(productData?.shop?.shopid) || 1217321194
       }
       const bodyAddCart = _variantId ? {...body, product_variant_id: _variantId} : body
-      await addToCartMutation.mutate(bodyAddCart, {
+      await addToCartMutation.mutateAsync(bodyAddCart, {
         onSuccess: (data) => {
           console.log('success', data)
           toast.success("Add/Update product successfully") 
@@ -101,7 +102,7 @@ export default function ProductDetail() {
 
   const handleBuy = async () => {
     if(!check()) return
-    if(addToCartMutation.isLoading) return
+    if(buyNowMutation.isLoading) return
     const checkCart = checkOnCart()
       const body = {
         product_id: productData?.product_id || 12,
@@ -110,7 +111,7 @@ export default function ProductDetail() {
         selected_to_checkout: true 
       }
       const bodyAddCart = _variantId ? {...body, product_variant_id: _variantId} : body
-      await addToCartMutation.mutate(bodyAddCart, {
+      await buyNowMutation.mutateAsync(bodyAddCart, {
         onSuccess: (data) => { 
           queryClient.invalidateQueries({queryKey: ['cart']})
           navigate(path.cart)
@@ -279,7 +280,7 @@ export default function ProductDetail() {
                         </svg>
                         Thêm vào giỏ hàng
                       </Button>
-                      <Button onClick={handleBuy} className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90`}>
+                      <Button isLoading={buyNowMutation.isLoading} onClick={handleBuy} className={`${(Object.keys(selectedOptions).length !== productData.options?.length) && 'cursor-not-allowed opacity-50'} fkex ml-4 h-12 min-w-[5rem] items-center justify-center rounded-sm bg-orange px-5 capitalize text-white shadow-sm outline-none hover:bg-orange/90`}>
                         Mua ngay
                       </Button>
                     </div>

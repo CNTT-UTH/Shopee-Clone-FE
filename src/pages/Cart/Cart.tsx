@@ -211,7 +211,7 @@ export default function Cart() {
                                 name: item?.product_name as string,
                                 id: item?.product_id as number
                               })}`} className='line-clamp-2' >
-                                {item?.product_name}
+                                {item?.variant_name || item?.product_name}
                               </Link>
                             </div>
                           </div>

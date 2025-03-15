@@ -35,14 +35,6 @@ const router = createBrowserRouter([
     )
   },
   {
-    path: `${path.product}${path.productDetail}`,
-    element: (
-      <MainLayout>
-        <ProductDetail />
-      </MainLayout>
-    )
-  },
-  {
     path: path.search,
     element: (
       <MainLayout>
@@ -142,6 +134,14 @@ const router = createBrowserRouter([
         )
       } 
     ]
+  },
+  {
+    path: `${path.product}${path.productDetail}`,
+    element: (
+      <MainLayout>
+        <ProductDetail />
+      </MainLayout>
+    )
   },
   
 ])

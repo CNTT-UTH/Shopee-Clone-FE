@@ -21,6 +21,7 @@ export interface CartItem {
   price_before_discount?: number
   total_price?: number
   product_name?: string
+  variant_name?: string
   image?: string
   shop_name?: string
   shop_avatar?: string

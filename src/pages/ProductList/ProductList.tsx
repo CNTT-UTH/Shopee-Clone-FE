@@ -21,7 +21,7 @@ export default function ProductList() {
   const queryConfig: QueryConfig = {
     page: queryParam.page || '1',
     limit: queryParam.limit || '24',
-    category: queryParam.category
+    // category: queryParam.category
   }
   const {data, isLoading} = useProductAll(queryConfig) 
 
