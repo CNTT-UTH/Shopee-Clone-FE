@@ -11,7 +11,9 @@ export class CheckoutTemp {
 
 export class OrderCheckout {
   order_temp_id?: string;
-  shipping_info: any
+  shipping_info?: {
+    [key: number]: ShippingInfo;
+  }
   shipping_channel_id_selected!: number;
   notes?: string;
   items?: CartItem[];
@@ -23,3 +25,13 @@ export class OrderCheckout {
   estimated_delivery_date_to?: number; // timestamp
 
 }
+
+type ShippingInfo = {
+  channel_id: number;
+  name: string;
+  fee: number;
+  freeship: boolean;
+  estimated_delivery_days_min: number;
+  estimated_delivery_days_max: number;
+  delivery_text: string;
+};

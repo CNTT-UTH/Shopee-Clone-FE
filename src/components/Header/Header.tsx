@@ -35,8 +35,8 @@ export default function Header() {
     mutationFn: authApi.logoutAuth
   })
 
-  const handleLogout = () => {
-    logoutMutation.mutate(undefined, {
+  const handleLogout = async () => {
+    await logoutMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('Logout success')
         setIsAuthenticated(false)

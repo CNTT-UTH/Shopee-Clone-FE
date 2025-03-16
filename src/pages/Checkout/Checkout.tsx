@@ -45,8 +45,10 @@ const CheckoutPage = () => {
           </div>
 
 
-        {checkoutData?.result?.orders?.map((item, index) => (
-          <div key={index} className="bg-white mt-12 p-4 px-8 rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-xl hover:-translate-y-[0.10rem]">
+        {checkoutData?.result?.orders?.map((item, index) => {
+          const selected_shipping_info = item?.shipping_channel_id_selected || 2
+           
+          return <div key={index} className="bg-white mt-12 p-4 px-8 rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-xl hover:-translate-y-[0.10rem]">
             <div className="flex gap-4 items-center text-base">
               <span className="bg-orange p-1 text-sm rounded text-white">Yêu thích</span>
               {item?.items?.[0].shop_name}
@@ -67,8 +69,58 @@ const CheckoutPage = () => {
                 </div>
               </div>
             })}
+            <div className="h-[1px] w-full bg-gray-300 my-12" />
+
+            <div className="bg-white grid grid-cols-10 gap-16 p-6 rounded-lg  mt-6">
+              {/* Hóa đơn điện tử & Voucher */}
+              <div className="col-span-4">
+                <div className="flex justify-between items-center border-b pb-4">
+                  <div className="text-gray-700 font-medium">
+                    Hóa đơn điện tử
+                  </div>
+                  <a href="#" className="text-blue-500 hover:underline">
+                    Yêu Cầu Ngay
+                  </a> 
+                </div>
+
+                {/* Lời nhắn */}
+                <div className="mt-8">
+                  <label className="block text-gray-700 font-medium mb-2">Lời nhắn:</label>
+                  <input
+                    type="text"
+                    placeholder="Lưu ý cho Người bán..."
+                    className="w-full px-3 mt-4 py-2 border rounded-md focus:ring focus:ring-blue-200"
+                  />
+                </div>
+              </div>
+
+              {/* Phương thức vận chuyển */}
+              <div className="mt-6 col-span-6 flex justify-between items-center border-b pb-4">
+                <div>
+                  <span className="text-gray-700 font-medium">Phương thức vận chuyển:</span>{" "}
+                  <span className="text-green-600 font-semibold">{item?.shipping_info?.[selected_shipping_info]?.name}</span>
+                  <span className="text-gray-600 ml-4 font-semibold">đ{item?.shipping_info?.[selected_shipping_info]?.fee?.toLocaleString('VN')}</span>
+                  <p className="text-sm text-green-600 mt-1">
+                    🚚 Đảm bảo nhận hàng từ <strong>{item?.shipping_info?.[selected_shipping_info]?.delivery_text}</strong>
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Nhận Voucher trị giá <strong>15.000</strong> nếu đơn hàng được giao đến bạn sau ngày 20 Tháng 3 2025.
+                  </p>
+                </div>
+                <a href="#" className="text-blue-500 hover:underline">
+                  Thay Đổi
+                </a> 
+              </div>
+
+
+            </div>
+              {/* Tổng số tiền */}
+              <div className="mt-6 flex justify-between items-center text-lg font-semibold text-red-500">
+                <span>Tổng số tiền ({item?.items_count} sản phẩm):</span>
+                <span>₫{item?.total_items_price?.toLocaleString('VN')}</span>
+              </div>
           </div>
-        ))}
+        })}
 
         {/* Insurance */}
         <div className="flex items-center mb-6 mt-8">
