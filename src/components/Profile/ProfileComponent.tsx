@@ -27,8 +27,8 @@ export default function ProfileComponent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const detailAddress = addressData?.result
-  const defaultAddress = detailAddress?.find(item => item?.phone_number === '0940010000')
-  console.log(defaultAddress)
+  // const defaultAddress = detailAddress?.find(item => item?.phone_number === '0940010000')
+  // console.log(defaultAddress)
   const [file, setFile] = useState<File>()
   const previewAvatar = useMemo(() => {
     return file ? URL.createObjectURL(file) : ''
@@ -213,7 +213,7 @@ export default function ProfileComponent() {
             >
               Thêm Địa Chỉ
             </button> 
-            {isModalOpen && detailAddress && <AddressInfo address={detailAddress} setIsModalOpen={setIsModalOpen} />}
+            {isModalOpen && detailAddress && <AddressInfo addresses={detailAddress} setIsModalOpen={setIsModalOpen} />}
           </div>
 
           <div className="flex flex-wrap mt-6 flex-col sm:flex-row">

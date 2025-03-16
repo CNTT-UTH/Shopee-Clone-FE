@@ -1,24 +1,45 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { stateProps } from "../Cart/Cart";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import orderApi from "@uth/apis/order.api";
 import Button from "@uth/components/Button";
+import addressApi from "@uth/apis/addresses.api";
+import AddressInfo from "@uth/components/AddressInfo";
+import { toast } from "react-toastify";
+import { queryClient } from "@uth/main";
 
 const CheckoutPage = () => {
+  const navigate = useNavigate()
+  const {data: addressData, refetch} = useQuery({
+    queryKey: ['address'],
+    queryFn: addressApi.getMyAddress
+  })
+  const detailAddress = addressData?.result
+  const defaultAddress = detailAddress?.find(item => item?.is_default === true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const location = useLocation();
   const {data: checkoutData} = useQuery({
     queryKey: ['checkout'],
     queryFn: () => orderApi.getMyCheckout(location.state._id)
   })
-  console.log('run', checkoutData, '>>>', location.state.data)
+  const orderMutation = useMutation(orderApi.placeAnOrder)
   // Lấy dữ liệu state từ location
-  const data = location.state?.data as stateProps[];
-  const totalCheckedPrice = data.reduce((result, current) => {
-    return result + (current.price! * current.quantity) 
-  }, 0)
+  const data = location.state?.data as stateProps[]; 
 
-  const voucher = totalCheckedPrice * 0.15
+  const handleOrder = async () => {
+    try {
+      await orderMutation.mutateAsync(location.state._id, {
+        onSuccess: () => {
+          toast.success('You have placed an order successfully')
+          queryClient.invalidateQueries({queryKey: ['address']})
+          navigate('/')
+        }
+      })
+    } catch (error) {
+      console.warn('Error to place order', error)
+    }
+  }
 
   return (
     <div className="bg-gray-100 py-20">
@@ -26,9 +47,16 @@ const CheckoutPage = () => {
       <div className="container bg-white p-8 rounded-lg flex justify-between items-center mb-8">
         <div className="flex flex-col gap-2">
           <span className="text-xl font-bold">Địa Chỉ Nhận Hàng</span>
-          <span>Phan Đức Tài (+84) 917642510, gần tập hóa 2 Lâm, chợ Tân Việt Hòa, Phường 6, Thành Phố Cao Lãnh, Đồng Tháp</span>
+          <span className="capitalize">{defaultAddress?.address_line}, {defaultAddress?.ward}, {defaultAddress?.district}, {defaultAddress?.city}</span>
         </div>
-        <button className="text-blue-500">Thay Đổi</button>
+        <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="text-orange text-lg text-left"
+            >
+              Thay đổi
+            </button> 
+            {isModalOpen && detailAddress && <AddressInfo addresses={detailAddress} setIsModalOpen={setIsModalOpen} />}
       </div>
       <div className="container bg-white p-4">
 
@@ -54,7 +82,7 @@ const CheckoutPage = () => {
               {item?.items?.[0].shop_name}
             </div>
             {item?.items?.map((product) => {
-              return  <div className="grid grid-cols-12 justify-between items-center">
+              return  <div key={product?.id} className="grid grid-cols-12 justify-between items-center">
                 <div className="flex col-span-7 items-center mt-8">
                   <img src={product.image} alt="Product" className="w-16 h-16 mr-4" />
                   <div className="grid gap-2">
@@ -133,15 +161,11 @@ const CheckoutPage = () => {
         {/* Total */}
         <div className="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-6">
           <span className="font-bold text-xl">Tổng số tiền ({data?.length} sản phẩm):</span>
-          <span className="font-bold text-red-500 text-xl">₫{totalCheckedPrice?.toLocaleString('VN')}</span>
+          <span className="font-bold text-red-500 text-xl">₫{checkoutData?.result?.total_products_price?.toLocaleString('VN')}</span>
         </div> 
 
         {/* Payment */}
-        <div className="flex flex-col bg-white p-4 rounded-lg shadow-md">
-          <div className="flex justify-between mb-4">
-            <span className="text-lg">Shopee Voucher</span>
-            <span className="text-gray-600">Giảm đ{voucher.toLocaleString('VN')}</span>
-          </div>
+        <div className="flex flex-col bg-white p-4 rounded-lg shadow-md"> 
           <div className="flex justify-between mb-6">
             <span className="text-lg">Tổng tiền hàng</span>
             <span className="text-gray-600">đ{checkoutData?.result.total_products_price?.toLocaleString('VN')}</span>
@@ -156,7 +180,7 @@ const CheckoutPage = () => {
           </div>
 
           {/* Button */}
-          <Button className="w-full py-3 bg-red-500 text-white rounded-lg">Đặt hàng</Button>
+          <Button onClick={handleOrder} className="w-full py-3 bg-red-500 text-white rounded-lg">Đặt hàng</Button>
         </div>
       </div>
     </div>

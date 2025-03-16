@@ -29,6 +29,15 @@ const userApi = {
         'Content-Type': 'multipart/form-data'
       }
     })
+  },
+
+  updateDefaultAddress({address_id}: {address_id: number}) {
+    return http.patch<ResponseApi<any>>(`${USER_ENDPOINT}/update-default-address`, {address_id})
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Update default address fail ', error)
+      throw error
+    })
   }
 }
 

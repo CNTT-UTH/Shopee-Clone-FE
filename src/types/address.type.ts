@@ -15,6 +15,7 @@ interface infoAddress {
 
  
 export const AddressSchema = yup.object().shape({
+  id: yup.number().optional(),
   city: yup.string().required("Vui lòng chọn thành phố"),
   district: yup.string().required("Vui lòng chọn quận/huyện"),
   ward: yup.string().required("Vui lòng chọn phường/xã"),
@@ -23,7 +24,7 @@ export const AddressSchema = yup.object().shape({
     .string()
     .matches(/^(0[3|5|7|8|9])+([0-9]{8})\b$/, "Số điện thoại không hợp lệ")
     .required("Số điện thoại là bắt buộc"),
-  isDefault: yup.boolean().optional()
+  is_default: yup.boolean().optional()
 });
 
 export type addressSchemaType = yup.InferType<typeof AddressSchema>

@@ -1,25 +1,36 @@
 import { addressSchemaType } from '@uth/types/address.type';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import AddressModal from '../AddressModal';
+import { useMutation } from '@tanstack/react-query';
+import userApi from '@uth/apis/user.api';
+import { queryClient } from '@uth/main';
+import { toast } from 'react-toastify';
+import Button from '../Button';
 
 interface Props {
-  address: addressSchemaType[]
+  addresses: addressSchemaType[]
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const AddressInfo = ({address, setIsModalOpen} : Props) => {
-  const [addresses, setAddresses] = useState<addressSchemaType[]>(address);
+const AddressInfo = ({addresses, setIsModalOpen} : Props) => {
+  // const [addresses, setAddresses] = useState<addressSchemaType[]>(address);
   const [modalAddOpen, setModalAddOpen] = useState(false);
-
+  const updateDefaultAddressMutation = useMutation(userApi.updateDefaultAddress)
   const [selectedAddress, setSelectedAddress] = useState<addressSchemaType | null>(null);
 
-  const handleSelectAddress = (address: addressSchemaType) => {
-    setSelectedAddress(address);
-  }; 
-  address[0] = {
-    ...address[0],
-    isDefault: true
-  }
+  const handleSelectAddress = async (address: addressSchemaType) => {
+    if(address.is_default) return
+    try {
+      await updateDefaultAddressMutation.mutateAsync({address_id: address?.id as number}, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({queryKey: ['address']})
+          toast.success('Update default address successfully')
+        }
+      })
+    } catch (error) {
+      console.warn(error)
+    }
+  };  
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
@@ -30,7 +41,7 @@ const AddressInfo = ({address, setIsModalOpen} : Props) => {
             <div
               key={index}
               className={`flex items-center justify-between p-3 border-b ${
-                address.isDefault ? 'bg-gray-100' : ''
+                address.is_default ? 'bg-gray-100' : ''
               }`}
             >
               <div>
@@ -39,13 +50,14 @@ const AddressInfo = ({address, setIsModalOpen} : Props) => {
                 <p>{address?.ward}, {address?.district}, {address.city}</p>
               </div>
               <div>
-                <button
+                <Button
+                  isLoading={updateDefaultAddressMutation.isLoading}
                   onClick={() => handleSelectAddress(address)}
                   className="text-blue-600"
                   type='button'
                 >
-                  {address.isDefault ? 'Mặc Định' : 'Chọn'}
-                </button>
+                  {address.is_default ? 'Mặc Định' : 'Chọn'}
+                </Button>
               </div>
             </div>
           ))}
