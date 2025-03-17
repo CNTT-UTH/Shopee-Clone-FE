@@ -53,3 +53,16 @@ Shopee-Clone-FE/
 ├── vite.config.ts   # Cấu hình Vite
 └── README.md        # Tài liệu dự án
 
+```
+![image](https://github.com/user-attachments/assets/705a9c8c-4c82-4060-a7df-f6ec4a9697cb)
+![image](https://github.com/user-attachments/assets/7d32581a-628a-4827-b2e2-3780de20e065)
+
+![image](https://github.com/user-attachments/assets/2b42d372-cd6d-4fa2-9f86-f574d2cd0220)
+![image](https://github.com/user-attachments/assets/e6cebf14-2c9e-4bca-9a90-ed369ab59cd1)
+![image](https://github.com/user-attachments/assets/7f4b0cd9-1c70-429d-910a-c3f9b975d28c)
+![image](https://github.com/user-attachments/assets/7401c25e-92ce-4dc8-950d-93b656873480)
+
+![image](https://github.com/user-attachments/assets/8c24233f-d973-48c0-9cd7-b22165085fc0)
+
+
+
