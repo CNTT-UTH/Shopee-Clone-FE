@@ -3,7 +3,7 @@
 📢 **Shopee Clone Front-End** là một dự án clone giao diện Shopee, giúp bạn tìm hiểu cách xây dựng một nền tảng thương mại điện tử bằng các công nghệ hiện đại.
 
 ## 🚀 Demo
-👉 **[Shopee Clone Demo](https://shopee-reactjs-zeta.vercel.app)**
+👉 **[Shopee Clone Demo](https://shopee-clone-fe-deploy.vercel.app/)**
 
 👉 **[Server backend của project này](https://shopee-clone-be.onrender.com/api-docs)**  -  [Nhật Linh](https://github.com/linhhuynhcoding)**
 
